@@ -1,0 +1,76 @@
+{
+    "diaryList" : [
+        {
+            "diaryId": 1,
+            "keywords": [{ "idx" : "1", "keyword" : "자전거" }, { "idx" : "2", "keyword" : "공원" }, { "idx" : "3", "keyword" : "파스타" } ],
+            "feeling": "😶 감정 없음",
+            "date": "2022. 12. 03",
+            "imageSrc": "https://source.unsplash.com/random/?bicycle",
+            "imageAlt": "diary thumbnail"
+        },
+        {
+            "diaryId": 2,
+            "keywords": [{ "idx" : "1", "keyword" : "파티" }, { "idx" : "2", "keyword" : "샴페인" }, { "idx" : "3", "keyword" : "선물" } ],
+            "feeling": "😯 놀람",
+            "date": "2022. 12. 09",
+            "imageSrc": "https://source.unsplash.com/random/?party",
+            "imageAlt": "diary thumbnail"
+        },
+        {
+            "diaryId": 3,
+            "keywords": [{ "idx" : "1", "keyword" : "학교" }, { "idx" : "2", "keyword" : "교수님" }, { "idx" : "3", "keyword" : "과제" } ],
+            "feeling": "😬 두려움",
+            "date": "2022. 12. 12",
+            "imageSrc": "https://source.unsplash.com/random/?school",
+            "imageAlt": "diary thumbnail"
+        },
+        {
+            "diaryId": 4,
+            "keywords": [{ "idx" : "1", "keyword" : "취업" }, { "idx" : "2", "keyword" : "미래" }, { "idx" : "3", "keyword" : "연봉" } ],
+            "feeling": "🤔 불확실",
+            "date": "2022. 12. 17",
+            "imageSrc": "https://source.unsplash.com/random/?job",
+            "imageAlt": "diary thumbnail"
+        },
+        {
+            "diaryId": 5,
+            "keywords": [{ "idx" : "1", "keyword" : "주식" }, { "idx" : "2", "keyword" : "거지" }, { "idx" : "3", "keyword" : "돈" } ],
+            "feeling": "😭 슬픔",
+            "date": "2022. 12. 18",
+            "imageSrc": "https://source.unsplash.com/random/?stock",
+            "imageAlt": "diary thumbnail"
+        },
+        {
+            "diaryId": 6,
+            "keywords": [{ "idx" : "1", "keyword" : "벌레" }, { "idx" : "2", "keyword" : "청소" }, { "idx" : "3", "keyword" : "싸움" } ],
+            "feeling": "😕 싫음",
+            "date": "2022. 12. 24",
+            "imageSrc": "https://source.unsplash.com/random/?bug",
+            "imageAlt": "diary thumbnail"
+        },
+        {
+            "diaryId": 7,
+            "keywords": [{ "idx" : "1", "keyword" : "아기" }, { "idx" : "2", "keyword" : "조카" }, { "idx" : "3", "keyword" : "귀여운" } ],
+            "feeling": "😀 좋음",
+            "date": "2022. 12. 31",
+            "imageSrc": "https://source.unsplash.com/random/?baby",
+            "imageAlt": "diary thumbnail"
+        },
+        {
+            "diaryId": 8,
+            "keywords": [{ "idx" : "1", "keyword" : "강의" }, { "idx" : "2", "keyword" : "교실" }, { "idx" : "3", "keyword" : "전공" } ],
+            "feeling": "😑 지루함",
+            "date": "2023. 01. 02",
+            "imageSrc": "https://source.unsplash.com/random/?lecture",
+            "imageAlt": "diary thumbnail"
+        },
+        {
+            "diaryId": 9,
+            "keywords": [{ "idx" : "1", "keyword" : "운전" }, { "idx" : "2", "keyword" : "연습" }, { "idx" : "3", "keyword" : "자동차" } ],
+            "feeling": "🤢 창피함",
+            "date": "2023. 01. 04",
+            "imageSrc": "https://source.unsplash.com/random/?drive",
+            "imageAlt": "diary thumbnail"
+        }
+    ]
+}
