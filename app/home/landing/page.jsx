@@ -6,7 +6,7 @@ import { ChevronDoubleDownIcon, FaceSmileIcon, ChatBubbleBottomCenterTextIcon, P
 import Image from 'next/image';
 import exampleImg from '../../../public/images/landing-example.png'
 import { motion } from "framer-motion";
- 
+
 const features = [
   {
     name: '감정 분석',
