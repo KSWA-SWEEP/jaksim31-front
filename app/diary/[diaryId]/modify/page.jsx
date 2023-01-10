@@ -1,5 +1,3 @@
-'use client';
-
 import BackButton from "../../common/backButton";
 import DiaryInputFormat from "../../common/diaryInputFormat";
 import diaryData from '../../../../public/data/dairy.json'
@@ -9,10 +7,10 @@ export default function diaryModify() {
 
   return (
     <>
-      <div className="p-4">
+      <div className="p-1 sm:p-4">
         <BackButton/>
         <div className="flex justify-center w-full">
-          <div className="text-2xl font-extrabold text-center lg:text-3xl text-slate-500">
+          <div className="text-2xl font-extrabold text-center lg:text-3xl text-zinc-500">
             일기 수정
           </div>
         </div>
@@ -22,10 +20,9 @@ export default function diaryModify() {
           <div className="m-6 text-2xl font-bold">
             {diary.date} 
           </div>
-          {/* <DiaryInputFormat/> */}
-          <div className="relative text-lg">
+          <div className="relative text-sm sm:text-lg">
             <div>
-              <DiaryInputFormat Contents={diary.Contents.toString()}/>
+              <DiaryInputFormat Contents={diary.Contents.toString()} date={diary.date}/>
             </div>
           </div>      
         </div>

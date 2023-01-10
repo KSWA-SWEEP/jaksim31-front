@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import './globals.css'
-import Drawer from './Drawer';
-import Header from './Header';
+import Drawer from './common/Drawer';
+import Header from './common/header/Header';
 import { usePathname } from 'next/navigation';
 
 export default function RootLayout({ children }) {  
@@ -30,9 +30,9 @@ export default function RootLayout({ children }) {
               {children}
             </div>
             :
-            <div className="relative z-0 flex flex-col w-full min-h-screen mx-5 mt-20 mb-10 scrollbar-hide md:mt-24 md:mx-20 lg:mx-36 xl:mx-56 2xl:mx-72">
+            <div className="relative z-0 flex flex-col w-full min-h-[100vh] mx-5 mt-20 mb-5 xl:mb-10 scrollbar-hide md:mt-24 md:mx-20 lg:mx-36 xl:mx-56 2xl:mx-72">
               {/* 하위 Page 표시 영역 */}
-              <div className='p-2 bg-white min-h-max rounded-2xl scrollbar-hide'>
+              <div className='p-2 bg-white min-h-fit rounded-2xl scrollbar-hide'>
               {children}
               </div>
             
