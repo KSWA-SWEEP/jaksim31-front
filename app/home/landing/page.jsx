@@ -1,11 +1,7 @@
-'use client';
-
 import React from 'react';
 import LazyShow from '../../common/LazyShow';
 import { ChevronDoubleDownIcon, FaceSmileIcon, ChatBubbleBottomCenterTextIcon, PresentationChartBarIcon, PencilSquareIcon } from '@heroicons/react/24/outline'
-import Image from 'next/image';
-import exampleImg from '../../../public/images/landing-example.png'
-import { motion } from "framer-motion";
+import ExampleScreen from './ExampleScreen'
 
 const features = [
   {
@@ -38,7 +34,26 @@ const features = [
   },
 ]
 
-function Home() {
+async function getBgImg() {
+  const Access_Key = process.env.NEXT_PUBLIC_UNSPLASH_ACCESSKEY; 
+
+  // API 호출 횟수 제한으로 개발시 아래 url로 하고, 배포시 아래 API 호출로 넣기
+  let imgUrl = "https://source.unsplash.com/random/?diary";
+
+  // const res = await fetch(`https://api.unsplash.com/photos/random?query=diary&client_id=${Access_Key}`);
+
+  // if (!res.ok) {
+  //   throw new Error('Failed to fetch data');
+  // }
+
+  // let jsonData = await res.json();
+  // let imgUrl = jsonData.urls.full;
+  
+  return imgUrl;
+}
+
+export default async function Home() {
+  const imgUrl = await getBgImg();
 
   return (
     <>
@@ -50,13 +65,13 @@ function Home() {
             className="absolute top-0 w-full h-full bg-center bg-cover"
             style={{
               backgroundImage:
-                "url('https://source.unsplash.com/random/?diary')",
+                "url("+imgUrl+")",
             }}
           >
             {/* overlay */}
             <div
               id="blackOverlay"
-              className="absolute w-full h-full opacity-75 bg-slate-700"
+              className="absolute w-full h-full opacity-75 bg-zinc-700"
             ></div>
           </div>
 
@@ -72,7 +87,7 @@ function Home() {
                     </h1>
                   </LazyShow>
                   <LazyShow delay={0.25}>
-                    <p className="mt-4 text-base sm:text-xl lg:text-3xl text-slate-200 font-[GmarketSansLight]">
+                    <p className="mt-4 text-base sm:text-xl lg:text-3xl text-zinc-200 font-[GmarketSansLight]">
                       작심삼일로 하루의 감정과 키워드를 남겨보세요🥰
                     </p>
                   </LazyShow>
@@ -83,7 +98,7 @@ function Home() {
               
               <div className='flex w-full pt-16 pb-3 sm:pb-4 sm:pt-28 lg:pt-36 lg:pb-10 place-content-center'>
                 <LazyShow delay={0.4}>
-                  <ChevronDoubleDownIcon className='w-10 lg:w-16 animate-bounce text-slate-300'/>
+                  <ChevronDoubleDownIcon className='w-10 lg:w-16 animate-bounce text-zinc-300'/>
                 </LazyShow>
               </div> 
             </div>
@@ -114,19 +129,7 @@ function Home() {
             
             <LazyShow delay={0.5}>
               {/* 예시 화면 */}
-              <div className="flex flex-wrap justify-center">
-                <div className="w-full px-4 text-center aspect-video lg:mx-40">
-                  <motion.div
-                    whileHover={{ scale: 1.03, rotate: -3 }}
-                  >
-                    <div className="relative flex flex-col w-full h-full mb-8 break-words bg-white rounded-lg shadow-lg shadow-slate-300">
-                      <div className="flex-auto overflow-hidden rounded-lg">
-                        <Image src={exampleImg}/>
-                      </div>
-                    </div>
-                  </motion.div>
-                </div>
-              </div>
+              <ExampleScreen/>
             </LazyShow>
 
           
@@ -165,11 +168,11 @@ function Home() {
                 </LazyShow>
   
                 <LazyShow delay={0.2}>
-                  <p className="mt-2 text-3xl font-bold tracking-tight text-slate-800 font-[GmarketSansBold] sm:text-4xl">작심삼일은 이런 기능들을 지원합니다</p>
+                  <p className="mt-2 text-3xl font-bold tracking-tight text-zinc-800 font-[GmarketSansBold] sm:text-4xl">작심삼일은 이런 기능들을 지원합니다</p>
                 </LazyShow>
                 
                 <LazyShow delay={0.3}>
-                  <p className="max-w-2xl mx-auto mt-6 text-base sm:text-lg leading-7 sm:leading-3 font-[GmarketSansMedium] text-slate-600">
+                  <p className="max-w-2xl mx-auto mt-6 text-base sm:text-lg leading-7 sm:leading-3 font-[GmarketSansMedium] text-zinc-600">
                     사용자들은 작심삼일에서 가볍고 쉬우면서도 재미있게 일기를 작성할 수 있습니다💗
                   </p>
                 </LazyShow>
@@ -184,8 +187,8 @@ function Home() {
                           <feature.icon className="w-8 h-8" aria-hidden="true" />
                         </div>
                         <div className="sm:min-w-0 sm:flex-1">
-                          <p className="text-lg font-[GmarketSansMedium] font-semibold leading-8 text-slate-900">{feature.name}</p>
-                          <p className="mt-2 font-[GmarketSansLight] text-base leading-7 text-slate-600">{feature.description}</p>
+                          <p className="text-lg font-[GmarketSansMedium] font-semibold leading-8 text-zinc-900">{feature.name}</p>
+                          <p className="mt-2 font-[GmarketSansLight] text-base leading-7 text-zinc-600">{feature.description}</p>
                         </div>
                       </div>
                     </LazyShow>
@@ -227,11 +230,11 @@ function Home() {
                 </LazyShow>
   
                 <LazyShow delay={0.2}>
-                  <p className="mt-2 text-3xl font-bold tracking-tight text-slate-800 font-[GmarketSansBold] sm:text-4xl">작심삼일은 이런 기능들을 지원합니다</p>
+                  <p className="mt-2 text-3xl font-bold tracking-tight text-zinc-800 font-[GmarketSansBold] sm:text-4xl">작심삼일은 이런 기능들을 지원합니다</p>
                 </LazyShow>
                 
                 <LazyShow delay={0.3}>
-                  <p className="max-w-2xl mx-auto mt-6 text-base sm:text-lg leading-7 sm:leading-3 font-[GmarketSansMedium] text-slate-600">
+                  <p className="max-w-2xl mx-auto mt-6 text-base sm:text-lg leading-7 sm:leading-3 font-[GmarketSansMedium] text-zinc-600">
                     사용자들은 작심삼일에서 가볍고 쉬우면서도 재미있게 일기를 작성할 수 있습니다💗
                   </p>
                 </LazyShow>
@@ -246,8 +249,8 @@ function Home() {
                           <feature.icon className="w-8 h-8" aria-hidden="true" />
                         </div>
                         <div className="sm:min-w-0 sm:flex-1">
-                          <p className="text-lg font-[GmarketSansMedium] font-semibold leading-8 text-slate-900">{feature.name}</p>
-                          <p className="mt-2 font-[GmarketSansLight] text-base leading-7 text-slate-600">{feature.description}</p>
+                          <p className="text-lg font-[GmarketSansMedium] font-semibold leading-8 text-zinc-900">{feature.name}</p>
+                          <p className="mt-2 font-[GmarketSansLight] text-base leading-7 text-zinc-600">{feature.description}</p>
                         </div>
                       </div>
                     </LazyShow>
@@ -279,5 +282,3 @@ function Home() {
     </>
   );
 }
-
-export default Home;

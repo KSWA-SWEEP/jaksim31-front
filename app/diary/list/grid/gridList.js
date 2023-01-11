@@ -30,8 +30,8 @@ export default function DiaryGridList() {
         <h2 className="sr-only">diarys</h2>
         <div className="grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 2xl:grid-cols-3">
             {diarys.map((diary) => (
-                <div key={diary.diaryId} className="rounded-2xl bg-slate-200/50">
-                    <div className="w-full overflow-hidden rounded-t-lg bg-slate-200 aspect-w-4 aspect-h-3 xl:aspect-w-4 xl:aspect-h-3">
+                <div key={diary.diaryId} className="rounded-2xl bg-zinc-200/50">
+                    <div className="w-full overflow-hidden rounded-t-lg bg-zinc-200 aspect-w-4 aspect-h-3 xl:aspect-w-4 xl:aspect-h-3">
                             <Link
                                 href={{
                                     pathname: '/diary/'+diary.diaryId
@@ -51,7 +51,7 @@ export default function DiaryGridList() {
                     <div className="flex justify-between mx-4 mt-5 mb-2">
                         <div className="w-full">
                             <div className="flex justify-between">
-                                <p className="ml-2 text-lg font-bold text-slate-900 truncate">{diary.date}</p>
+                                <p className="ml-2 text-lg font-bold text-zinc-900 truncate">{diary.date}</p>
                                 <Menu as="div" className="relative ml-3">
                                     <div>
                                         <Menu.Button className="flex max-w-xs text-sm focus:outline-none">
@@ -74,8 +74,8 @@ export default function DiaryGridList() {
                                                     <a
                                                         href={item.href + diary.diaryId + '/modify'}
                                                         className={classNames(
-                                                        active ? 'bg-slate-100' : '',
-                                                        'block px-4 py-2 text-sm text-slate-700 border-b-2 border-gray-100'
+                                                        active ? 'bg-zinc-100' : '',
+                                                        'block px-4 py-2 text-sm text-zinc-700 border-b-2 border-gray-100'
                                                         )}
                                                     >
                                                         {item.name}
@@ -90,8 +90,8 @@ export default function DiaryGridList() {
                                                               //   href={{ pathname: item.href === '/survey/preview/' ? item.href + "basic" : item.href + survey.id, query: { svyId: survey.id, svyType: survey.type, preURL: currentURL } }}     // TODO: survey.type 구분 추가 후 변경하기
                                                                 href={item.href + diary.diaryId + '/modify'}                                                            >
                                                                 <div className={classNames(
-                                                                    active ? 'bg-slate-100' : '',
-                                                                    'block px-4 py-2 text-sm text-slate-700 border-b-2 border-gray-100'
+                                                                    active ? 'bg-zinc-100' : '',
+                                                                    'block px-4 py-2 text-sm text-zinc-700 border-b-2 border-gray-100'
                                                                 )}>
                                                                     {item.name}
                                                                 </div>
@@ -100,7 +100,7 @@ export default function DiaryGridList() {
                                                         :
                                                         <a
                                                             onClick={openDeleteModal(diary.diaryId)}
-                                                            className='block px-4 py-2 text-sm text-slate-700 border-b-2 border-slate-100 hover:bg-slate-100 '
+                                                            className='block px-4 py-2 text-sm text-zinc-700 border-b-2 border-zinc-100 hover:bg-zinc-100 '
                                                         >
                                                             {item.name}
                                                         </a>
@@ -113,7 +113,7 @@ export default function DiaryGridList() {
                             </div>
                             <div className="flex flex-wrap mt-2">
                                 {diary.keywords.map((keyword, idx) => (
-                                    <div key={keyword.keyword} className="px-3 mb-2 py-1 mr-2.5 text-sm font-medium text-slate-500 bg-slate-200 rounded-xl dark:bg-slate-200 dark:text-slate-800 hover:scale-105 hover:bg-slate-300 hover:text-slate-600 duration-200">
+                                    <div key={keyword.keyword} className="px-3 mb-2 py-1 mr-2.5 text-sm font-medium text-zinc-500 bg-zinc-200 rounded-xl dark:bg-zinc-200 dark:text-zinc-800 hover:scale-105 hover:bg-zinc-300 hover:text-zinc-600 duration-200">
                                         #{keyword.keyword}
                                     </div>
                                 ))}

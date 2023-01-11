@@ -18,6 +18,8 @@
     "ckeditor5-custom-build": "file:ckeditor5",
     "classnames": "^2.3.2",
     "daisyui": "^2.46.1",
+    "dotenv": "^16.0.3",
+    "dotenv-webpack": "^8.0.1",
     "framer-motion": "^8.2.4",
     "moment": "^2.29.4",
     "next": "13.1.1",

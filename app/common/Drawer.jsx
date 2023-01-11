@@ -49,8 +49,8 @@ export default function Drawer({ isOpen, setIsOpen }) {
                 {/* TODO 우선 로그인 후 목록으로 해둠 (menuAfterLogin) => isLogin인 값 사용해서 로그인 전 상태랑 구분 추가하기 */}
                 <li className="m-3 mt-0 mb-5 text-2xl font-bold text-red-500 sm:text-3xl" onClick={() => { setIsOpen(false); }}><Link href="/home/landing"><div className="w-full">작심삼일</div></Link></li>
                 {menuAfterLogin.map((menu) => (
-                    <li key={menu.name} className="py-3 pl-4 my-1 text-lg hover:rounded-2xl hover:bg-red-100 text-slate-700" onClick={() => { setIsOpen(false); }}>
-                      <Link href={menu.href}><div className="w-full">{menu.name}</div></Link>
+                    <li key={menu.name} className="my-1 text-lg hover:rounded-2xl hover:bg-red-100 text-zinc-700" onClick={() => { setIsOpen(false); }}>
+                      <Link href={menu.href}><div className="w-full py-3 pl-4">{menu.name}</div></Link>
                     </li>
                 ))}
               
