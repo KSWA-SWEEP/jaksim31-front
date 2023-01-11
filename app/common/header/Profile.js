@@ -1,8 +1,10 @@
+'use client';
 
 import { PencilSquareIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Dialog, Transition } from '@headlessui/react';
 import userData from '../../../public/data/user.json'
 import { Fragment, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 const Profile = () => {
 
@@ -16,6 +18,7 @@ const Profile = () => {
     function closeEditModal() { setIsProfileModalOpen(false); setIsEditModalOpen(false) }
 
     const user = userData;
+    const router = useRouter();
   
     function replaceImg() { 
       // TODO 파일 첨부 어쩌구 넣고 프로필 이미지 변경하는 부분 추가하기
