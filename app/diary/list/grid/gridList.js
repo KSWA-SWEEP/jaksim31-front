@@ -36,7 +36,7 @@ export default function DiaryGridList() {
                                 href={{
                                     pathname: '/diary/'+diary.diaryId
                                     }} 
-                                className="relative flex items-center justify-center group"
+                                className="relative flex items-center justify-center w-full group"
                                 >
                                 <div className="absolute hidden text-3xl font-extrabold group-hover:block">
                                     {diary.feeling}
@@ -51,7 +51,7 @@ export default function DiaryGridList() {
                     <div className="flex justify-between mx-4 mt-5 mb-2">
                         <div className="w-full">
                             <div className="flex justify-between">
-                                <p className="ml-2 text-lg font-bold text-zinc-900 truncate">{diary.date}</p>
+                                <p className="ml-2 text-lg font-bold truncate text-zinc-900">{diary.date}</p>
                                 <Menu as="div" className="relative ml-3">
                                     <div>
                                         <Menu.Button className="flex max-w-xs text-sm focus:outline-none">
@@ -100,7 +100,7 @@ export default function DiaryGridList() {
                                                         :
                                                         <a
                                                             onClick={openDeleteModal(diary.diaryId)}
-                                                            className='block px-4 py-2 text-sm text-zinc-700 border-b-2 border-zinc-100 hover:bg-zinc-100 '
+                                                            className='block px-4 py-2 text-sm border-b-2 text-zinc-700 border-zinc-100 hover:bg-zinc-100 '
                                                         >
                                                             {item.name}
                                                         </a>
