@@ -13,11 +13,11 @@ export default function diaryShow({ params }) {
           
           {/* 날짜 및 키워드 */}
           <div className="col-span-3 sm:col-span-2">
-            <div className="text-2xl font-extrabold">{diary.date}</div>
+            <div className="text-2xl font-extrabold">{diary.date.split("T")[0].replace(/-/g, '').replace(/(\d{4})(\d{2})(\d{2})/g, '$1. $2. $3.')}</div>
             <div className="flex flex-wrap mt-3">
-                {diary.keywords.map((keyword, idx) => (
+                {diary.keywords.map((keyword) => (
                     <div key={keyword} className="px-3 mb-2 py-1 mr-2.5 text-sm font-medium text-zinc-500 bg-zinc-200 rounded-xl dark:bg-zinc-200 dark:text-zinc-800 ">
-                        #{keyword.keyword}
+                        #{keyword}
                     </div>
                 ))}
             </div>
@@ -26,15 +26,14 @@ export default function diaryShow({ params }) {
           {/* 감정 */}
           <div className="flex items-center col-span-3 sm:justify-end sm:col-span-1">
             <div className="text-lg">
-                {diary.feeling}
+                {diary.emotion}
             </div>
           </div>
 
           {/* 일기 내용 */}
           <div className="col-span-3 my-5">
-            <div className="text-lg">
-                {diary.Contents}
-            </div>
+            {/* HTML 타입으로 텍스트 표시 - 글자 크기, 글자 색 등 */}
+            <div className='text-lg' dangerouslySetInnerHTML={{__html: diary.content}}></div>
           </div>
 
           {/* 목록, 수정, 삭제 */}

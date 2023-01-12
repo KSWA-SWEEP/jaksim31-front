@@ -77,17 +77,7 @@ function Editor({ onClick, editorLoaded, name, value, date }) {
 
         let data = new Object();
 
-        // date : 날짜
-        // 일기 수정의 경우 YYYY. MM. DD의 형식으로 날짜 전달
-        if(date.includes('.'))
-        {
-            date = date.replace(/\./g, '');
-            date = date.replace(/ /g, '-');
-        }
-        // 일기 생성의 경우 YYYYMMDD의 형식으로 날짜 전달
-        else {
-            date = date.replace(/(\d{4})(\d{2})(\d{2})/g, '$1-$2-$3');
-        }
+        date = date.replace(/(\d{4})(\d{2})(\d{2})/g, '$1-$2-$3');
         data.date = date;
 
         // 일기 내용

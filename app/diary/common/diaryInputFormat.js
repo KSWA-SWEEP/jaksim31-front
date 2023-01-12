@@ -25,13 +25,13 @@ export default function DiaryInputFormat(props) {
     <>
       <div>
         { 
-          props.Contents
+          props.content
           ? 
             <Editor
               name="description"
               onClick={onClick}
               editorLoaded={editorLoaded}
-              value={props.Contents}
+              value={props.content}
               date={props.date}
             />
           :
