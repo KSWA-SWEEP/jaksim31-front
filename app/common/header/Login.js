@@ -13,8 +13,8 @@ const Login = () => {
     function openLoginModal() { setIsLoginModalOpen(true); setIsRegisterModalOpen(false); setEmailMessage("") }
     function closeLoginModal() { setIsLoginModalOpen(false); setIsRegisterModalOpen(false) }
    
-    function openRegisterModal() { setIsRegisterModalOpen(true); setIsLoginModalOpen(false), setEmailMessage(""), setPasswordMessage(""), setPasswordConfirmMessage("")}
-    function closeRegisterModal() { setIsLoginModalOpen(false); setIsRegisterModalOpen(false) }
+    function openRegisterModal() { setIsRegisterModalOpen(true); setIsLoginModalOpen(false), setEmailMessage(""), setPasswordMessage(""), setPasswordConfirmMessage(""), setChkAuthMessage(""), setAuthMessage("")}
+    function closeRegisterModal() { setIsLoginModalOpen(false); setIsRegisterModalOpen(false), setIsEmail(false) }
     
     // 사용자 입력 변수
     const userName = useRef("");
@@ -25,6 +25,7 @@ const Login = () => {
     // 메일 인증 변수
     const userAuth = useRef(""); // 인증번호 입력값
     const [authMessage, setAuthMessage] = useState('') // 인증번호 오류 메세지
+    const [chkAuthMessage, setChkAuthMessage] = useState('') // 인증번호 확인 요청 메시지
     const [isAuthConfirm, setIsAuthConfirm] = useState(false) // 인증 번호가 일치하는지 확인
     let randNum = useRef("00000"); // 인증번호
     let [isAuthIng, setIsAuthIng] = useState(false) // 메일 인증 중인지 확인
@@ -51,13 +52,27 @@ const Login = () => {
           setIsEmail(false)
           // 메일 변경 시 인증번호 창 다시 막고, 인증 다시하도록 인증 관련 변수 초기화
           setIsAuthConfirm(false)
-          setAuthMessage('인증 번호가 틀렸습니다. 다시 확인해 주세요😢')
+          setAuthMessage('')
           setIsAuthIng(false)
+          setChkAuthMessage('');
       } else {
           setEmailMessage('올바른 이메일 형식입니다✅')
           //인증번호 발급
           randNum.current = parseInt(Math.random() * 100000 + "");
           setIsEmail(true)
+      }
+    };
+
+    const onAuthChange = (e) => {
+      userAuth.current = e.target.value;
+      // console.log("인증번호##" + randNum.current)
+
+      if (randNum.current != userAuth.current) {
+          setAuthMessage('인증 번호가 틀렸습니다. 다시 확인해 주세요😢')
+          setIsAuthConfirm(false)
+      } else {
+          setAuthMessage('인증 번호가 확인되었습니다. ✅')
+          setIsAuthConfirm(true)
       }
     };
   
@@ -87,6 +102,25 @@ const Login = () => {
             setPasswordConfirmMessage('비밀번호가 달라요. 다시 확인해주세요😢')
             setIsPasswordConfirm(false)
         }
+    };
+
+    const sendAuthMail =()=>{
+
+      /*
+      * TODO: API 확정되면 이메일 인증 구현 예정
+      * 
+      * 현재 입력한 이메일에 대한 계정 존재 여부 확인 X
+      * 인증번호 이메일 전송 기능 X
+      * 단순 인증번호만 생성 O
+      */
+      
+      //인증 중
+      console.log("메일인증")
+      // 인증번호 test 코드
+      console.log("============== "+randNum.current)
+      setIsAuthIng(true)
+      setChkAuthMessage("메일을 전송하였습니다. 확인 후 인증번호를 입력해 주세요.");
+     
     };
 
     return (
@@ -289,6 +323,35 @@ const Login = () => {
                                   onChange={onEmailChange}
                                 />
                                 {userEmail.current.length > 0 && <span className={`message ${isEmail ? 'success text-xs text-blue-500' : 'error text-xs text-red-500'}`}>{emailMessage}</span>}
+                              </div>
+
+                              <div className="mt-6 text-center">
+                                <button
+                                  className="w-full px-6 py-3 mb-1 mr-1 text-sm font-bold text-white uppercase transition-all duration-150 ease-linear rounded shadow outline-none bg-rose-400 active:bg-zinc-600 hover:shadow-lg focus:outline-none"
+                                  type="button"
+                                  onClick={sendAuthMail}
+                                  disabled={!(isEmail)}
+                                >
+                                  인증메일 전송
+                                </button>
+                                {(<span className="text-xs text-blue-500">{chkAuthMessage}</span>)}
+                              </div>
+
+                              <div className="relative w-full mb-3">
+                                <label
+                                  className="block mb-2 text-xs font-bold uppercase text-zinc-600"
+                                  htmlFor="grid-verify"
+                                >
+                                  인증번호
+                                </label>
+                                <input
+                                  type="text"
+                                  className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
+                                  placeholder="인증번호를 입력하세요"
+                                  disabled={!(isAuthIng)}
+                                  onChange={onAuthChange}
+                                />
+                                {userAuth.current.length > 0 && <span className={`message ${isAuthConfirm ? 'success text-xs' : 'error text-xs text-red-500'}`}>{authMessage}</span>}
                               </div>
 
                               <div className="relative w-full mb-5">
