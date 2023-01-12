@@ -36,14 +36,14 @@ export default function DiaryGridList() {
                                 href={{
                                     pathname: '/diary/'+diary.diaryId
                                     }} 
-                                className="relative flex items-center justify-center group"
+                                className="relative flex items-center justify-center w-full group"
                                 >
                                 <div className="absolute hidden text-3xl font-extrabold group-hover:block">
-                                    {diary.feeling}
+                                    {diary.emotion}
                                 </div>
                                 <img
-                                    src={diary.imageSrc}
-                                    alt={diary.imageAlt}
+                                    src={diary.thumbnail}
+                                    alt={diary.emotion}
                                     className="object-cover object-center aspect-[4/3] duration-200 hover:opacity-20 hover:scale-105"
                                 />
                             </Link>
@@ -51,7 +51,7 @@ export default function DiaryGridList() {
                     <div className="flex justify-between mx-4 mt-5 mb-2">
                         <div className="w-full">
                             <div className="flex justify-between">
-                                <p className="ml-2 text-lg font-bold text-zinc-900 truncate">{diary.date}</p>
+                                <p className="ml-2 text-lg font-bold truncate text-zinc-900">{diary.date.split("T")[0].replace(/-/g, '').replace(/(\d{4})(\d{2})(\d{2})/g, '$1. $2. $3.')}</p>
                                 <Menu as="div" className="relative ml-3">
                                     <div>
                                         <Menu.Button className="flex max-w-xs text-sm focus:outline-none">
@@ -69,25 +69,12 @@ export default function DiaryGridList() {
                                     >
                                     <Menu.Items className="absolute right-0 z-10 py-1 mt-2 mb-10 origin-top-right bg-white rounded-md shadow-lg w-36 ring-1 ring-black ring-opacity-5 focus:outline-none">
                                         {diaryMenu.map((item) => (
-                                            <Menu.Item key={item.name}>
-                                                {/* {({ active }) => (
-                                                    <a
-                                                        href={item.href + diary.diaryId + '/modify'}
-                                                        className={classNames(
-                                                        active ? 'bg-zinc-100' : '',
-                                                        'block px-4 py-2 text-sm text-zinc-700 border-b-2 border-gray-100'
-                                                        )}
-                                                    >
-                                                        {item.name}
-                                                    </a>
-                                                )} */}
-                                                
+                                            <Menu.Item key={item.name}>                                             
                                                 {
                                                     item.href.includes('/')
                                                         ?
                                                         ({ active }) => (
                                                             <Link
-                                                              //   href={{ pathname: item.href === '/survey/preview/' ? item.href + "basic" : item.href + survey.id, query: { svyId: survey.id, svyType: survey.type, preURL: currentURL } }}     // TODO: survey.type 구분 추가 후 변경하기
                                                                 href={item.href + diary.diaryId + '/modify'}                                                            >
                                                                 <div className={classNames(
                                                                     active ? 'bg-zinc-100' : '',
@@ -100,7 +87,7 @@ export default function DiaryGridList() {
                                                         :
                                                         <a
                                                             onClick={openDeleteModal(diary.diaryId)}
-                                                            className='block px-4 py-2 text-sm text-zinc-700 border-b-2 border-zinc-100 hover:bg-zinc-100 '
+                                                            className='block px-4 py-2 text-sm border-b-2 text-zinc-700 border-zinc-100 hover:bg-zinc-100 '
                                                         >
                                                             {item.name}
                                                         </a>
@@ -112,9 +99,9 @@ export default function DiaryGridList() {
                                 </Menu>
                             </div>
                             <div className="flex flex-wrap mt-2">
-                                {diary.keywords.map((keyword, idx) => (
-                                    <div key={keyword.keyword} className="px-3 mb-2 py-1 mr-2.5 text-sm font-medium text-zinc-500 bg-zinc-200 rounded-xl dark:bg-zinc-200 dark:text-zinc-800 hover:scale-105 hover:bg-zinc-300 hover:text-zinc-600 duration-200">
-                                        #{keyword.keyword}
+                                {diary.keywords.map((keyword) => (
+                                    <div key={keyword} className="px-3 mb-2 py-1 mr-2.5 text-sm font-medium text-zinc-500 bg-zinc-200 rounded-xl dark:bg-zinc-200 dark:text-zinc-800 hover:scale-105 hover:bg-zinc-300 hover:text-zinc-600 duration-200">
+                                        #{keyword}
                                     </div>
                                 ))}
                                 

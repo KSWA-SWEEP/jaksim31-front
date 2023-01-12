@@ -1,6 +1,12 @@
 import Link from "next/link";
 import React from "react";
 
+// 오늘 일기 쓰기를 위한 date 설정
+let formatTwoDigits = (digit) => ("0" + digit).slice(-2);
+let tempDate = new Date();
+let date = `${tempDate.getFullYear()}${formatTwoDigits(tempDate.getMonth()+1)}${formatTwoDigits(tempDate.getDate())}`;
+
+// 오늘의 일기 쓰기의 경우 date를 encode 해서 dynamic routing
 const menuAfterLogin = [
   {
     name: '📊  대시보드',
@@ -11,8 +17,8 @@ const menuAfterLogin = [
     href: '/diary/list/grid',
   },
   {
-    name: '📇  일기 작성',
-    href: '/diary/create',
+    name: '📇  오늘의 일기 쓰기',
+    href: '/diary/create/'+ encodeURIComponent(btoa(date)),
   },
   {
     name: '🌼  튜토리얼',
