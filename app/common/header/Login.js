@@ -9,13 +9,13 @@ import { useRouter } from 'next/navigation';
 
 const Login = () => {
     let [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
-    let [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false)
+    let [isSignupModalOpen, setIsSignupModalOpen] = useState(false)
  
-    function openLoginModal() { setIsLoginModalOpen(true); setIsRegisterModalOpen(false); setEmailMessage("") }
-    function closeLoginModal() { setIsLoginModalOpen(false); setIsRegisterModalOpen(false) }
+    function openLoginModal() { setIsLoginModalOpen(true); setIsSignupModalOpen(false); setEmailMessage("") }
+    function closeLoginModal() { setIsLoginModalOpen(false); setIsSignupModalOpen(false) }
    
-    function openRegisterModal() { setIsRegisterModalOpen(true); setIsLoginModalOpen(false), setEmailMessage(""), setPasswordMessage(""), setPasswordConfirmMessage(""), setCheckAuthMessage(""), setAuthMessage("")}
-    function closeRegisterModal() { setIsLoginModalOpen(false); setIsRegisterModalOpen(false), setIsEmail(false) }
+    function openSignupModal() { setIsSignupModalOpen(true); setIsLoginModalOpen(false), setEmailMessage(""), setPasswordMessage(""), setPasswordConfirmMessage(""), setCheckAuthMessage(""), setAuthMessage("")}
+    function closeSignupModal() { setIsLoginModalOpen(false); setIsSignupModalOpen(false), setIsEmail(false) }
     
     const router = useRouter();
 
@@ -345,7 +345,7 @@ const Login = () => {
                               </div>
 
                               <div className="relative w-full mt-4 mb-2">
-                                <p>회원이 아니신가요?  <strong onClick={openRegisterModal} className='text-red-400 hover:text-red-500'>회원 가입하기</strong></p>
+                                <p>회원이 아니신가요?  <strong onClick={openSignupModal} className='text-red-400 hover:text-red-500'>회원 가입하기</strong></p>
                               </div>
                             </form>
                           </div>
@@ -377,8 +377,8 @@ const Login = () => {
             </Transition>
 
             {/* 회원가입 Modal */}
-            <Transition className="z-50 overflow-auto" appear show={isRegisterModalOpen} as={Fragment}>
-              <Dialog as="div" className="relative z-50" onClose={closeRegisterModal}>
+            <Transition className="z-50 overflow-auto" appear show={isSignupModalOpen} as={Fragment}>
+              <Dialog as="div" className="relative z-50" onClose={closeSignupModal}>
                 <Transition.Child
                   as={Fragment}
                   enter="ease-out duration-300"
@@ -407,7 +407,7 @@ const Login = () => {
                         <div className='flex justify-end'>
                           <XMarkIcon
                             className="w-6 h-6 text-sm text-zinc-500 "
-                            onClick={closeRegisterModal}
+                            onClick={closeSignupModal}
                           />
                         </div>
 
@@ -553,7 +553,7 @@ const Login = () => {
                           </div>
 
                           <div className="mb-3 text-center">
-                            <h6 onClick={() => {closeRegisterModal(); openLoginModal();}} className="text-sm font-bold text-zinc-400">
+                            <h6 onClick={() => {closeSignupModal(); openLoginModal();}} className="text-sm font-bold text-zinc-400">
                               로그인 화면으로 돌아가기
                             </h6>
                           </div>
