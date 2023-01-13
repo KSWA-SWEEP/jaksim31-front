@@ -39,6 +39,10 @@ const Login = () => {
     const [isEmail, setIsEmail] = useState(false)
     const [isPassword, setIsPassword] = useState(false)
     const [isPasswordConfirm, setIsPasswordConfirm] = useState(false)
+    
+    const onNameChange = (e) => {
+      userName.current = e.target.value;
+    };
 
     // 이메일 검증
     const onEmailChange = (e) => {
@@ -92,6 +96,7 @@ const Login = () => {
           setIsPassword(true)
       }
     };
+
     const onPasswordCheckChange = (e) => {
         userPasswordCheck.current = e.target.value;
         // console.log("userPasswordCheck : "+userPasswordCheck.current);
@@ -102,6 +107,51 @@ const Login = () => {
             setPasswordConfirmMessage('비밀번호가 달라요. 다시 확인해주세요 😢')
             setIsPasswordConfirm(false)
         }
+    };
+
+    async function requestSignup(){
+
+      console.log("회원가입 버튼 눌림");
+
+      if(!userName.current){
+          alert("이름을 입력해 주세요 😮");
+          return;
+      }
+
+      //회원가입 api 호출
+      console.log("======= SignUp Request");
+      const data = new Object();
+      console.log("userEmail : " + userEmail.current);
+      console.log("userPassword : " + userPassword.current);
+      console.log("userName : " + userName.current);
+      data.loginId = userEmail.current;
+      data.password = userPassword.current;
+      data.username = userName.current;
+
+      const requestBody = {
+          loginId: userEmail.current,
+          password: userPassword.current,
+          username: userName.current
+      }
+      
+      try{
+          const response = await fetch('/api/v0/members/register', {
+              method: 'POST',
+              body: JSON.stringify(requestBody),
+              headers: {
+                  'Content-type': 'application/json',
+              }
+          });
+          //check
+          // console.log("Result : " + JSON.stringify(response));
+          // console.log("User email : "+ response["email"]);
+          
+          alert("회원가입이 완료되었습니다 😊");
+          openLoginModal();
+      } catch (e) {
+          console.log(e);
+          alert("회원가입에 실패했습니다. 다시 시도해 주세요.");
+      }
     };
 
     const sendAuthMail =()=>{
@@ -322,6 +372,7 @@ const Login = () => {
                                       type="text"
                                       className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
                                       placeholder="Name"
+                                      onChange={onNameChange}
                                     />
                                   </div>
                                 </div>
@@ -432,6 +483,8 @@ const Login = () => {
                                 <button
                                   className="w-full px-6 py-3 mb-1 mr-1 text-sm font-bold text-white uppercase transition-all duration-150 ease-linear rounded shadow outline-none bg-zinc-800 active:bg-zinc-600 hover:shadow-lg focus:outline-none"
                                   type="button"
+                                  disabled={!(isEmail && isPassword && isPasswordConfirm && isAuthConfirm)}
+                                  onClick={requestSignup}
                                 >
                                   회원가입
                                 </button>
