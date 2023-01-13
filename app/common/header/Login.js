@@ -170,39 +170,51 @@ const Login = () => {
                         </div>
 
                         <div className='flex flex-col text-center justify-items-center'>
-                          <div className="flex-auto px-4 py-10 pt-2 lg:px-10">
+                          <div className="flex-auto px-4 py-4 pt-2 lg:px-10">
                             <div className="mb-5 text-2xl font-bold text-center text-zinc-700">
                               로그인
                             </div>
                             <form>
                               <div className="relative w-full mb-3">
-                                <label
-                                  className="block mb-2 text-xs font-bold uppercase text-zinc-600"
-                                  htmlFor="grid-password"
-                                >
-                                  이메일
-                                </label>
-                                <input
-                                  type="email"
-                                  className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
-                                  placeholder="Email"
-                                  onChange={onEmailChange}
-                                />
-                                {userEmail.current.length > 0 && <span className={`message ${isEmail ? 'success text-xs text-blue-500' : 'error text-xs text-red-500'}`}>{emailMessage}</span>}
+                                <div class="grid grid-cols-7 gap-1">
+                                  <div class="col-span-2">
+                                    <label
+                                      className="block mb-2 pt-2 text-m font-bold uppercase text-zinc-600"
+                                      htmlFor="grid-password"
+                                    >
+                                      이메일
+                                    </label>
+                                  </div>
+                                  <div class="col-span-5">
+                                    <input
+                                      type="email"
+                                      className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
+                                      placeholder="Email"
+                                      onChange={onEmailChange}
+                                    />
+                                    {userEmail.current.length > 0 && <span className={`message ${isEmail ? 'success text-xs text-blue-500' : 'error text-xs text-red-500'}`}>{emailMessage}</span>}
+                                  </div>
+                                </div>
                               </div>
 
                               <div className="relative w-full mb-5">
-                                <label
-                                  className="block mb-2 text-xs font-bold uppercase text-zinc-600"
-                                  htmlFor="grid-password"
-                                >
-                                  비밀번호
-                                </label>
-                                <input
-                                  type="password"
-                                  className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
-                                  placeholder="Password"
-                                />
+                                <div class="grid grid-cols-7 gap-1">  
+                                  <div class="col-span-2">
+                                    <label
+                                      className="block mb-2 pt-2 text-m font-bold uppercase text-zinc-600"
+                                      htmlFor="grid-password"
+                                    >
+                                      비밀번호
+                                    </label>
+                                  </div>
+                                  <div class="col-span-5">
+                                    <input
+                                      type="password"
+                                      className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
+                                      placeholder="Password"
+                                    />
+                                  </div>
+                                </div>
                               </div>
                               <div>
                                 <label className="inline-flex items-center cursor-pointer">
@@ -296,36 +308,48 @@ const Login = () => {
                             </div>
                             <form>
                               <div className="relative w-full mb-3">
-                                <label
-                                  className="block mb-2 text-xs font-bold uppercase text-zinc-600"
-                                  htmlFor="grid-password"
-                                >
-                                  이름
-                                </label>
-                                <input
-                                  type="text"
-                                  className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
-                                  placeholder="Name"
-                                />
+                                <div class="grid grid-cols-7 gap-1">
+                                  <div class="col-span-2">
+                                    <label
+                                      className="block mb-2 pt-2 text-m font-bold uppercase text-zinc-600"
+                                      htmlFor="grid-password"
+                                    >
+                                      이름
+                                    </label>
+                                  </div>
+                                  <div class="col-span-5">
+                                    <input
+                                      type="text"
+                                      className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
+                                      placeholder="Name"
+                                    />
+                                  </div>
+                                </div>
                               </div>
 
                               <div className="relative w-full mb-3">
-                                <label
-                                  className="block mb-2 text-xs font-bold uppercase text-zinc-600"
-                                  htmlFor="grid-password"
-                                >
-                                  이메일
-                                </label>
-                                <input
-                                  type="email"
-                                  className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
-                                  placeholder="Email"
-                                  onChange={onEmailChange}
-                                />
+                                <div class="grid grid-cols-7 gap-1">
+                                  <div class="col-span-2">
+                                    <label
+                                      className="block mb-2 pt-2 text-m font-bold uppercase text-zinc-600"
+                                      htmlFor="grid-password"
+                                    >
+                                      이메일
+                                    </label>
+                                  </div>
+                                  <div class="col-span-5">
+                                    <input
+                                      type="email"
+                                      className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
+                                      placeholder="Email"
+                                      onChange={onEmailChange}
+                                    />
+                                  </div>
+                                </div>
                                 {userEmail.current.length > 0 && <span className={`message ${isEmail ? 'success text-xs text-blue-500' : 'error text-xs text-red-500'}`}>{emailMessage}</span>}
                               </div>
 
-                              <div className="mt-6 text-center">
+                              <div className="mt-3 mb-3 text-center">
                                 <button
                                   className="w-full px-6 py-3 mb-1 mr-1 text-sm font-bold text-white uppercase transition-all duration-150 ease-linear rounded shadow outline-none bg-rose-400 active:bg-zinc-600 hover:shadow-lg focus:outline-none"
                                   type="button"
@@ -338,52 +362,72 @@ const Login = () => {
                               </div>
 
                               <div className="relative w-full mb-3">
-                                <label
-                                  className="block mb-2 text-xs font-bold uppercase text-zinc-600"
-                                  htmlFor="grid-verify"
-                                >
-                                  인증번호
-                                </label>
-                                <input
-                                  type="text"
-                                  className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
-                                  placeholder="인증번호를 입력하세요"
-                                  disabled={!(isAuthIng)}
-                                  onChange={onAuthChange}
-                                />
-                                {userAuth.current.length > 0 && <span className={`message ${isAuthConfirm ? 'success text-xs' : 'error text-xs text-red-500'}`}>{authMessage}</span>}
+                                <div class="grid grid-cols-7 gap-1">
+                                  <div class="col-span-2">
+                                    <label
+                                      className="block mb-2 pt-2 text-m font-bold uppercase text-zinc-600"
+                                      htmlFor="grid-verify"
+                                    >
+                                      인증번호
+                                    </label>
+                                  </div>
+                                  <div class="col-span-5">
+                                    <input
+                                      type="text"
+                                      className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
+                                      placeholder="인증번호를 입력하세요"
+                                      disabled={!(isAuthIng)}
+                                      onChange={onAuthChange}
+                                    />
+                                  </div>
+                                </div>
+                                {userAuth.current.length > 0 && <span className={`message ${isAuthConfirm ? 'success text-xs text-blue-500' : 'error text-xs text-red-500'}`}>{authMessage}</span>}
                               </div>
 
                               <div className="relative w-full mb-5">
-                                <label
-                                  className="block mb-2 text-xs font-bold uppercase text-zinc-600"
-                                  htmlFor="grid-password"
-                                >
-                                  비밀번호
-                                </label>
-                                <input
-                                  type="password"
-                                  className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
-                                  placeholder="Password"
-                                  onChange={onPwChange}
-                                />
+                                <div class="grid grid-cols-7 gap-1">
+                                  <div class="col-span-2">
+                                    <label
+                                      className="block mb-2 pt-2 text-m font-bold uppercase text-zinc-600"
+                                      htmlFor="grid-password"
+                                    >
+                                      비밀번호
+                                    </label>
+                                  </div>
+                                  <div class="col-span-5">
+                                    <input
+                                      type="password"
+                                      className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
+                                      placeholder="Password"
+                                      onChange={onPwChange}
+                                    />
+                                  </div>
+                                </div>
+                                {userPw.current.length > 0 && <span className={`message ${isPassword ? 'success text-xs text-blue-500' : 'error text-xs text-red-500'}`}>{passwordMessage}</span>}
                               </div>
-                              {userPw.current.length > 0 && <span className={`message ${isPassword ? 'success text-xs text-blue-500' : 'error text-xs text-red-500'}`}>{passwordMessage}</span>}
+                              
                               <div className="relative w-full mb-5">
-                                <label
-                                  className="block mb-2 text-xs font-bold uppercase text-zinc-600"
-                                  htmlFor="grid-password"
-                                >
-                                  비밀번호 확인
-                                </label>
-                                <input
-                                  type="password"
-                                  className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
-                                  placeholder="Password"
-                                  onChange={onPwChkChange}
-                                />
-                              </div>
+                                <div class="grid grid-cols-7 gap-1">
+                                  <div class="col-span-2">
+                                    <label
+                                      className="block mb-2 pt-2 text-m font-bold uppercase text-zinc-600"
+                                      htmlFor="grid-password"
+                                    >
+                                      비밀번호 확인
+                                    </label>
+                                  </div>
+                                  <div class="col-span-5">
+                                    <input
+                                      type="password"
+                                      className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
+                                      placeholder="Password"
+                                      onChange={onPwChkChange}
+                                    />
+                                  </div>
+                                </div>
                                 {userPwChk.current.length > 0 && <span className={`message ${isPasswordConfirm ? 'success text-xs text-blue-500' : 'error text-xs text-red-500'}`}>{passwordConfirmMessage}</span>}
+                              </div>
+                              
                               <div className="mt-6 text-center">
                                 <button
                                   className="w-full px-6 py-3 mb-1 mr-1 text-sm font-bold text-white uppercase transition-all duration-150 ease-linear rounded shadow outline-none bg-zinc-800 active:bg-zinc-600 hover:shadow-lg focus:outline-none"
