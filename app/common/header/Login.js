@@ -324,14 +324,6 @@ const Login = () => {
                                   </div>
                                 </div>
                               </div>
-                              <div>
-                                <label className="inline-flex items-center cursor-pointer">
-                                  <input type="checkbox" className="checkbox checkbox-xs" /> 
-                                  <div className="ml-2 text-sm font-semibold text-zinc-600">
-                                    자동 로그인
-                                  </div>
-                                </label>
-                              </div>
 
                               <div className="mt-6 text-center">
                                 <button
@@ -342,6 +334,17 @@ const Login = () => {
                                 >
                                   로그인
                                 </button>
+                              </div>
+
+                              <div className="relative w-full mt-1 mb-1">
+                                <div class="grid grid-cols-2 gap-1">
+                                  <div class="grid justify-start">
+                                    <strong className="text-sm hover:text-gray-500">아이디 조회</strong>
+                                  </div>
+                                  <div class="grid justify-end">
+                                    <strong className="text-sm hover:text-gray-500">비밀번호 재설정</strong>
+                                  </div>
+                                </div>
                               </div>
 
                               <div className="relative w-full mt-4 mb-2">
