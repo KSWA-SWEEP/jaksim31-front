@@ -12,7 +12,7 @@ const SearchBox = () => {
     }
 
     // 검색 옵션
-    const [query,setQuery] = useState("");
+    const [searchWord,setSearchWord] = useState("");
     const [emotion, setEmotion] = useState("");
     const [sort, setSort] = useState("");
     const [startDate, setStartDate] = useState(setDateFormat(new Date(1999,0,1)));
@@ -20,8 +20,8 @@ const SearchBox = () => {
 
     // 검색 옵션 설정값 가져오기
     // 검색어
-    const onQueryChange =(e)=>{
-        setQuery(e.target.value);
+    const onSearchWordChange =(e)=>{
+        setSearchWord(e.target.value);
     }
     // 감정
     const onEmotionChange =(e)=>{
@@ -35,11 +35,11 @@ const SearchBox = () => {
     // 검색
     function search(){
         // check
-        console.log("검색어 : " + query + "\nemotion : " + emotion + "\nstartDate : " + startDate + "\nendDate : " + endDate + "\nsort형식 : " + sort);
+        console.log("검색어 : " + searchWord + "\nemotion : " + emotion + "\nstartDate : " + startDate + "\nendDate : " + endDate + "\nsort형식 : " + sort);
         const data = new Object();
         let url = "/v1/diaries/{userId}?"
         // TODO 일기 검색 API에 query parameter로 넘기면 됨.
-        url = url+"query="+query+"&emotion="+emotion+"&startDate="+startDate+"&endDate="+endDate+"&sort="+startDate
+        url = url+"searchWord="+searchWord+"&emotion="+emotion+"&startDate="+startDate+"&endDate="+endDate+"&sort="+startDate
     }
 
 
@@ -66,11 +66,11 @@ const SearchBox = () => {
                                     </label>
                                     <input
                                         type="text"
-                                        name="query"
-                                        id="query"
+                                        name="search-word"
+                                        id="search-word"
                                         autoComplete="search-word"
                                         placeholder='검색어를 입력하세요'
-                                        onChange={onQueryChange}
+                                        onChange={onSearchWordChange}
                                         className="w-full pl-4 mt-1 shadow-sm border-zinc-300 focus:outline-zinc-300 h-9 rounded-xl "
                                     />
                                 </div>
