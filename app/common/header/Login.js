@@ -1,5 +1,5 @@
 
-import { Fragment, useState } from "react";
+import { Fragment, useState, useRef } from "react";
 import { motion } from "framer-motion";
 import Image from 'next/image';
 import { Dialog, Transition } from '@headlessui/react';
@@ -10,11 +10,118 @@ const Login = () => {
     let [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
     let [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false)
  
-    function openLoginModal() { setIsLoginModalOpen(true); setIsRegisterModalOpen(false) }
+    function openLoginModal() { setIsLoginModalOpen(true); setIsRegisterModalOpen(false); setEmailMessage("") }
     function closeLoginModal() { setIsLoginModalOpen(false); setIsRegisterModalOpen(false) }
    
-    function openRegisterModal() { setIsRegisterModalOpen(true); setIsLoginModalOpen(false) }
-    function closeRegisterModal() { setIsLoginModalOpen(false); setIsRegisterModalOpen(false) }
+    function openRegisterModal() { setIsRegisterModalOpen(true); setIsLoginModalOpen(false), setEmailMessage(""), setPasswordMessage(""), setPasswordConfirmMessage(""), setChkAuthMessage(""), setAuthMessage("")}
+    function closeRegisterModal() { setIsLoginModalOpen(false); setIsRegisterModalOpen(false), setIsEmail(false) }
+    
+    // 사용자 입력 변수
+    const userName = useRef("");
+    const userEmail = useRef("");
+    const userPw = useRef("");
+    const userPwChk = useRef("");
+
+    // 메일 인증 변수
+    const userAuth = useRef(""); // 인증번호 입력값
+    const [authMessage, setAuthMessage] = useState('') // 인증번호 오류 메세지
+    const [chkAuthMessage, setChkAuthMessage] = useState('') // 인증번호 확인 요청 메시지
+    const [isAuthConfirm, setIsAuthConfirm] = useState(false) // 인증 번호가 일치하는지 확인
+    let randNum = useRef("00000"); // 인증번호
+    let [isAuthIng, setIsAuthIng] = useState(false) // 메일 인증 중인지 확인
+
+    // 오류 메시지 변수
+    const [emailMessage, setEmailMessage] = useState('')
+    const [passwordMessage, setPasswordMessage] = useState('')
+    const [passwordConfirmMessage, setPasswordConfirmMessage] = useState('')
+
+    // 유효성 검사 변수
+    const [isEmail, setIsEmail] = useState(false)
+    const [isPassword, setIsPassword] = useState(false)
+    const [isPasswordConfirm, setIsPasswordConfirm] = useState(false)
+
+    // 이메일 검증
+    const onEmailChange = (e) => {
+      const emailRegex =
+          /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/
+      userEmail.current = e.target.value;
+      // console.log("Email : "+userEmail.current);
+
+      if (!emailRegex.test(userEmail.current)) {
+          setEmailMessage('이메일 형식이 틀렸습니다. 다시 확인해 주세요😢')
+          setIsEmail(false)
+          // 메일 변경 시 인증번호 창 다시 막고, 인증 다시하도록 인증 관련 변수 초기화
+          setIsAuthConfirm(false)
+          setAuthMessage('')
+          setIsAuthIng(false)
+          setChkAuthMessage('');
+      } else {
+          setEmailMessage('올바른 이메일 형식입니다✅')
+          //인증번호 발급
+          randNum.current = parseInt(Math.random() * 100000 + "");
+          setIsEmail(true)
+      }
+    };
+
+    const onAuthChange = (e) => {
+      userAuth.current = e.target.value;
+      // console.log("인증번호##" + randNum.current)
+
+      if (randNum.current != userAuth.current) {
+          setAuthMessage('인증 번호가 틀렸습니다. 다시 확인해 주세요😢')
+          setIsAuthConfirm(false)
+      } else {
+          setAuthMessage('인증 번호가 확인되었습니다. ✅')
+          setIsAuthConfirm(true)
+      }
+    };
+  
+    // 비밀번호 검증
+    const onPwChange = (e) => {
+      setIsPasswordConfirm(false);
+      setPasswordConfirmMessage('비밀번호가 달라요. 다시 확인해주세요😢')
+
+      const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/
+      userPw.current = e.target.value;
+      // console.log("userPw : "+userPw.current);
+      if (!passwordRegex.test(userPw.current)) {
+          setPasswordMessage('숫자+영문자+특수문자 조합으로 8자리 이상 입력해 주세요🚨')
+          setIsPassword(false)
+      } else {
+          setPasswordMessage('안전한 비밀번호입니다✅')
+          setIsPassword(true)
+      }
+    };
+    const onPwChkChange = (e) => {
+        userPwChk.current = e.target.value;
+        // console.log("userPwChk : "+userPwChk.current);
+        if (userPw.current === userPwChk.current) {
+            setPasswordConfirmMessage('비밀번호를 똑같이 입력했어요✅')
+            setIsPasswordConfirm(true)
+        } else {
+            setPasswordConfirmMessage('비밀번호가 달라요. 다시 확인해주세요😢')
+            setIsPasswordConfirm(false)
+        }
+    };
+
+    const sendAuthMail =()=>{
+
+      /*
+      * TODO: API 확정되면 이메일 인증 구현 예정
+      * 
+      * 현재 입력한 이메일에 대한 계정 존재 여부 확인 X
+      * 인증번호 이메일 전송 기능 X
+      * 단순 인증번호만 생성 O
+      */
+      
+      //인증 중
+      console.log("메일인증")
+      // 인증번호 test 코드
+      console.log("============== "+randNum.current)
+      setIsAuthIng(true)
+      setChkAuthMessage("메일을 전송하였습니다. 확인 후 인증번호를 입력해 주세요.");
+     
+    };
 
     return (
       <div>
@@ -73,13 +180,15 @@ const Login = () => {
                                   className="block mb-2 text-xs font-bold uppercase text-zinc-600"
                                   htmlFor="grid-password"
                                 >
-                                  Email
+                                  이메일
                                 </label>
                                 <input
                                   type="email"
                                   className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
                                   placeholder="Email"
+                                  onChange={onEmailChange}
                                 />
+                                {userEmail.current.length > 0 && <span className={`message ${isEmail ? 'success text-xs text-blue-500' : 'error text-xs text-red-500'}`}>{emailMessage}</span>}
                               </div>
 
                               <div className="relative w-full mb-5">
@@ -87,7 +196,7 @@ const Login = () => {
                                   className="block mb-2 text-xs font-bold uppercase text-zinc-600"
                                   htmlFor="grid-password"
                                 >
-                                  Password
+                                  비밀번호
                                 </label>
                                 <input
                                   type="password"
@@ -196,7 +305,7 @@ const Login = () => {
                                 <input
                                   type="text"
                                   className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
-                                  placeholder="이름"
+                                  placeholder="Name"
                                 />
                               </div>
 
@@ -205,13 +314,44 @@ const Login = () => {
                                   className="block mb-2 text-xs font-bold uppercase text-zinc-600"
                                   htmlFor="grid-password"
                                 >
-                                  Email
+                                  이메일
                                 </label>
                                 <input
                                   type="email"
                                   className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
                                   placeholder="Email"
+                                  onChange={onEmailChange}
                                 />
+                                {userEmail.current.length > 0 && <span className={`message ${isEmail ? 'success text-xs text-blue-500' : 'error text-xs text-red-500'}`}>{emailMessage}</span>}
+                              </div>
+
+                              <div className="mt-6 text-center">
+                                <button
+                                  className="w-full px-6 py-3 mb-1 mr-1 text-sm font-bold text-white uppercase transition-all duration-150 ease-linear rounded shadow outline-none bg-rose-400 active:bg-zinc-600 hover:shadow-lg focus:outline-none"
+                                  type="button"
+                                  onClick={sendAuthMail}
+                                  disabled={!(isEmail)}
+                                >
+                                  인증메일 전송
+                                </button>
+                                {(<span className="text-xs text-blue-500">{chkAuthMessage}</span>)}
+                              </div>
+
+                              <div className="relative w-full mb-3">
+                                <label
+                                  className="block mb-2 text-xs font-bold uppercase text-zinc-600"
+                                  htmlFor="grid-verify"
+                                >
+                                  인증번호
+                                </label>
+                                <input
+                                  type="text"
+                                  className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
+                                  placeholder="인증번호를 입력하세요"
+                                  disabled={!(isAuthIng)}
+                                  onChange={onAuthChange}
+                                />
+                                {userAuth.current.length > 0 && <span className={`message ${isAuthConfirm ? 'success text-xs' : 'error text-xs text-red-500'}`}>{authMessage}</span>}
                               </div>
 
                               <div className="relative w-full mb-5">
@@ -225,9 +365,10 @@ const Login = () => {
                                   type="password"
                                   className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
                                   placeholder="Password"
+                                  onChange={onPwChange}
                                 />
                               </div>
-
+                              {userPw.current.length > 0 && <span className={`message ${isPassword ? 'success text-xs text-blue-500' : 'error text-xs text-red-500'}`}>{passwordMessage}</span>}
                               <div className="relative w-full mb-5">
                                 <label
                                   className="block mb-2 text-xs font-bold uppercase text-zinc-600"
@@ -239,9 +380,10 @@ const Login = () => {
                                   type="password"
                                   className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
                                   placeholder="Password"
+                                  onChange={onPwChkChange}
                                 />
                               </div>
-
+                                {userPwChk.current.length > 0 && <span className={`message ${isPasswordConfirm ? 'success text-xs text-blue-500' : 'error text-xs text-red-500'}`}>{passwordConfirmMessage}</span>}
                               <div className="mt-6 text-center">
                                 <button
                                   className="w-full px-6 py-3 mb-1 mr-1 text-sm font-bold text-white uppercase transition-all duration-150 ease-linear rounded shadow outline-none bg-zinc-800 active:bg-zinc-600 hover:shadow-lg focus:outline-none"
