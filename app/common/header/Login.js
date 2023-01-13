@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { Dialog, Transition } from '@headlessui/react';
 import KakaoLoginBtn from '../../../public/images/KakaoLogin.png'
 import { XMarkIcon } from '@heroicons/react/24/outline';
+import { useRouter } from 'next/navigation';
 
 const Login = () => {
     let [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
@@ -16,6 +17,8 @@ const Login = () => {
     function openRegisterModal() { setIsRegisterModalOpen(true); setIsLoginModalOpen(false), setEmailMessage(""), setPasswordMessage(""), setPasswordConfirmMessage(""), setCheckAuthMessage(""), setAuthMessage("")}
     function closeRegisterModal() { setIsLoginModalOpen(false); setIsRegisterModalOpen(false), setIsEmail(false) }
     
+    const router = useRouter();
+
     // 사용자 입력 변수
     const userName = useRef("");
     const userEmail = useRef("");
@@ -109,6 +112,60 @@ const Login = () => {
         }
     };
 
+    async function requestLogin(){
+      
+      console.log("로그인 버튼 눌림");
+
+      if(!userPassword.current) {
+        alert("비밀번호를 입력해 주세요 😮");
+        return;
+      }
+
+      //로그인 api 호출
+      console.log("======= Login Request");
+      const data = new Object();
+      console.log("userEmail : " + userEmail.current);
+      console.log("userPassword : " + userPassword.current);
+      data.loginId = userEmail.current;
+      data.password = userPassword.current;
+      
+      const requestLoginBody = {
+          loginId: userEmail.current,
+          password: userPassword.current
+      }
+      
+      try{
+          const responseLogin = await fetch('/api//v0/members/login', {
+              method: 'POST',
+              body: JSON.stringify(requestLoginBody),
+              headers: {
+                  'Content-type': 'application/json',
+              }
+          });
+
+          /*
+          * TODO: accessToken / 로그인 상태 / 만료 시간 저장 기능
+          
+          const responseData = await responseLogin.json();
+          let responseDataJson = JSON.parse(responseData);
+
+          //recoil에 accessToken 저장
+          setAcctoken(responseDataJson.accessToken);
+          
+          //로그인 상태와 만료 시간 sessionStorage에 저장
+          sessionStorage.setItem("isLogin","true")
+          sessionStorage.setItem("expTime",responseDataJson.expTime)
+
+          */
+
+          router.push('/diary/dashboard');
+          return;
+      }catch(e){
+          console.log(e);
+          alert("로그인에 실패했습니다. 다시 시도해 주세요.");
+      }
+  }
+
     async function requestSignup(){
 
       console.log("회원가입 버튼 눌림");
@@ -128,22 +185,22 @@ const Login = () => {
       data.password = userPassword.current;
       data.username = userName.current;
 
-      const requestBody = {
+      const requestSignupBody = {
           loginId: userEmail.current,
           password: userPassword.current,
           username: userName.current
       }
       
       try{
-          const response = await fetch('/api/v0/members/register', {
+          const responseSignup = await fetch('/api/v0/members/register', {
               method: 'POST',
-              body: JSON.stringify(requestBody),
+              body: JSON.stringify(requestSignupBody),
               headers: {
                   'Content-type': 'application/json',
               }
           });
           //check
-          // console.log("Result : " + JSON.stringify(response));
+          // console.log("Result : " + JSON.stringify(responseSignup));
           // console.log("User email : "+ response["email"]);
           
           alert("회원가입이 완료되었습니다 😊");
@@ -262,6 +319,7 @@ const Login = () => {
                                       type="password"
                                       className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
                                       placeholder="Password"
+                                      onChange={onPasswordChange}
                                     />
                                   </div>
                                 </div>
@@ -279,6 +337,8 @@ const Login = () => {
                                 <button
                                   className="w-full px-6 py-3 mb-1 mr-1 text-sm font-bold text-white uppercase transition-all duration-150 ease-linear rounded shadow outline-none bg-zinc-800 active:bg-zinc-600 hover:shadow-lg focus:outline-none"
                                   type="button"
+                                  onClick={requestLogin}
+                                  disabled={!isEmail}
                                 >
                                   로그인
                                 </button>
