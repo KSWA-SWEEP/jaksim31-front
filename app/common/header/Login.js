@@ -168,7 +168,42 @@ const Login = () => {
           console.log(e);
           alert("로그인에 실패했습니다. 다시 시도해 주세요.");
       }
-  }
+    }
+
+    async function requestEmailCheck(){
+      
+      console.log("이메일 조회하기 버튼 눌림");
+      console.log("======= EmailCheck Request");
+      console.log("userEmail : " + userEmail.current);
+
+      const data = new Object();
+      data.loginId = userEmail.current;
+      
+      const requestLoginBody = {
+          loginId: userEmail.current,
+      }
+      
+      try{
+
+        /*
+        * TODO: 회원가입 여부 확인 API 호출
+
+          const responseLogin = await fetch('/api//v0/members', {
+              method: 'POST',
+              body: JSON.stringify(requestLoginBody),
+              headers: {
+                  'Content-type': 'application/json',
+              }
+          });
+
+        */
+
+          setEmailMessage('이미 가입된 메일입니다.')
+      }catch(e){
+          console.log(e);
+          setEmailMessage('등록되지 않은 메일입니다. 회원가입을 진행해 주세요 🤗')
+      }
+    }
 
     async function requestSignup(){
 
