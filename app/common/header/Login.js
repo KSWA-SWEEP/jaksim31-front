@@ -10,14 +10,19 @@ import { useRouter } from 'next/navigation';
 const Login = () => {
     let [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
     let [isSignupModalOpen, setIsSignupModalOpen] = useState(false)
+    let [isEmailCheckModalOpen, setIsEmailCheckModalOpen] = useState(false)
  
-    function openLoginModal() { setIsLoginModalOpen(true); setIsSignupModalOpen(false); setEmailMessage("") }
+    function openLoginModal() { setIsLoginModalOpen(true); setIsSignupModalOpen(false); setIsEmailCheckModalOpen(false); setEmailMessage(""), setIsChangePasswordModal(false) }
     function closeLoginModal() { setIsLoginModalOpen(false); setIsSignupModalOpen(false) }
    
-    function openSignupModal() { setIsSignupModalOpen(true); setIsLoginModalOpen(false), setEmailMessage(""), setPasswordMessage(""), setPasswordConfirmMessage(""), setCheckAuthMessage(""), setAuthMessage("")}
-    function closeSignupModal() { setIsLoginModalOpen(false); setIsSignupModalOpen(false), setIsEmail(false) }
+    function openSignupModal() { setIsSignupModalOpen(true); setIsLoginModalOpen(false), setIsEmailCheckModalOpen(false); setEmailMessage(""), setPasswordMessage(""), setPasswordConfirmMessage(""), setCheckAuthMessage(""), setAuthMessage("")}
+    function closeSignupModal() { setIsLoginModalOpen(false); setIsSignupModalOpen(false), setIsEmail(false), setIsChangePasswordModal(false) }
+
+    function openEmailCheckModal() { setIsEmailCheckModalOpen(true); setIsLoginModalOpen(false); setEmailMessage("") }
+    function closeEmailCheckModal() { setIsEmailCheckModalOpen(false); setIsLoginModalOpen(true); setEmailMessage("") }
     
     const router = useRouter();
+    const [isChangePasswordMoal, setIsChangePasswordModal] = useState("false");   // 회원가입과 비밀번호 재설정 모달 구분을 위한 변수
 
     // 사용자 입력 변수
     const userName = useRef("");
@@ -164,7 +169,42 @@ const Login = () => {
           console.log(e);
           alert("로그인에 실패했습니다. 다시 시도해 주세요.");
       }
-  }
+    }
+
+    async function requestEmailCheck(){
+      
+      console.log("이메일 조회하기 버튼 눌림");
+      console.log("======= EmailCheck Request");
+      console.log("userEmail : " + userEmail.current);
+
+      const data = new Object();
+      data.loginId = userEmail.current;
+      
+      const requestLoginBody = {
+          loginId: userEmail.current,
+      }
+      
+      try{
+
+        /*
+        * TODO: 회원가입 여부 확인 API 호출
+
+          const responseLogin = await fetch('/api//v0/members', {
+              method: 'POST',
+              body: JSON.stringify(requestLoginBody),
+              headers: {
+                  'Content-type': 'application/json',
+              }
+          });
+
+        */
+
+          setEmailMessage('이미 가입된 메일입니다.')
+      }catch(e){
+          console.log(e);
+          setEmailMessage('등록되지 않은 메일입니다. 회원가입을 진행해 주세요 🤗')
+      }
+    }
 
     async function requestSignup(){
 
@@ -208,6 +248,41 @@ const Login = () => {
       } catch (e) {
           console.log(e);
           alert("회원가입에 실패했습니다. 다시 시도해 주세요.");
+      }
+    };
+
+    async function requestChangePassword(){
+
+      console.log("비밀번호 변경하기 버튼 눌림");
+
+      //비밀번호 재설정 api 호출
+      console.log("======= Change Password Request");
+      const data = new Object();
+      console.log("newPassword : " + userPassword.current);
+      console.log("userName : " + userName.current);
+      data.newPassword = userPassword.current;
+      data.username = userName.current;
+
+      const requestSignupBody = {
+          newPassword: userPassword.current,
+          username: userName.current
+      }
+
+      
+      try{
+          const responseChangePassword = await fetch('/api/v0/members/{userID}/password', {
+              method: 'POST',
+              body: JSON.stringify(requestSignupBody),
+              headers: {
+                  'Content-type': 'application/json',
+              }
+          });
+          
+          alert("비밀번호가 변경되었습니다 😊");
+          openLoginModal();
+      } catch (e) {
+          console.log(e);
+          alert("비밀번호 재설정에 실패했습니다. 다시 시도해 주세요.");
       }
     };
 
@@ -324,14 +399,6 @@ const Login = () => {
                                   </div>
                                 </div>
                               </div>
-                              <div>
-                                <label className="inline-flex items-center cursor-pointer">
-                                  <input type="checkbox" className="checkbox checkbox-xs" /> 
-                                  <div className="ml-2 text-sm font-semibold text-zinc-600">
-                                    자동 로그인
-                                  </div>
-                                </label>
-                              </div>
 
                               <div className="mt-6 text-center">
                                 <button
@@ -344,8 +411,19 @@ const Login = () => {
                                 </button>
                               </div>
 
+                              <div className="relative w-full mt-1 mb-1">
+                                <div class="grid grid-cols-2 gap-1">
+                                  <div class="grid justify-start">
+                                    <strong onClick={openEmailCheckModal} className="text-sm hover:text-gray-500">이메일 조회</strong>
+                                  </div>
+                                  <div class="grid justify-end">
+                                    <strong onClick={() => {setIsChangePasswordModal(true); openSignupModal();}} className="text-sm hover:text-gray-500">비밀번호 재설정</strong>
+                                  </div>
+                                </div>
+                              </div>
+
                               <div className="relative w-full mt-4 mb-2">
-                                <p>회원이 아니신가요?  <strong onClick={openSignupModal} className='text-red-400 hover:text-red-500'>회원 가입하기</strong></p>
+                                <p>회원이 아니신가요? <strong onClick={openSignupModal} className='text-red-400 hover:text-red-500'>회원 가입하기</strong></p>
                               </div>
                             </form>
                           </div>
@@ -376,7 +454,94 @@ const Login = () => {
               </Dialog>
             </Transition>
 
-            {/* 회원가입 Modal */}
+            {/* 이메일 조회 Modal */}
+            <Transition className="z-50 overflow-auto" appear show={isEmailCheckModalOpen} as={Fragment}>
+              <Dialog as="div" className="relative" onClose={closeEmailCheckModal}>
+                <Transition.Child
+                  as={Fragment}
+                  enter="ease-out duration-300"
+                  enterFrom="opacity-0"
+                  enterTo="opacity-100"
+                  leave="ease-in duration-200"
+                  leaveFrom="opacity-100"
+                  leaveTo="opacity-0"
+                >
+                  <div className="fixed inset-0 bg-black bg-opacity-50" />
+                </Transition.Child>
+
+                <div className="fixed inset-0">
+                  <div className="flex items-center justify-center min-h-full p-4 text-center">
+                    <Transition.Child
+                      as={Fragment}
+                      enter="ease-out duration-300"
+                      enterFrom="opacity-0 scale-95"
+                      enterTo="opacity-100 scale-100"
+                      leave="ease-in duration-200"
+                      leaveFrom="opacity-100 scale-100"
+                      leaveTo="opacity-0 scale-95"
+                    >
+                      <Dialog.Panel className="w-full max-w-md p-6 pt-4 text-left align-middle transition-all transform bg-white shadow-xl lg:max-w-lg rounded-2xl">
+                        
+                        <div className='flex justify-end'>
+                          <XMarkIcon
+                            className="w-6 h-6 text-sm text-zinc-500 "
+                            onClick={closeEmailCheckModal}
+                          />
+                        </div>
+
+                        <div className='flex flex-col text-center justify-items-center'>
+                          <div className="flex-auto px-4 py-4 pt-2 lg:px-10">
+                            <div className="mb-5 text-2xl font-bold text-center text-zinc-700">
+                              이메일 조회
+                            </div>
+                            <form>
+                              <div className="relative w-full mb-3">
+                                <div class="grid grid-cols-7 gap-1">
+                                  <div class="col-span-2">
+                                    <label
+                                      className="block mb-2 pt-2 text-m font-bold uppercase text-zinc-600"
+                                      htmlFor="grid-password"
+                                    >
+                                      이메일
+                                    </label>
+                                  </div>
+                                  <div class="col-span-5">
+                                    <input
+                                      type="email"
+                                      className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
+                                      placeholder="Email"
+                                      onChange={onEmailChange}
+                                    />
+                                    {userEmail.current.length > 0 && <span className={`message ${isEmail ? 'success text-xs text-blue-500' : 'error text-xs text-red-500'}`}>{emailMessage}</span>}
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div className="mt-6 text-center">
+                                <button
+                                  className="w-full px-6 py-3 mb-1 mr-1 text-sm font-bold text-white uppercase transition-all duration-150 ease-linear rounded shadow outline-none bg-zinc-800 active:bg-zinc-600 hover:shadow-lg focus:outline-none"
+                                  type="button"
+                                  onClick={requestEmailCheck}
+                                  disabled={!isEmail}
+                                >
+                                  조회하기
+                                </button>
+                              </div>
+
+                              <div className="relative w-full mt-4 mb-2">
+                                <p>회원이 아니신가요?  <strong onClick={openSignupModal} className='text-red-400 hover:text-red-500'>회원 가입하기</strong></p>
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                      </Dialog.Panel>
+                    </Transition.Child>
+                  </div>
+                </div>
+              </Dialog>
+            </Transition>
+
+            {/* 회원가입 & 비밀번호 재설정 Modal */}
             <Transition className="z-50 overflow-auto" appear show={isSignupModalOpen} as={Fragment}>
               <Dialog as="div" className="relative z-50" onClose={closeSignupModal}>
                 <Transition.Child
@@ -414,29 +579,35 @@ const Login = () => {
                         <div className='flex flex-col text-center justify-items-center'>
                           <div className="flex-auto px-4 py-10 pt-2 lg:px-10">
                             <div className="mb-5 text-2xl font-bold text-center text-zinc-700">
-                              회원가입
+                              {isChangePasswordMoal ? <>비밀번호 재설정</> : <>회원가입</>}
                             </div>
                             <form>
-                              <div className="relative w-full mb-3">
-                                <div class="grid grid-cols-7 gap-1">
-                                  <div class="col-span-2">
-                                    <label
-                                      className="block mb-2 pt-2 text-m font-bold uppercase text-zinc-600"
-                                      htmlFor="grid-password"
-                                    >
-                                      이름
-                                    </label>
-                                  </div>
-                                  <div class="col-span-5">
-                                    <input
-                                      type="text"
-                                      className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
-                                      placeholder="Name"
-                                      onChange={onNameChange}
-                                    />
+                              {isChangePasswordMoal ?
+                              // 비밀번호 재설정 모달일 경우, 이름 입력란 없음
+                                <></>
+                              :
+                              // 회원가입 모달일 경우, 이름 입력란 있음
+                                <div className="relative w-full mb-3">
+                                  <div class="grid grid-cols-7 gap-1">
+                                    <div class="col-span-2">
+                                      <label
+                                        className="block mb-2 pt-2 text-m font-bold uppercase text-zinc-600"
+                                        htmlFor="grid-password"
+                                      >
+                                        이름
+                                      </label>
+                                    </div>
+                                    <div class="col-span-5">
+                                      <input
+                                        type="text"
+                                        className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
+                                        placeholder="Name"
+                                        onChange={onNameChange}
+                                      />
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
+                              }
 
                               <div className="relative w-full mb-3">
                                 <div class="grid grid-cols-7 gap-1">
@@ -544,9 +715,9 @@ const Login = () => {
                                   className="w-full px-6 py-3 mb-1 mr-1 text-sm font-bold text-white uppercase transition-all duration-150 ease-linear rounded shadow outline-none bg-zinc-800 active:bg-zinc-600 hover:shadow-lg focus:outline-none"
                                   type="button"
                                   disabled={!(isEmail && isPassword && isPasswordConfirm && isAuthConfirm)}
-                                  onClick={requestSignup}
+                                  onClick={isChangePasswordMoal ? requestChangePassword : requestSignup}
                                 >
-                                  회원가입
+                                  {isChangePasswordMoal ? <>비밀번호 변경하기</> : <>회원가입</>}
                                 </button>
                               </div>
                             </form>
