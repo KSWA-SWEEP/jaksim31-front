@@ -6,6 +6,7 @@ import { Dialog, Transition } from '@headlessui/react';
 import KakaoLoginBtn from '../../../public/images/KakaoLogin.png'
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { useRouter } from 'next/navigation';
+import { init, send } from 'emailjs-com';
 
 const Login = () => {
     let [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
@@ -171,38 +172,46 @@ const Login = () => {
       }
     }
 
-    async function requestEmailCheck(){
+    async function requestIsMember(){
       
-      console.log("이메일 조회하기 버튼 눌림");
-      console.log("======= EmailCheck Request");
+      console.log("======= isMember Request");
       console.log("userEmail : " + userEmail.current);
 
       const data = new Object();
       data.loginId = userEmail.current;
       
-      const requestLoginBody = {
-          loginId: userEmail.current,
-      }
-      
       try{
-
+          let resData = new Object();
         /*
-        * TODO: 회원가입 여부 확인 API 호출
+        * TODO: 회원가입 여부 확인 API 확정되면 수정하기
 
-          const responseLogin = await fetch('/api//v0/members', {
+          const responseLogin = await fetch('/api/v0/members', {
               method: 'POST',
-              body: JSON.stringify(requestLoginBody),
+              body: JSON.stringify(data),
               headers: {
                   'Content-type': 'application/json',
               }
+          })
+          .then((response) => response.json())
+          .then((result) => {
+              resData = result;
           });
 
         */
 
-          setEmailMessage('이미 가입된 메일입니다.')
+          /*
+          * API 확정 전 테스트 코드
+          */
+          throw "API 확정 전 테스트용 오류 발생";
+          // 임의로 userName 설정
+          resData.userName = userName.current;
+          let resDataTmp = new Array();
+          resDataTmp.push(resData);
+          setEmailMessage('이미 가입된 메일입니다.');
+          return resDataTmp;
       }catch(e){
           console.log(e);
-          setEmailMessage('등록되지 않은 메일입니다. 회원가입을 진행해 주세요 🤗')
+          if(!isChangePasswordMoal) setEmailMessage('등록되지 않은 메일입니다. 회원가입을 진행해 주세요 🤗')
       }
     }
 
@@ -288,21 +297,31 @@ const Login = () => {
 
     const sendAuthMail =()=>{
 
-      /*
-      * TODO: API 확정되면 이메일 인증 구현 예정
-      * 
-      * 현재 입력한 이메일에 대한 계정 존재 여부 확인 X
-      * 인증번호 이메일 전송 기능 X
-      * 단순 인증번호만 생성 O
-      */
-      
-      //인증 중
-      console.log("메일인증")
-      // 인증번호 test 코드
-      console.log("============== "+randNum.current)
-      setIsAuthIng(true)
-      setCheckAuthMessage("메일을 전송하였습니다. 확인 후 인증번호를 입력해 주세요.");
-     
+      // 인증메일 전송 전, 회원 여부 검증
+      requestIsMember().then(resp => {
+
+        console.log(resp);
+
+        if(resp == undefined) {  // API 응답 데이터가 없는 경우, 인증 메일 전송
+          
+          setIsAuthIng(true);
+
+          send("service_xefuilp", "template_flcknvq", {
+            to_name: userName.current,
+            message: "인증번호는 " + randNum.current + " 입니다.",
+            user_email: userEmail.current,
+          },"cPndipwNGrbp1LMBT").then(resp => {});
+
+          // 인증번호 test 코드
+          console.log("============== "+randNum.current)
+          setIsAuthIng(true)
+          setCheckAuthMessage("메일을 전송하였습니다. 확인 후 인증번호를 입력해 주세요.");
+        }
+        else {  // API 응답 데이터가 있는 경우, 계정 존재
+          console.log("계정 존재");
+          return;
+        }
+      });
     };
 
     return (
@@ -521,7 +540,7 @@ const Login = () => {
                                 <button
                                   className="w-full px-6 py-3 mb-1 mr-1 text-sm font-bold text-white uppercase transition-all duration-150 ease-linear rounded shadow outline-none bg-zinc-800 active:bg-zinc-600 hover:shadow-lg focus:outline-none"
                                   type="button"
-                                  onClick={requestEmailCheck}
+                                  onClick={requestIsMember}
                                   disabled={!isEmail}
                                 >
                                   조회하기
