@@ -10,12 +10,16 @@ import { useRouter } from 'next/navigation';
 const Login = () => {
     let [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
     let [isSignupModalOpen, setIsSignupModalOpen] = useState(false)
+    let [isEmailCheckModalOpen, setIsEmailCheckModalOpen] = useState(false)
  
     function openLoginModal() { setIsLoginModalOpen(true); setIsSignupModalOpen(false); setEmailMessage("") }
     function closeLoginModal() { setIsLoginModalOpen(false); setIsSignupModalOpen(false) }
    
     function openSignupModal() { setIsSignupModalOpen(true); setIsLoginModalOpen(false), setEmailMessage(""), setPasswordMessage(""), setPasswordConfirmMessage(""), setCheckAuthMessage(""), setAuthMessage("")}
     function closeSignupModal() { setIsLoginModalOpen(false); setIsSignupModalOpen(false), setIsEmail(false) }
+
+    function openEmailCheckModal() { setIsEmailCheckModalOpen(true); setIsLoginModalOpen(false), setEmailMessage("") }
+    function closeEmailCheckModal() { setIsEmailCheckModalOpen(false); setIsLoginModalOpen(true), setEmailMessage("") }
     
     const router = useRouter();
 
@@ -339,7 +343,7 @@ const Login = () => {
                               <div className="relative w-full mt-1 mb-1">
                                 <div class="grid grid-cols-2 gap-1">
                                   <div class="grid justify-start">
-                                    <strong className="text-sm hover:text-gray-500">아이디 조회</strong>
+                                    <strong onClick={openEmailCheckModal} className="text-sm hover:text-gray-500">이메일 조회</strong>
                                   </div>
                                   <div class="grid justify-end">
                                     <strong className="text-sm hover:text-gray-500">비밀번호 재설정</strong>
@@ -371,6 +375,93 @@ const Login = () => {
                             </div>
                           </div>
                           
+                        </div>
+                      </Dialog.Panel>
+                    </Transition.Child>
+                  </div>
+                </div>
+              </Dialog>
+            </Transition>
+
+            {/* 이메일 조회 Modal */}
+            <Transition className="z-50 overflow-auto" appear show={isEmailCheckModalOpen} as={Fragment}>
+              <Dialog as="div" className="relative" onClose={closeEmailCheckModal}>
+                <Transition.Child
+                  as={Fragment}
+                  enter="ease-out duration-300"
+                  enterFrom="opacity-0"
+                  enterTo="opacity-100"
+                  leave="ease-in duration-200"
+                  leaveFrom="opacity-100"
+                  leaveTo="opacity-0"
+                >
+                  <div className="fixed inset-0 bg-black bg-opacity-50" />
+                </Transition.Child>
+
+                <div className="fixed inset-0">
+                  <div className="flex items-center justify-center min-h-full p-4 text-center">
+                    <Transition.Child
+                      as={Fragment}
+                      enter="ease-out duration-300"
+                      enterFrom="opacity-0 scale-95"
+                      enterTo="opacity-100 scale-100"
+                      leave="ease-in duration-200"
+                      leaveFrom="opacity-100 scale-100"
+                      leaveTo="opacity-0 scale-95"
+                    >
+                      <Dialog.Panel className="w-full max-w-md p-6 pt-4 text-left align-middle transition-all transform bg-white shadow-xl lg:max-w-lg rounded-2xl">
+                        
+                        <div className='flex justify-end'>
+                          <XMarkIcon
+                            className="w-6 h-6 text-sm text-zinc-500 "
+                            onClick={closeEmailCheckModal}
+                          />
+                        </div>
+
+                        <div className='flex flex-col text-center justify-items-center'>
+                          <div className="flex-auto px-4 py-4 pt-2 lg:px-10">
+                            <div className="mb-5 text-2xl font-bold text-center text-zinc-700">
+                              이메일 조회
+                            </div>
+                            <form>
+                              <div className="relative w-full mb-3">
+                                <div class="grid grid-cols-7 gap-1">
+                                  <div class="col-span-2">
+                                    <label
+                                      className="block mb-2 pt-2 text-m font-bold uppercase text-zinc-600"
+                                      htmlFor="grid-password"
+                                    >
+                                      이메일
+                                    </label>
+                                  </div>
+                                  <div class="col-span-5">
+                                    <input
+                                      type="email"
+                                      className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
+                                      placeholder="Email"
+                                      onChange={onEmailChange}
+                                    />
+                                    {userEmail.current.length > 0 && <span className={`message ${isEmail ? 'success text-xs text-blue-500' : 'error text-xs text-red-500'}`}>{emailMessage}</span>}
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div className="mt-6 text-center">
+                                <button
+                                  className="w-full px-6 py-3 mb-1 mr-1 text-sm font-bold text-white uppercase transition-all duration-150 ease-linear rounded shadow outline-none bg-zinc-800 active:bg-zinc-600 hover:shadow-lg focus:outline-none"
+                                  type="button"
+                                  onClick={requestEmailCheck}
+                                  disabled={!isEmail}
+                                >
+                                  조회하기
+                                </button>
+                              </div>
+
+                              <div className="relative w-full mt-4 mb-2">
+                                <p>회원이 아니신가요?  <strong onClick={openSignupModal} className='text-red-400 hover:text-red-500'>회원 가입하기</strong></p>
+                              </div>
+                            </form>
+                          </div>
                         </div>
                       </Dialog.Panel>
                     </Transition.Child>
