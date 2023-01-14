@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic';
 
 
 export default function DiaryInputFormat(props) {  
-  const Editor = dynamic(() => import('../../common/Editor'), { ssr: false });
+  const Editor = dynamic(() => import('./Editor'), { ssr: false });
 
   useEffect(() => {
     setEditorLoaded(true);

@@ -1,12 +1,15 @@
 import React, { useState, Fragment, useEffect } from 'react';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
-import ClassicEditor from 'ckeditor5-custom-build/build/ckeditor';
+import ClassicEditor from '../../../ckeditor5';
 import { Dialog, Transition } from '@headlessui/react';
 import { ArrowPathIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { useRouter } from 'next/navigation';
-import Spinner from '../../public/svgs/spinner.svg'
+import Spinner from '../../../public/svgs/spinner.svg'
 
 function Editor({ onClick, editorLoaded, name, value, date }) {
+    // TODO 사용자 ID 상태 관리 설정이 되면 그 값으로 변경하기
+    // 사용자 ID(Object ID)
+    let userId = "";
 
     let [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
 
@@ -21,11 +24,15 @@ function Editor({ onClick, editorLoaded, name, value, date }) {
     let [regularThumbnailLink, setRegularThumbnailLink] = useState("");
     let [smallThumbnailLink, setSmallThumbnailLink] = useState("");
     let [thumbnailId, setThumbnailId] = useState("imgId");
+    let [thumbnailDirectory, setThumbnailDirectory] = useState(""); // thumbnail 이미지 저장 경로(Object Storage)
     // 이미지 출처 저장 변수들
-    let [userProfileLink, setUserProfileLink] = useState("");
+    let [userProfileLink, setUserProfileLink] = useState("userProfile");
     let [userName, setUserName] = useState("");
     // unsplash API access key
-    const Access_Key = process.env.NEXT_PUBLIC_UNSPLASH_ACCESSKEY; 
+    const Access_Key = process.env.NEXT_PUBLIC_UNSPLASH_ACCESSKEY;
+    // thumbnail 저장 안내 메세지
+    const [saveMessage, setSaveMessage] = useState('썸네일을 선택해주세요😲');
+    const [isSaved, setIsSaved] = useState(false);
   
     // async로 인해 setKeywords가 getThumbnail보다 늦게 실행되는 현상 있음 => useEffect 사용하여 keywords 변경되면 getThumbnail 실행
     useEffect(() => {
@@ -56,9 +63,10 @@ function Editor({ onClick, editorLoaded, name, value, date }) {
             randKeywordList.push(emotion)
             console.log("Find image with keyword "+randKeywordList[randNum])
 
-            // thumbnail 가져오는 부분 - token당 API 호출 횟수 정해져 있으니 개발시 아래 API 호출 부분과 setState 부분들 주석처리 해서 진행
+            // thumbnail 가져오는 부분
+            // 운영용 - token당 API 호출 횟수 정해져 있으니 개발시 아래 API 호출 부분과 setState 부분들 주석처리 해서 진행
             let res = await fetch(`https://api.unsplash.com/photos/random?query=${randKeywordList[randNum]}&client_id=${Access_Key}`);
-            
+
             // 키워드 랜덤으로 돌렸을 때 오류나면 emotion으로 검색하도록
             if(res.status != 200) {
                 res = await fetch(`https://api.unsplash.com/photos/random?query=${emotion}&client_id=${Access_Key}`);
@@ -69,6 +77,11 @@ function Editor({ onClick, editorLoaded, name, value, date }) {
             setUserProfileLink(jsonData.user.links.html);
             setUserName(jsonData.user.username);
             setThumbnailId(jsonData.id);
+
+            // 개발용 - URL로 이미지 불러오기 (API 호출 없음)
+            // setRegularThumbnailLink("https://source.unsplash.com/random/?"+emotion);
+            // setSmallThumbnailLink("https://source.unsplash.com/random/?"+emotion);
+
         }
     };
 
@@ -90,12 +103,13 @@ function Editor({ onClick, editorLoaded, name, value, date }) {
         data.keywords = keywords;
 
         // thumbnail에 이미지 url 넣기
-        data.thumbnail = regularThumbnailLink;
+        data.thumbnail = thumbnailDirectory;
         // 사용 X - thumbnail에 file object(blob) 넣기
         // let thumbnailFile = urlToObject(regularThumbnailLink);
         // data.thumbnail = thumbnailFile;
         
         // TODO 일기 저장 API 호출 추가
+        console.log("Saved")
         
     };
 
@@ -108,6 +122,20 @@ function Editor({ onClick, editorLoaded, name, value, date }) {
     //     console.log(file)
     //     return file;
     // }
+
+    function saveThumbnail() {
+        const data = new Object();
+        data.userId = userId;
+        data.thumbnail = regularThumbnailLink;
+
+        // TODO thumbnail 저장 API 호출 추가
+        const res = "thumbnail Directory"; // thumbnail API 응답으로 이미지가 저장 된 Object Storage directory 경로가 return 됨.
+
+        // 이미지 저장 후 message 변경
+        setSaveMessage("썸네일이 생성되었습니다. \"저장하기\" 버튼을 눌러 일기 작성을 마무리하세요🤗");
+        setIsSaved(true);
+        setThumbnailDirectory(res);
+    }
 
     return (
         <>
@@ -135,7 +163,10 @@ function Editor({ onClick, editorLoaded, name, value, date }) {
             </div>
             
             <div className='flex justify-center w-full mb-2'>
-                <button className="inline-flex justify-center px-3 py-2 mr-2 text-sm font-medium text-red-700 duration-200 bg-red-200 border border-transparent rounded-md mt-7 hover:bg-red-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2" onClick={() => { analyzeDiary(); openSaveModal(); }}>저장하기</button>
+                <button className="inline-flex justify-center px-3 py-2 mr-2 text-sm font-medium text-red-700 duration-200 bg-red-200 border border-transparent rounded-md mt-7 hover:bg-red-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
+                        onClick={() => { analyzeDiary(); setThumbnailDirectory(""); openSaveModal(); setSaveMessage("썸네일을 선택해주세요😲"); setIsSaved(false); }}>
+                    저장하기
+                </button>
                 <button className="inline-flex justify-center px-3 py-2 ml-2 text-sm font-medium duration-200 border border-transparent rounded-md text-zinc-700 bg-zinc-200 mt-7 hover:bg-zinc-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500 focus-visible:ring-offset-2" onClick={() => router.push('/diary/list/grid')}>취소하기</button>
             </div>
             
@@ -199,7 +230,10 @@ function Editor({ onClick, editorLoaded, name, value, date }) {
                                     </div>
 
                                     {/* thumbnail */}
-                                    <p className='pb-2 pl-2'>📷 자동 생성 썸네일</p>
+                                    <div className='flex items-stretch'>
+                                        <p className='pb-2 pl-2'>📷 자동 생성 썸네일</p>
+                                        <p className={`py-1 pl-3 float:right message ${isSaved ? 'success text-xs text-blue-500' : 'error text-xs text-red-500'}`}>{saveMessage}</p>
+                                    </div>
                                     <div className="w-full text-center aspect-video">
                                         <div className='w-full h-full bg-zinc-400'>
                                             <div className="flex flex-col justify-center h-full text-center justify-items-center">
@@ -208,11 +242,20 @@ function Editor({ onClick, editorLoaded, name, value, date }) {
                                                         ?
                                                         <div className="relative top-0 flex items-start w-full h-full group">
                                                             <img className='object-cover w-full h-full' src={regularThumbnailLink} />
-                                                            <div onClick={getThumbnail} className='absolute top-0 flex items-center justify-center w-full h-full bg-black opacity-0 hover:opacity-50'>
-                                                                <div className='relative flex items-center'>
-                                                                    <ArrowPathIcon className='hidden text-white w-7 h-7 group-hover:block'/> <p className='ml-3 text-white'>다른 이미지 가져오기</p>
+                                                            {/*thumbnail 저장 시 onClick 비활성화 및 Hover effect 제거*/}
+                                                            {thumbnailDirectory==""?
+                                                                <div onClick={getThumbnail} className='absolute top-0 flex items-center justify-center w-full h-full bg-black opacity-0 hover:opacity-50'>
+                                                                    <div className='relative flex items-center'>
+                                                                        <ArrowPathIcon className='hidden text-white w-7 h-7 group-hover:block'/> <p className='ml-3 text-white'>다른 이미지 가져오기</p>
+                                                                    </div>
+                                                                </div> :
+                                                                <div className='absolute top-0 flex items-center justify-center w-full h-full bg-black opacity-0'>
+                                                                    <div className='relative flex items-center'>
+                                                                        <ArrowPathIcon className='hidden text-white w-7 h-7 group-hover:block'/>
+                                                                    </div>
                                                                 </div>
-                                                            </div>
+                                                            }
+
                                                         </div>
                                                         :
                                                         <div className='relative flex items-center justify-center'>
@@ -235,6 +278,19 @@ function Editor({ onClick, editorLoaded, name, value, date }) {
                                     :
                                     <></>
                                 }
+                                <div className='flex justify-center w-full mt-2 mb-2'>
+                                    {/* 썸네일 저장 버튼 */}
+                                    {
+                                        regularThumbnailLink != ""
+                                            ?
+                                            <button className={"inline-flex justify-center px-3 py-2 mr-2 text-sm font-medium rounded-xl " + (thumbnailDirectory==""?"btn-secondary rounded-md":"text-sky-700 bg-sky-200 border border-transparent rounded-md")}
+                                                    onClick={() => saveThumbnail()}>
+                                                {thumbnailDirectory==""?"이 사진으로 결정✅":"썸네일 생성 완료👍"}
+                                            </button>
+                                            :
+                                            <></>
+                                    }
+                                </div>
                                 {/* 작성한 내용 미리보기 */}
                                 <div className='px-5 py-3 mx-2 my-3 overflow-y-scroll text-sm border border-red-100 max-h-36 min-h-16 rounded-xl' dangerouslySetInnerHTML={{__html: text}}></div>
                             </div>
@@ -243,15 +299,16 @@ function Editor({ onClick, editorLoaded, name, value, date }) {
                         }
 
                         <div className='flex justify-center w-full mt-6 mb-2'>
-                            {/* 썸네일 제대로 생성될 경우에만 저장하기 버튼 활성화 */}
-                            {
-                                regularThumbnailLink != ""
-                                ?
-                                <button className="inline-flex justify-center px-3 py-2 mr-2 text-sm font-medium text-red-700 duration-200 bg-red-200 border border-transparent rounded-md hover:bg-red-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 " onClick={() => saveDiary()}>저장하기</button>
-                                :
-                                <></>
-                            }
-                            <button className="inline-flex justify-center px-3 py-2 ml-2 text-sm font-medium duration-200 border border-transparent rounded-md text-zinc-700 bg-zinc-200 hover:bg-zinc-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500 focus-visible:ring-offset-2" onClick={() => closeSaveModal()}>돌아가기</button>
+                            {/* 썸네일 제대로 저장 되었을 경우에만 저장하기 버튼 활성화 */}
+                            <button
+                                className={"inline-flex w-full justify-center px-3 py-2 mr-2 text-sm font-medium "+ (thumbnailDirectory == ""
+                                    ?"text-zinc-700 duration-200 bg-zinc-200 border border-transparent rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500 focus-visible:ring-offset-2"
+                                    :"text-red-700 duration-200 bg-red-200 border border-transparent rounded-md hover:bg-red-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2")}
+                                disabled={(thumbnailDirectory == "")}
+                                onClick={() => saveDiary()}>
+                                저장하기
+                            </button>
+                            {/*<button className="inline-flex justify-center px-3 py-2 ml-2 text-sm font-medium duration-200 border border-transparent rounded-md text-zinc-700 bg-zinc-200 hover:bg-zinc-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500 focus-visible:ring-offset-2" onClick={() => {setThumbnailDirectory(""); closeSaveModal();}}>돌아가기</button>*/}
                         </div>
                     </Dialog.Panel>
                     </Transition.Child>
