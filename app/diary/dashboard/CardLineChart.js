@@ -109,25 +109,25 @@ export default function CardLineChart() {
     window.myLine = new Chart(ctx, config);
   }, []);
   return (
-    <>
-      <div className="relative flex flex-col w-full min-w-0 mb-6 break-words shadow-lg rounded-xl bg-zinc-100">
-        <div className="px-4 py-3 mb-0 bg-transparent rounded-t">
-          <div className="flex flex-wrap items-center">
-            <div className="relative flex-1 flex-grow w-full max-w-full">
-              <h6 className="mb-1 text-xs font-semibold uppercase text-zinc-100">
-                Overview
-              </h6>
-              <h2 className="text-xl font-semibold text-zinc-700">Sales value</h2>
+      <>
+        <div className="relative flex flex-col w-full h-full min-w-0 mb-6 break-words shadow-lg rounded-xl bg-zinc-100">
+          <div className="px-4 py-6 mb-0 bg-transparent rounded-t">
+            <div className="flex flex-wrap items-center">
+              <div className="relative flex-1 flex-grow w-full max-w-full">
+                <h6 className="mb-1 text-xs font-semibold uppercase text-zinc-100">
+                  Overview
+                </h6>
+                <h2 className="text-xl font-semibold text-zinc-700">Sales value</h2>
+              </div>
+            </div>
+          </div>
+          <div className="flex-auto p-4">
+            {/* Chart */}
+            <div className="relative h-350-px">
+              <canvas id="line-chart"></canvas>
             </div>
           </div>
         </div>
-        <div className="flex-auto p-4">
-          {/* Chart */}
-          <div className="relative h-350-px">
-            <canvas id="line-chart"></canvas>
-          </div>
-        </div>
-      </div>
-    </>
+      </>
   );
 }
