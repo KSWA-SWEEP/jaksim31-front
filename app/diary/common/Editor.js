@@ -167,7 +167,7 @@ function Editor({ onClick, editorLoaded, name, value, date }) {
                         onClick={() => { analyzeDiary(); setThumbnailDirectory(""); openSaveModal(); setSaveMessage("썸네일을 선택해주세요😲"); setIsSaved(false); }}>
                     저장하기
                 </button>
-                <button className="inline-flex justify-center px-3 py-2 ml-2 text-sm font-medium duration-200 border border-transparent rounded-md text-zinc-700 bg-zinc-200 mt-7 hover:bg-zinc-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500 focus-visible:ring-offset-2" onClick={() => router.push('/diary/list/grid')}>취소하기</button>
+                <button className="inline-flex justify-center px-3 py-2 ml-2 text-sm font-medium duration-200 border border-transparent rounded-md text-zinc-700 bg-zinc-200 mt-7 hover:bg-zinc-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500 focus-visible:ring-offset-2" onClick={() => router.push('/diary/list/calendar')}>취소하기</button>
             </div>
             
             {/* 저장하기 Modal */}
