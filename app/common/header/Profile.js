@@ -3,7 +3,7 @@
 import { PencilSquareIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Dialog, Transition } from '@headlessui/react';
 import userData from '../../../public/data/user.json'
-import { Fragment, useState } from 'react';
+import { Fragment, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 
 const Profile = () => {
@@ -11,7 +11,7 @@ const Profile = () => {
     let [isProfileModalOpen, setIsProfileModalOpen] = useState(false)
     let [isEditModalOpen, setIsEditModalOpen] = useState(false)  
 
-    function openProfileModal() { setIsEditModalOpen(false); setIsProfileModalOpen(true) }
+    function openProfileModal() { setIsEditModalOpen(false); setIsProfileModalOpen(true), setPasswordMessage(""), setPasswordConfirmMessage("") }
     function closeProfileModal() { setIsProfileModalOpen(false); setIsEditModalOpen(false) }
   
     function openEditModal() { setIsProfileModalOpen(false); setIsEditModalOpen(true) }
@@ -19,6 +19,59 @@ const Profile = () => {
 
     const user = userData;
     const router = useRouter();
+
+    // 사용자 입력 변수
+    const userName = useRef();
+    const userOldPassword = useRef("");
+    const userNewPassword = useRef("");
+    const userNewPasswordCheck = useRef("");
+
+    // 오류 메시지 변수
+    const [passwordMessage, setPasswordMessage] = useState('')
+    const [passwordConfirmMessage, setPasswordConfirmMessage] = useState('')
+
+    // 유효성 검사 변수
+    const [isOldPassword, setIsOldPassword] = useState(false)
+    const [isNewPassword, setIsNewPassword] = useState(false)
+    const [isNewPasswordConfirm, setIsNewPasswordConfirm] = useState(false)
+
+    const onNameChange = (e) => {
+      userName.current = e.target.value;
+    };
+
+    const onOldPasswordChange = (e) => {
+      userOldPassword.current = e.target.value;
+      setIsOldPassword(true)
+    };
+
+    // 비밀번호 검증
+    const onNewPasswordChange = (e) => {
+      setIsNewPasswordConfirm(false);
+      setPasswordConfirmMessage('비밀번호가 달라요. 다시 확인해주세요 😢')
+
+      const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/
+      userNewPassword.current = e.target.value;
+
+      if (!passwordRegex.test(userNewPassword.current)) {
+          setPasswordMessage('숫자+영문자+특수문자 조합으로 8자리 이상 입력해 주세요 🚨')
+          setIsNewPassword(false)
+      } else {
+          setPasswordMessage('안전한 비밀번호입니다 ✅')
+          setIsNewPassword(true)
+      }
+    };
+
+    const onNewPasswordCheckChange = (e) => {
+        userNewPasswordCheck.current = e.target.value;
+
+        if (userNewPassword.current === userNewPasswordCheck.current) {
+            setPasswordConfirmMessage('비밀번호를 똑같이 입력했어요 ✅')
+            setIsNewPasswordConfirm(true)
+        } else {
+            setPasswordConfirmMessage('비밀번호가 달라요. 다시 확인해주세요 😢')
+            setIsNewPasswordConfirm(false)
+        }
+    };
   
     function replaceImg() { 
       // TODO 파일 첨부 어쩌구 넣고 프로필 이미지 변경하는 부분 추가하기
@@ -34,6 +87,51 @@ const Profile = () => {
       // landing page로 이동
       router.push('/home/landing')
     }
+
+    async function requestChangeProfile(){
+
+      console.log("프로필 저장하기 버튼 눌림");
+
+      //비밀번호 재설정 api 호출
+      console.log("======= Change Profile Request");
+      const data = new Object();
+      console.log("userName : " + userName.current);
+      console.log("oldPassword : " + userOldPassword.current);
+      console.log("newPassword : " + userNewPassword.current);
+      data.username = userName.current;
+      data.OldPassword = userOldPassword.current;
+      data.newPassword = userNewPassword.current;
+
+      /*
+      * TODO: 비밀번호 재설정 API 확정되면 수정 예정
+      */
+      
+      try{
+          const responseChangeProfile = await fetch('/api/v1/members/{userId}', {
+              method: 'PATCH',
+              body: JSON.stringify(data),
+              headers: {
+                  'Content-type': 'application/json',
+              }
+          });
+          
+          alert("개인정보가 저장되었습니다 😊");
+          
+      } catch (e) {
+          console.log(e);
+          alert("개인정보 수정에 실패했습니다. 다시 시도해 주세요.");
+      } finally {
+        // 변수 초기화
+        userName.current = "";
+        userOldPassword.current = "";
+        userNewPassword.current = "";
+        userNewPasswordCheck.current = "";
+        setIsOldPassword(false);
+        setIsNewPassword(false);
+        setIsNewPasswordConfirm(false);
+        closeEditModal();
+      }
+    };
 
     return (
       <div>
@@ -134,7 +232,7 @@ const Profile = () => {
                                     총 작성한 일기
                                   </div>
                                   <div className='text-3xl font-bold'>
-                                    165개
+                                    {user.diary_total}
                                   </div>
                                 </div>
 
@@ -238,7 +336,7 @@ const Profile = () => {
                                 <label className="label">
                                   <div className="label-text">이름</div>
                                 </label>
-                                <input type="text" placeholder="이름을 입력하세요" defaultValue={user.name} className="w-full h-10 input input-bordered" />
+                                <input type="text" placeholder="이름을 입력하세요" defaultValue={user.name} className="w-full h-10 input input-bordered" onChange={onNameChange} />
                               </div>
 
                               {/* 소셜 로그인일 경우 비밀번호 변경 불가 */}
@@ -252,22 +350,23 @@ const Profile = () => {
                                     <label className="label">
                                       <div className="label-text">현재 비밀번호</div>
                                     </label>
-                                    <input type="password" placeholder="현재 비밀번호를 입력하세요" className="w-full h-10 input input-bordered" />
+                                    <input type="password" placeholder="현재 비밀번호를 입력하세요" className="w-full h-10 input input-bordered" onChange={onOldPasswordChange} />
                                   </div>
           
                                   <div className="w-full form-control">
                                     <label className="label">
                                       <div className="label-text">변경할 비밀번호</div>
                                     </label>
-                                    <input type="password" placeholder="변경할 비밀번호를 입력하세요" className="w-full h-10 input input-bordered" />
+                                    <input type="password" placeholder="변경할 비밀번호를 입력하세요" className="w-full h-10 input input-bordered" onChange={onNewPasswordChange} />
                                   </div>
-          
+                                  {userNewPassword.current.length > 0 && <span className={`message ${isNewPassword ? 'success text-xs text-blue-500' : 'error text-xs text-red-500'}`}>{passwordMessage}</span>}
                                   <div className="w-full form-control">
                                     <label className="label">
                                       <div className="label-text">비밀번호 확인</div>
                                     </label>
-                                    <input type="password" placeholder="변경할 비밀번호를 다시 입력하세요" className="w-full h-10 input input-bordered" />
+                                    <input type="password" placeholder="변경할 비밀번호를 다시 입력하세요" className="w-full h-10 input input-bordered" onChange={onNewPasswordCheckChange} />
                                   </div>
+                                  {userNewPasswordCheck.current.length > 0 && <span className={`message ${isNewPasswordConfirm ? 'success text-xs text-blue-500' : 'error text-xs text-red-500'}`}>{passwordConfirmMessage}</span>}
                                 </div> 
                                 
                               }
@@ -275,7 +374,8 @@ const Profile = () => {
                               <button
                                 type="button"
                                 className="inline-flex justify-center px-3 py-2 mr-2 text-sm font-medium text-red-700 bg-red-200 border border-transparent rounded-md mt-7 hover:bg-red-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
-                                onClick={closeEditModal}
+                                onClick={requestChangeProfile}
+                                disabled={(user.is_social || userName.current != "") ? false : !(isOldPassword && isNewPassword && isNewPasswordConfirm)}
                               >
                                 저장하기
                               </button>
@@ -288,9 +388,6 @@ const Profile = () => {
                                 뒤로가기
                               </button>
                             </div>
-                            
-
-                            
                           </div>
                         </Dialog.Panel>
                       </Transition.Child>
