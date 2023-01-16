@@ -1,47 +1,47 @@
 'use client';
 
+import userEmotion from "../../../public/data/emotions.json"
 import React, { useEffect } from "react";
 import Chart from "chart.js";
 
 export default function CardBarChart() {
+  const emotions = userEmotion;
   useEffect(() => {
     let config = {
       type: "bar",
       data: {
         labels: [
-          "January",
-          "February",
-          "March",
-          "April",
-          "May",
-          "June",
-          "July",
+          "좋음",
+          "싫음",
+          "놀람",
+          "두려움",
+          "감정 없음",
+          "지루함",
+          "부끄러움",
         ],
         datasets: [
           {
-            label: new Date().getFullYear(),
-            backgroundColor: "#ed64a6",
-            borderColor: "#ed64a6",
-            data: [30, 78, 56, 34, 100, 45, 13],
-            fill: false,
-            barThickness: 8,
-          },
-          {
-            label: new Date().getFullYear() - 1,
-            fill: false,
+            label: "이번 달",
             backgroundColor: "#4c51bf",
             borderColor: "#4c51bf",
-            data: [27, 68, 86, 74, 10, 4, 87],
-            barThickness: 8,
+            data: [emotions.monthEmotions.좋음, emotions.monthEmotions.싫음, emotions.monthEmotions.놀람, emotions.monthEmotions.두려움, emotions.monthEmotions.감정없음, emotions.monthEmotions.지루함, emotions.monthEmotions.부끄러움],
+            fill: false
+          },
+          {
+            label: "저번 달",
+            fill: false,
+            backgroundColor: "#ed64a6",
+            borderColor: "#ed64a6",
+            data: [7, 10, 3, 1, 3, 1, 5],
           },
         ],
       },
       options: {
-        maintainAspectRatio: false,
+        maintainAspectRatio: true,
         responsive: true,
         title: {
           display: false,
-          text: "Orders Chart",
+          text: "감정 비교",
         },
         tooltips: {
           mode: "index",
@@ -61,10 +61,10 @@ export default function CardBarChart() {
         scales: {
           xAxes: [
             {
-              display: false,
+              display: true,
               scaleLabel: {
                 display: true,
-                labelString: "Month",
+                labelString: "감정 종류",
               },
               gridLines: {
                 borderDash: [2],
@@ -107,10 +107,10 @@ export default function CardBarChart() {
           <div className="flex flex-wrap items-center">
             <div className="relative flex-1 flex-grow w-full max-w-full">
               <h6 className="mb-1 text-xs font-semibold uppercase text-zinc-400">
-                Performance
+                
               </h6>
               <h2 className="text-xl font-semibold text-zinc-700">
-                Total orders
+                저번 달과 감정 빈도를 비교해봐요!😊
               </h2>
             </div>
           </div>

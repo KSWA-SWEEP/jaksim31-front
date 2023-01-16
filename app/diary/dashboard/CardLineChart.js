@@ -1,10 +1,11 @@
 'use client';
 
+import userEmotion from "../../../public/data/emotions.json"
 import React, { useEffect } from "react";
 import Chart from "chart.js";
 
 export default function CardLineChart() {
-  
+    const emotions = userEmotion;
     useEffect(() => {
     var config = {
       type: "line",
@@ -23,15 +24,15 @@ export default function CardLineChart() {
             label: "이번 달",
             backgroundColor: "#4c51bf",
             borderColor: "#4c51bf",
-            data: [10, 5, 2, 4, 5, 2, 2],
-            fill: false,
+            data: [emotions.monthEmotions.좋음, emotions.monthEmotions.싫음, emotions.monthEmotions.놀람, emotions.monthEmotions.두려움, emotions.monthEmotions.감정없음, emotions.monthEmotions.지루함, emotions.monthEmotions.부끄러움],
+            fill: false
           },
           {
             label: "저번 달",
             fill: false,
             backgroundColor: "#ed64a6",
             borderColor: "#ed64a6",
-            data: [7, 10, 3, 1, 3, 1, 5],
+            data: [7, 10, 3, 1, 3, 1, 5]
           },
         ],
       },
@@ -40,7 +41,7 @@ export default function CardLineChart() {
         responsive: true,
         title: {
           display: false,
-          text: "Sales Charts",
+          text: "감정 비교",
           fontColor: "black",
         },
         legend: {

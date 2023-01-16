@@ -8,33 +8,31 @@ export default function UserProfile() {
             <div
                 className="w-full max-w-md p-6 pt-4 mb-6 overflow-hidden text-left align-middle transition-all transform bg-zinc-100 shadow-xl lg:max-w-lg rounded-xl">
                 <h2 className="text-xl font-semibold text-zinc-700">
-                My Profile 🙋
+                최근 일기 📝
                 </h2>
                 <div className='flex flex-col text-center justify-items-center'>
                     {/* 프로필 사진 */}
                     <div className="justify-center m-5 avatar">
-                        <div className="w-32 rounded-full">
-                            <img src={user.profile_photo}/>
+                        <div className="w-32 rounded-xl">
+                            <img src={user.recent_diaries[0].thumbnail}/>
                         </div>
                     </div>
                     {/* 이름 */}
-                    <div className='text-3xl font-extrabold text-zinc-700'>
-                        {user.name}
+                    <div className='text-xl font-extrabold text-zinc-700'>
+                        {user.recent_diaries[0].date}
                     </div>
-                    
-                    {/* divider */}
-                    <div className="my-6 border-b-2"></div>
+                    <br></br>
+                    {/* Keywords */}
+                    <div className='flex flex-row justify-items-center align-middle'>
+                                        {user.recent_diaries[0].keywords.map((keyword) => (
+                                            <div key={keyword}
+                                                 className="px-3 py-1 mb-1 mr-2 text-l align-middle font-medium w-fit text-zinc-500 bg-zinc-200 rounded-xl dark:bg-zinc-200 dark:text-zinc-800 ">
+                                                #{keyword}
+                                            </div>
+                                        ))}
+                                    </div>
                     <div className='w-full'>
                         <div className="grid grid-cols-3">
-                            {/* 총 작성한 일기 */}
-                            <div className='col-span-3 mb-1 sm:col-span-1'>
-                                <div className="mb-1 text-lg text-zinc-600">
-                                    작성한<br></br>일기장들
-                                </div>
-                                <div className='text-3xl font-bold'>
-                                    {user.diary_total}
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
