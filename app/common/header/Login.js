@@ -266,20 +266,14 @@ const Login = () => {
 
       //비밀번호 재설정 api 호출
       console.log("======= Change Password Request");
-      const data = new Object();
       console.log("newPassword : " + userPassword.current);
-      console.log("userName : " + userName.current);
-      data.newPassword = userPassword.current;
-      data.username = userName.current;
 
       const requestSignupBody = {
           newPassword: userPassword.current,
-          username: userName.current
       }
-
       
       try{
-          const responseChangePassword = await fetch('/api/v0/members/{userID}/password', {
+          const responseChangePassword = await fetch('/api/v0/members/{loginId}/password', {
               method: 'POST',
               body: JSON.stringify(requestSignupBody),
               headers: {
@@ -307,7 +301,6 @@ const Login = () => {
           setIsAuthIng(true);
 
           send("service_xefuilp", "template_flcknvq", {
-            to_name: userName.current,
             message: "인증번호는 " + randNum.current + " 입니다.",
             user_email: userEmail.current,
           },"cPndipwNGrbp1LMBT").then(resp => {});
