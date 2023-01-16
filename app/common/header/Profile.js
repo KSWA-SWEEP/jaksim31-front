@@ -356,9 +356,13 @@ const Profile = () => {
                                   />
 
                                   {/* 파일 선택 창 대신 아이콘 사용 */}
-                                  <label className="signup-profileImg-label" htmlFor="profileImage">
+                                  {user.is_social ? 
                                     <PencilSquareIcon className='hidden text-white w-7 h-7 group-hover:block'/>
-                                  </label>
+                                    :
+                                    <label className="signup-profileImg-label" htmlFor="profileImage">
+                                      <PencilSquareIcon className='hidden text-white w-7 h-7 group-hover:block'/>
+                                     </label>
+                                  }
                                 </div>
                               </div>
                             </div>
