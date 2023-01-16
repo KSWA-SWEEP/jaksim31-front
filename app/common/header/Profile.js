@@ -5,6 +5,7 @@ import { Dialog, Transition } from '@headlessui/react';
 import userData from '../../../public/data/user.json'
 import { Fragment, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
+import moment from 'moment';
 
 const Profile = () => {
 
@@ -278,7 +279,7 @@ const Profile = () => {
                                     최근 일기
                                   </div>
                                   <div className='mb-2 text-xl font-semibold'>
-                                    {user.recent_diaries[0].date}
+                                    {moment(user.recent_diaries[0].date).format("YYYY. MM. DD.")}
                                   </div>
                                   <div className='flex place-content-center'>
                                     <div className='w-1/3 pl-5 text-zinc-500'>
