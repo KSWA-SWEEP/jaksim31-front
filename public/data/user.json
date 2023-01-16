@@ -3,8 +3,9 @@
     "is_social": false,
     "login_id": "test@jaksim.31",
     "password": "12341234",
-    "name": "작심삼일",
+    "name": "김작심",
     "profile_photo": "https://source.unsplash.com/random/?people",
+    "diary_total": "177",
     "recent_diaries": [
         {
             "diary_id": "664e6aw131d",
