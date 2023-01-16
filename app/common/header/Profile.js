@@ -86,17 +86,29 @@ const Profile = () => {
           setUserProfileImageURL(reader.result);
         };
     };
-  
-  
-    function logout() {
-      // 로그아웃 API 호출
-      //
-      
-      // isLogin등 로그인 관련 정보 삭제
-      //
-  
-      // landing page로 이동
-      router.push('/home/landing')
+
+    async function requestLogout() {
+
+      console.log("로그아웃 버튼 눌림");
+
+      try {
+        const responseLogout = await fetch('/v1/members/{userId}/logout', {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json',
+            }
+        });
+
+        {/* TODO: 로그아웃 API 확정되면 isLogin, accessToken 등 로그인 관련 정보 삭제*/}
+
+        alert("로그아웃 되었습니다 😊");
+        
+        // landing page로 이동
+        router.push('/home/landing')
+      } catch(e) {
+        console.log(e);
+        alert("로그아웃에 실패했습니다.")
+      }
     }
 
     async function requestChangeProfile(){
@@ -170,7 +182,7 @@ const Profile = () => {
                   <a onClick={openProfileModal} className="text-base hover:bg-red-100">내 프로필</a>
                 </li>
                 <li>
-                  <a onClick={logout} className="text-base hover:bg-red-100">로그아웃</a>
+                  <a onClick={requestLogout} className="text-base hover:bg-red-100">로그아웃</a>
                 </li>
               </ul>
 
