@@ -20,14 +20,14 @@ export default function CardLineChart() {
         ],
         datasets: [
           {
-            label: "이번 달",
+            label: "1월",
             backgroundColor: "#4c51bf",
             borderColor: "#4c51bf",
             data: [10, 5, 2, 4, 5, 2, 2],
             fill: false,
           },
           {
-            label: "저번 달",
+            label: "12월",
             fill: false,
             backgroundColor: "#ed64a6",
             borderColor: "#ed64a6",
@@ -118,7 +118,7 @@ export default function CardLineChart() {
                 <h6 className="mb-1 text-xs font-semibold uppercase text-zinc-100">
                   Overview
                 </h6>
-                <h2 className="text-xl font-semibold text-zinc-700">감정 비교</h2>
+                <h2 className="text-xl font-semibold text-zinc-700">Sales value</h2>
               </div>
             </div>
           </div>
