@@ -97,7 +97,7 @@ export default function CalendarList() {
     else {
       setClickState(clickState.filter((clickedItem) => clickedItem !== emotion));
       e.target.classList.add("opacity-60")
-      e.target.classList.remove("opacity-100")
+      e.target.classList.remove("opacity-100", "drop-shadow-lg")
 
       // data에서 제외할 감정을 emotion으로 갖는 데이터 제외
       // 
@@ -126,34 +126,47 @@ export default function CalendarList() {
           formatDay={(locale, date) => moment(date).format("DD")}
           tileContent={({ date, view }) => {
             let matchedDiary = diarys.find(({diaryDate}) => moment(diaryDate).format('YYYY-MM-DD') == moment(date).format("YYYY-MM-DD"))
-
-            // 일기가 있을 경우 해당 일기에 맞는 아이콘 보여주기 => 클릭시 일기 조회 페이지로 이동
-            if((matchedDiary != undefined) && (view === 'month')) {
-              // 데이터의 emotion과 일치하는 emotionSet 설정 (아이콘 src 가져오기 위함)
-              let matchedEmotion = emotions.find(({name}) => name == matchedDiary.emotion)
-              return (
-               <>
-                <Link href={"/diary/"+matchedDiary.diaryId} className="flex items-center justify-center mt-2 dayBox">
-                   <div className="relative w-6 h-6 duration-200 sm:w-10 sm:h-10 lg:w-12 lg:h-12 hover:drop-shadow-lg hover:opacity-80 hover:scale-105">
-                     <Image src={matchedEmotion.src} alt="emotion" placeholder='empty' width={100} height={100}/>
-                   </div>
-                </Link>
-               </>
-              )
-            }
-            // 일기가 없을 때에는 일기 쓰기 버튼 보여주기
-            else if (view === 'month') {
-              let selectedDate = moment(date).format("YYYYMMDD")
-              return (
+            
+            if(view === 'month') {
+              // 일기가 있을 경우 해당 일기에 맞는 아이콘 보여주기 => 클릭시 일기 조회 페이지로 이동
+              if(matchedDiary != undefined) {
+                // 데이터의 emotion과 일치하는 emotionSet 설정 (아이콘 src 가져오기 위함)
+                let matchedEmotion = emotions.find(({name}) => name == matchedDiary.emotion)
+                return (
                 <>
-                  <div className="flex items-center justify-center mt-2 overflow-visible dayBox group">
-                   <Link href={'/diary/create/'+ encodeURIComponent(btoa(selectedDate))} className="relative w-6 h-6 overflow-visible duration-200 opacity-0 group sm:w-10 sm:h-10 group-hover:opacity-100 hover:opacity-80 hover:scale-105">
-                    <PlusCircleIcon alt="add" placeholder='empty' className='text-zinc-200'/>
-                    <p className='px-1 text-[4px] lg:text-[5px] text-center text-zinc-400 opacity-0 group-hover:opacity-100 h-fit w-100 rounded-xl bg-zinc-200'>일기 쓰기</p>
-                   </Link>
-                  </div>
+                  <Link href={"/diary/"+matchedDiary.diaryId} className="flex items-center justify-center mt-2 dayBox">
+                    <div className="relative w-6 h-6 duration-200 sm:w-10 sm:h-10 lg:w-12 lg:h-12 hover:drop-shadow-lg hover:opacity-80 hover:scale-105">
+                      <Image src={matchedEmotion.src} alt="emotion" placeholder='empty' width={100} height={100}/>
+                    </div>
+                  </Link>
                 </>
-               )
+                )
+              }
+              // 오늘 이전의 날짜에 대해 일기가 없을 때에는 일기 쓰기 버튼 보여주기
+              else if (moment() > moment(date)) {
+                let selectedDate = moment(date).format("YYYYMMDD")
+                return (
+                  <>
+                    <div className="flex items-center justify-center mt-2 overflow-visible dayBox group">
+                    <Link href={'/diary/create/'+ encodeURIComponent(btoa(selectedDate))} className="relative w-6 h-6 overflow-visible duration-200 opacity-0 group sm:w-10 sm:h-10 group-hover:opacity-100 hover:opacity-80 hover:scale-105">
+                      <PlusCircleIcon alt="add" placeholder='empty' className='text-zinc-200'/>
+                      <p className='px-1 text-[4px] lg:text-[5px] text-center text-zinc-400 opacity-0 group-hover:opacity-100 h-fit w-100 rounded-xl bg-zinc-200'>일기 쓰기</p>
+                    </Link>
+                    </div>
+                  </>
+                )
+              }
+              // 오늘 이후의 날짜에 대해 이전과 같은 크기의 view를 보여주기 위해 빈 div 삽입
+              else {
+                return (
+                  <>
+                    <div className="flex items-center justify-center mt-2 overflow-visible dayBox group">
+                      <div className="relative w-6 h-6 overflow-visible duration-200 opacity-0 group sm:w-10 sm:h-10 group-hover:opacity-100 hover:opacity-80 hover:scale-105">
+                      </div>
+                    </div>
+                  </>
+                )
+              }
             }
           }}
         />
