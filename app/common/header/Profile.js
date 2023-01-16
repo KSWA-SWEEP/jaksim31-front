@@ -25,6 +25,8 @@ const Profile = () => {
     const userOldPassword = useRef("");
     const userNewPassword = useRef("");
     const userNewPasswordCheck = useRef("");
+    const userProfileImage = useRef("");
+    const [userProfileImageURL, setUserProfileImageURL] = useState("");   // 프로필 이미지 미리보기를 위한 임시 주소
 
     // 오류 메시지 변수
     const [passwordMessage, setPasswordMessage] = useState('')
@@ -72,10 +74,19 @@ const Profile = () => {
             setIsNewPasswordConfirm(false)
         }
     };
+    
+    const onProfileImageChange = (e) => {
+
+        const file = e.target.files[0];
+        userProfileImage.current = file;
+        const reader = new FileReader();
+
+        reader.readAsDataURL(file);
+        reader.onloadend = () => {
+          setUserProfileImageURL(reader.result);
+        };
+    };
   
-    function replaceImg() { 
-      // TODO 파일 첨부 어쩌구 넣고 프로필 이미지 변경하는 부분 추가하기
-    }
   
     function logout() {
       // 로그아웃 API 호출
@@ -92,7 +103,7 @@ const Profile = () => {
 
       console.log("프로필 저장하기 버튼 눌림");
 
-      //비밀번호 재설정 api 호출
+      // 이름, 비밀번호 데이터
       console.log("======= Change Profile Request");
       const data = new Object();
       console.log("userName : " + userName.current);
@@ -102,16 +113,29 @@ const Profile = () => {
       data.OldPassword = userOldPassword.current;
       data.newPassword = userNewPassword.current;
 
+      // 프로필 사진 데이터
+      const formData = new FormData();
+      formData.append("profileImage", userProfileImage);
+      for(let [key, value] of Object.entries(data)) {
+        formData.append(key, value);
+      }
+
+      console.log("==== formData ====");
+      for(let value of formData.values()) {
+        console.log(value);
+      }
+      console.log("=============");
+
       /*
-      * TODO: 비밀번호 재설정 API 확정되면 수정 예정
+      * TODO: 회원정보 수정 API 확정되면 수정 예정
       */
       
       try{
           const responseChangeProfile = await fetch('/api/v1/members/{userId}', {
               method: 'PATCH',
-              body: JSON.stringify(data),
+              body: formData,
               headers: {
-                  'Content-type': 'application/json',
+                  'Content-type': 'multipart/form-data',
               }
           });
           
@@ -307,9 +331,22 @@ const Profile = () => {
                             {/* 프로필 사진 */}
                             <div className="justify-center m-5 avatar">
                               <div className="relative top-0 flex items-start w-32 rounded-full group">
-                                <img src={user.profile_photo} />
-                                <div onClick={replaceImg} className='absolute top-0 flex items-center justify-center w-full h-full bg-black opacity-0 hover:opacity-50'>
-                                  <PencilSquareIcon className='hidden text-white w-7 h-7 group-hover:block'/>
+                                <img src={userProfileImageURL ? userProfileImageURL : user.profile_photo} />
+                                <div className='absolute top-0 flex items-center justify-center w-full h-full bg-black opacity-0 hover:opacity-50'>
+                                  {/* 파일 선택 창 hidden 설정 */}
+                                  <input
+                                    hidden
+                                    type="file" 
+                                    onChange={onProfileImageChange} 
+                                    id="profileImage" 
+                                    ref={userProfileImage}
+                                    accept="image/*"
+                                  />
+
+                                  {/* 파일 선택 창 대신 아이콘 사용 */}
+                                  <label className="signup-profileImg-label" htmlFor="profileImage">
+                                    <PencilSquareIcon className='hidden text-white w-7 h-7 group-hover:block'/>
+                                  </label>
                                 </div>
                               </div>
                             </div>
@@ -375,7 +412,7 @@ const Profile = () => {
                                 type="button"
                                 className="inline-flex justify-center px-3 py-2 mr-2 text-sm font-medium text-red-700 bg-red-200 border border-transparent rounded-md mt-7 hover:bg-red-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
                                 onClick={requestChangeProfile}
-                                disabled={(user.is_social || userName.current != "") ? false : !(isOldPassword && isNewPassword && isNewPasswordConfirm)}
+                                disabled={(user.is_social || (userOldPassword.current.length == 0 && userNewPassword.current.length == 0 && userNewPasswordCheck.current.length == 0) ? false : !(isOldPassword && isNewPassword && isNewPasswordConfirm))}
                               >
                                 저장하기
                               </button>
