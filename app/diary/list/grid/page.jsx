@@ -5,7 +5,7 @@ export default function gridList() {
     return (
         <>
             {/* 검색 영역 */}
-            <div className="font-medium rounded-3xl bg-red-100/60 lg:mt-2 mt-5 lg:mb-5 lg:mx-16 mx-7 text-md text-zinc-600">
+            <div className="mx-auto mt-5 font-medium rounded-3xl bg-red-100/60 lg:mt-2 lg:mb-5 sm:mx-6 lg:mx-8 text-md text-zinc-600">
                 <SearchBox/>
             </div>
 

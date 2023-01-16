@@ -74,7 +74,7 @@ function Editor({ onClick, editorLoaded, name, value, date }) {
             let jsonData = await res.json();
             setRegularThumbnailLink(jsonData.urls.regular);
             setSmallThumbnailLink(jsonData.urls.small);
-            setUserProfileLink(jsonData.user.links.html);
+            setUserProfileLink(jsonData.user.links.html+"?utm_source=jaksim31&utm_medium=referral");
             setUserName(jsonData.user.username);
             setThumbnailId(jsonData.id);
 
@@ -273,7 +273,7 @@ function Editor({ onClick, editorLoaded, name, value, date }) {
                                     userProfileLink != ""
                                     ?
                                     <p className='text-xs text-center text-zinc-400'>
-                                        Photo by <a href={`${userProfileLink}`} target="_blank" className='underline'> {userName}</a> on <a href="https://unsplash.com/ko" target="_blank" className='underline'> Unsplash</a>
+                                        Photo by <a href={`${userProfileLink}`} target="_blank" className='underline'> {userName}</a> on <a href="https://unsplash.com/ko?utm_source=jaksim31&utm_medium=referral" target="_blank" className='underline'> Unsplash</a>
                                     </p>
                                     :
                                     <></>
