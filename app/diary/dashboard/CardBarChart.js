@@ -102,14 +102,14 @@ export default function CardBarChart() {
   }, []);
   return (
     <>
-      <div className="relative flex flex-col w-full min-w-0 mb-6 break-words shadow-lg rounded-xl bg-slate-100">
+      <div className="relative flex flex-col w-full min-w-0 mb-6 break-words shadow-lg rounded-xl bg-zinc-100">
         <div className="px-4 py-3 mb-0 bg-transparent rounded-t">
           <div className="flex flex-wrap items-center">
             <div className="relative flex-1 flex-grow w-full max-w-full">
-              <h6 className="mb-1 text-xs font-semibold uppercase text-slate-400">
+              <h6 className="mb-1 text-xs font-semibold uppercase text-zinc-400">
                 Performance
               </h6>
-              <h2 className="text-xl font-semibold text-slate-700">
+              <h2 className="text-xl font-semibold text-zinc-700">
                 Total orders
               </h2>
             </div>

@@ -1,11 +1,7 @@
-'use client';
-
 import React from 'react';
 import LazyShow from '../../common/LazyShow';
 import { ChevronDoubleDownIcon, FaceSmileIcon, ChatBubbleBottomCenterTextIcon, PresentationChartBarIcon, PencilSquareIcon } from '@heroicons/react/24/outline'
-import Image from 'next/image';
-import exampleImg from '../../../public/images/landing-example.png'
-import { motion } from "framer-motion";
+import ExampleScreen from './ExampleScreen'
 
 const features = [
   {
@@ -38,7 +34,26 @@ const features = [
   },
 ]
 
-function Home() {
+async function getBgImg() {
+  const Access_Key = process.env.NEXT_PUBLIC_UNSPLASH_ACCESSKEY; 
+
+  // API 호출 횟수 제한으로 개발시 아래 url로 하고, 배포시 아래 API 호출로 넣기
+  let imgUrl = "https://source.unsplash.com/random/?diary";
+
+  // const res = await fetch(`https://api.unsplash.com/photos/random?query=diary&client_id=${Access_Key}`);
+
+  // if (!res.ok) {
+  //   throw new Error('Failed to fetch data');
+  // }
+
+  // let jsonData = await res.json();
+  // let imgUrl = jsonData.urls.full;
+  
+  return imgUrl;
+}
+
+export default async function Home() {
+  const imgUrl = await getBgImg();
 
   return (
     <>
@@ -50,13 +65,13 @@ function Home() {
             className="absolute top-0 w-full h-full bg-center bg-cover"
             style={{
               backgroundImage:
-                "url('https://source.unsplash.com/random/?diary')",
+                "url("+imgUrl+")",
             }}
           >
             {/* overlay */}
             <div
               id="blackOverlay"
-              className="absolute w-full h-full opacity-75 bg-slate-700"
+              className="absolute w-full h-full opacity-75 bg-zinc-700"
             ></div>
           </div>
 
@@ -72,7 +87,7 @@ function Home() {
                     </h1>
                   </LazyShow>
                   <LazyShow delay={0.25}>
-                    <p className="mt-4 text-base sm:text-xl lg:text-3xl text-slate-200 font-[GmarketSansLight]">
+                    <p className="mt-4 text-base sm:text-xl lg:text-3xl text-zinc-200 font-[GmarketSansLight]">
                       작심삼일로 하루의 감정과 키워드를 남겨보세요🥰
                     </p>
                   </LazyShow>
@@ -83,7 +98,7 @@ function Home() {
               
               <div className='flex w-full pt-16 pb-3 sm:pb-4 sm:pt-28 lg:pt-36 lg:pb-10 place-content-center'>
                 <LazyShow delay={0.4}>
-                  <ChevronDoubleDownIcon className='w-10 lg:w-16 animate-bounce text-slate-300'/>
+                  <ChevronDoubleDownIcon className='w-10 lg:w-16 animate-bounce text-zinc-300'/>
                 </LazyShow>
               </div> 
             </div>
@@ -114,19 +129,7 @@ function Home() {
             
             <LazyShow delay={0.5}>
               {/* 예시 화면 */}
-              <div className="flex flex-wrap justify-center">
-                <div className="w-full px-4 text-center aspect-video lg:mx-40">
-                  <motion.div
-                    whileHover={{ scale: 1.03, rotate: -3 }}
-                  >
-                    <div className="relative flex flex-col w-full h-full mb-8 break-words bg-white rounded-lg shadow-lg shadow-slate-300">
-                      <div className="flex-auto overflow-hidden rounded-lg">
-                        <Image src={exampleImg}/>
-                      </div>
-                    </div>
-                  </motion.div>
-                </div>
-              </div>
+              <ExampleScreen/>
             </LazyShow>
 
           
@@ -165,11 +168,11 @@ function Home() {
                 </LazyShow>
   
                 <LazyShow delay={0.2}>
-                  <p className="mt-2 text-3xl font-bold tracking-tight text-slate-800 font-[GmarketSansBold] sm:text-4xl">작심삼일은 이런 기능들을 지원합니다</p>
+                  <p className="mt-2 text-3xl font-bold tracking-tight text-zinc-800 font-[GmarketSansBold] sm:text-4xl">작심삼일은 이런 기능들을 지원합니다</p>
                 </LazyShow>
                 
                 <LazyShow delay={0.3}>
-                  <p className="max-w-2xl mx-auto mt-6 text-base sm:text-lg leading-7 sm:leading-3 font-[GmarketSansMedium] text-slate-600">
+                  <p className="max-w-2xl mx-auto mt-6 text-base sm:text-lg leading-7 sm:leading-3 font-[GmarketSansMedium] text-zinc-600">
                     사용자들은 작심삼일에서 가볍고 쉬우면서도 재미있게 일기를 작성할 수 있습니다💗
                   </p>
                 </LazyShow>
@@ -184,8 +187,8 @@ function Home() {
                           <feature.icon className="w-8 h-8" aria-hidden="true" />
                         </div>
                         <div className="sm:min-w-0 sm:flex-1">
-                          <p className="text-lg font-[GmarketSansMedium] font-semibold leading-8 text-slate-900">{feature.name}</p>
-                          <p className="mt-2 font-[GmarketSansLight] text-base leading-7 text-slate-600">{feature.description}</p>
+                          <p className="text-lg font-[GmarketSansMedium] font-semibold leading-8 text-zinc-900">{feature.name}</p>
+                          <p className="mt-2 font-[GmarketSansLight] text-base leading-7 text-zinc-600">{feature.description}</p>
                         </div>
                       </div>
                     </LazyShow>
@@ -227,11 +230,11 @@ function Home() {
                 </LazyShow>
   
                 <LazyShow delay={0.2}>
-                  <p className="mt-2 text-3xl font-bold tracking-tight text-slate-800 font-[GmarketSansBold] sm:text-4xl">작심삼일은 이런 기능들을 지원합니다</p>
+                  <p className="mt-2 text-3xl font-bold tracking-tight text-zinc-800 font-[GmarketSansBold] sm:text-4xl">작심삼일은 이런 기능들을 지원합니다</p>
                 </LazyShow>
                 
                 <LazyShow delay={0.3}>
-                  <p className="max-w-2xl mx-auto mt-6 text-base sm:text-lg leading-7 sm:leading-3 font-[GmarketSansMedium] text-slate-600">
+                  <p className="max-w-2xl mx-auto mt-6 text-base sm:text-lg leading-7 sm:leading-3 font-[GmarketSansMedium] text-zinc-600">
                     사용자들은 작심삼일에서 가볍고 쉬우면서도 재미있게 일기를 작성할 수 있습니다💗
                   </p>
                 </LazyShow>
@@ -246,8 +249,8 @@ function Home() {
                           <feature.icon className="w-8 h-8" aria-hidden="true" />
                         </div>
                         <div className="sm:min-w-0 sm:flex-1">
-                          <p className="text-lg font-[GmarketSansMedium] font-semibold leading-8 text-slate-900">{feature.name}</p>
-                          <p className="mt-2 font-[GmarketSansLight] text-base leading-7 text-slate-600">{feature.description}</p>
+                          <p className="text-lg font-[GmarketSansMedium] font-semibold leading-8 text-zinc-900">{feature.name}</p>
+                          <p className="mt-2 font-[GmarketSansLight] text-base leading-7 text-zinc-600">{feature.description}</p>
                         </div>
                       </div>
                     </LazyShow>
@@ -269,15 +272,61 @@ function Home() {
             </p>
           </div> 
           <div className="grid-flow-col gap-4 md:place-self-center md:justify-self-end">
-            <a><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" className="fill-current"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"></path></svg>
-            </a> 
+            <a
+              aria-label="github"
+              href="https://github.com/KSWA-SWEEP"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <svg
+                className="fill-current text-neutral-500 dark:text-white hover:text-red-200"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+              >
+                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+              </svg>
+            </a>
+            <a
+              aria-label="notion"
+              href="https://www.notion.so/SWEEP-0720ff930d644ddb80388400628c89d7"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <svg 
+                className="fill-current text-neutral-500 dark:text-white hover:text-red-200"
+                height="24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="12 0.18999999999999906 487.619 510.941">
+                  <path d="M96.085 91.118c15.81 12.845 21.741 11.865 51.43 9.884l279.888-16.806c5.936 0 1-5.922-.98-6.906L379.94 43.686c-8.907-6.915-20.773-14.834-43.516-12.853L65.408 50.6c-9.884.98-11.858 5.922-7.922 9.883zm16.804 65.228v294.491c0 15.827 7.909 21.748 25.71 20.769l307.597-17.799c17.81-.979 19.794-11.865 19.794-24.722V136.57c0-12.836-4.938-19.758-15.84-18.77l-321.442 18.77c-11.863.997-15.82 6.931-15.82 19.776zm303.659 15.797c1.972 8.903 0 17.798-8.92 18.799l-14.82 2.953v217.412c-12.868 6.916-24.734 10.87-34.622 10.87-15.831 0-19.796-4.945-31.654-19.76l-96.944-152.19v147.248l30.677 6.922s0 17.78-24.75 17.78l-68.23 3.958c-1.982-3.958 0-13.832 6.921-15.81l17.805-4.935V210.7l-24.721-1.981c-1.983-8.903 2.955-21.74 16.812-22.736l73.195-4.934 100.889 154.171V198.836l-25.723-2.952c-1.974-10.884 5.927-18.787 15.819-19.767zM42.653 23.919l281.9-20.76c34.618-2.969 43.525-.98 65.283 14.825l89.986 63.247c14.848 10.876 19.797 13.837 19.797 25.693v346.883c0 21.74-7.92 34.597-35.608 36.564L136.64 510.14c-20.785.991-30.677-1.971-41.562-15.815l-66.267-85.978C16.938 392.52 12 380.68 12 366.828V58.495c0-17.778 7.922-32.608 30.653-34.576z" fill-rule="evenodd"/>
+              </svg>
+            </a>
+            <a
+              aria-label="mail"
+              href="mailto:gsa.sweep@gmail.com  "
+              target="_blank"
+              rel="noreferrer"
+            >
+            <svg
+              className="fill-current text-neutral-500 dark:text-white hover:text-red-200"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+            >
+              <path d="M0 3v18h24v-18h-24zm6.623 7.929l-4.623 5.712v-9.458l4.623 3.746zm-4.141-5.929h19.035l-9.517 7.713-9.518-7.713zm5.694 7.188l3.824 3.099 3.83-3.104 5.612 6.817h-18.779l5.513-6.812zm9.208-1.264l4.616-3.741v9.348l-4.616-5.607z"/>
+            </svg>
+            </a>
+          </div>
+          {/* <div className="grid-flow-col gap-4 md:place-self-center md:justify-self-end">
+            <a><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" className="fill-current"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"></path></svg></a> 
             <a><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" className="fill-current"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"></path></svg></a>
             <a><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" className="fill-current"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"></path></svg></a>
-          </div>
+          </div> */}
         </footer>
       </main>
     </>
   );
 }
-
-export default Home;

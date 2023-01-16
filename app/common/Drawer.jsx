@@ -1,6 +1,12 @@
 import Link from "next/link";
 import React from "react";
 
+// 오늘 일기 쓰기를 위한 date 설정
+let formatTwoDigits = (digit) => ("0" + digit).slice(-2);
+let tempDate = new Date();
+let date = `${tempDate.getFullYear()}${formatTwoDigits(tempDate.getMonth()+1)}${formatTwoDigits(tempDate.getDate())}`;
+
+// 오늘의 일기 쓰기의 경우 date를 encode 해서 dynamic routing
 const menuAfterLogin = [
   {
     name: '📊  대시보드',
@@ -8,11 +14,11 @@ const menuAfterLogin = [
   },
   {
     name: '📅  일기 목록',
-    href: '/diary/list/grid',
+    href: '/diary/list/calendar',
   },
   {
-    name: '📇  일기 작성',
-    href: '/diary/create',
+    name: '📇  오늘의 일기 쓰기',
+    href: '/diary/create/'+ encodeURIComponent(btoa(date)),
   },
   {
     name: '🌼  튜토리얼',
@@ -49,8 +55,8 @@ export default function Drawer({ isOpen, setIsOpen }) {
                 {/* TODO 우선 로그인 후 목록으로 해둠 (menuAfterLogin) => isLogin인 값 사용해서 로그인 전 상태랑 구분 추가하기 */}
                 <li className="m-3 mt-0 mb-5 text-2xl font-bold text-red-500 sm:text-3xl" onClick={() => { setIsOpen(false); }}><Link href="/home/landing"><div className="w-full">작심삼일</div></Link></li>
                 {menuAfterLogin.map((menu) => (
-                    <li key={menu.name} className="py-3 pl-4 my-1 text-lg hover:rounded-2xl hover:bg-red-100 text-slate-700" onClick={() => { setIsOpen(false); }}>
-                      <Link href={menu.href}><div className="w-full">{menu.name}</div></Link>
+                    <li key={menu.name} className="my-1 text-lg hover:rounded-2xl hover:bg-red-100 text-zinc-700" onClick={() => { setIsOpen(false); }}>
+                      <Link href={menu.href}><div className="w-full py-3 pl-4">{menu.name}</div></Link>
                     </li>
                 ))}
               

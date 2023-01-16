@@ -18,6 +18,9 @@
     "ckeditor5-custom-build": "file:ckeditor5",
     "classnames": "^2.3.2",
     "daisyui": "^2.46.1",
+    "dotenv": "^16.0.3",
+    "dotenv-webpack": "^8.0.1",
+    "emailjs-com": "^3.2.0",
     "framer-motion": "^8.2.4",
     "moment": "^2.29.4",
     "next": "13.1.1",
@@ -30,6 +33,7 @@
     "tailwind-scrollbar-hide": "^1.1.7"
   },
   "devDependencies": {
+    "@svgr/webpack": "^6.5.1",
     "autoprefixer": "^10.4.13",
     "postcss": "^8.4.20",
     "tailwindcss": "^3.2.4"

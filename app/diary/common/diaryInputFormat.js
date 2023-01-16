@@ -5,8 +5,14 @@ import dynamic from 'next/dynamic';
 
 
 export default function DiaryInputFormat(props) {  
-  const Editor = dynamic(() => import('../../common/Editor'), { ssr: false });
+  const Editor = dynamic(() => import('./Editor'), { ssr: false });
+
+  useEffect(() => {
+    setEditorLoaded(true);
+  }, []);
+  
   const [editorLoaded, setEditorLoaded] = useState(false);
+
   const resultView = useRef(null);
   
   const onClick = (str) => {
@@ -14,27 +20,26 @@ export default function DiaryInputFormat(props) {
       resultView.current.innerHTML = `<h2>html결과 view입니다</h2>${str}`;
     }
   };
-  useEffect(() => {
-    setEditorLoaded(true);
-  }, []);
 
   return (
     <>
       <div>
         { 
-          props.Contents
+          props.content
           ? 
             <Editor
               name="description"
               onClick={onClick}
               editorLoaded={editorLoaded}
-              value={props.Contents}
+              value={props.content}
+              date={props.date}
             />
           :
           <Editor
             name="description"
             onClick={onClick}
             editorLoaded={editorLoaded}
+            date={props.date}
           />
         }
       </div>
