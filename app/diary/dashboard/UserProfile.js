@@ -32,7 +32,7 @@ export default function UserProfile() {
                                     총 작성한 일기
                                 </div>
                                 <div className='text-3xl font-bold'>
-                                    165개
+                                    {user.diary_total}
                                 </div>
                             </div>
                             {/* 최근 일기 */}
