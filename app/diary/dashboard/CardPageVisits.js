@@ -5,11 +5,11 @@ import React from "react";
 export default function CardPageVisits() {
   return (
     <>
-      <div className="relative flex flex-col w-full min-w-0 mb-6 break-words shadow-lg rounded-xl bg-slate-100">
+      <div className="relative flex flex-col w-full min-w-0 mb-6 break-words shadow-lg rounded-xl bg-zinc-100">
         <div className="px-4 py-3 mb-0 border-0 rounded-t">
           <div className="flex flex-wrap items-center">
             <div className="relative flex-1 flex-grow w-full max-w-full px-4">
-              <h3 className="text-base font-semibold text-slate-700">
+              <h3 className="text-base font-semibold text-zinc-700">
                 Page visits
               </h3>
             </div>
@@ -28,16 +28,16 @@ export default function CardPageVisits() {
           <table className="items-center w-full bg-transparent border-collapse">
             <thead>
               <tr>
-                <th className="px-6 py-3 text-xs font-semibold text-left uppercase align-middle border border-l-0 border-r-0 border-solid bg-slate-50 text-slate-500 border-slate-100 whitespace-nowrap">
+                <th className="px-6 py-3 text-xs font-semibold text-left uppercase align-middle border border-l-0 border-r-0 border-solid bg-zinc-50 text-zinc-500 border-zinc-100 whitespace-nowrap">
                   Page name
                 </th>
-                <th className="px-6 py-3 text-xs font-semibold text-left uppercase align-middle border border-l-0 border-r-0 border-solid bg-slate-50 text-slate-500 border-slate-100 whitespace-nowrap">
+                <th className="px-6 py-3 text-xs font-semibold text-left uppercase align-middle border border-l-0 border-r-0 border-solid bg-zinc-50 text-zinc-500 border-zinc-100 whitespace-nowrap">
                   Visitors
                 </th>
-                <th className="px-6 py-3 text-xs font-semibold text-left uppercase align-middle border border-l-0 border-r-0 border-solid bg-slate-50 text-slate-500 border-slate-100 whitespace-nowrap">
+                <th className="px-6 py-3 text-xs font-semibold text-left uppercase align-middle border border-l-0 border-r-0 border-solid bg-zinc-50 text-zinc-500 border-zinc-100 whitespace-nowrap">
                   Unique users
                 </th>
-                <th className="px-6 py-3 text-xs font-semibold text-left uppercase align-middle border border-l-0 border-r-0 border-solid bg-slate-50 text-slate-500 border-slate-100 whitespace-nowrap">
+                <th className="px-6 py-3 text-xs font-semibold text-left uppercase align-middle border border-l-0 border-r-0 border-solid bg-zinc-50 text-zinc-500 border-zinc-100 whitespace-nowrap">
                   Bounce rate
                 </th>
               </tr>

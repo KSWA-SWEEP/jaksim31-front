@@ -3,7 +3,7 @@ import CalendarList from "./calendarList";
 export default function calendarList() {
     return (
         <>
-            <div className="relative mt-10">
+            <div className="relative">
                 <CalendarList className="flex w-full"/>
             </div>
         </>
