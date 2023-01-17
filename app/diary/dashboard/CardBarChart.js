@@ -10,6 +10,7 @@ export default function CardBarChart() {
     let config = {
       type: "bar",
       data: {
+        /* X축 범주 */
         labels: [
           "좋음",
           "싫음",
@@ -106,9 +107,6 @@ export default function CardBarChart() {
         <div className="px-4 py-3 mb-0 bg-transparent rounded-t">
           <div className="flex flex-wrap items-center">
             <div className="relative flex-1 flex-grow w-full max-w-full">
-              <h6 className="mb-1 text-xs font-semibold uppercase text-zinc-400">
-                
-              </h6>
               <h2 className="text-xl font-semibold text-zinc-700">
                 저번 달과 감정 빈도를 비교해봐요!😊
               </h2>

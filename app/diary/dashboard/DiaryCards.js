@@ -3,6 +3,7 @@ import Link from "next/link";
 // app/common/header/Profile에서 거의 다 가져왔지만 일부 수정하기 위해 component 따로 생성.
 export default function UserProfile() {
     const user = userData;
+    // 제일 최근 일기의 ID만 추출해서 /diary/ 뒤에 붙여줌.
     const firstDiary = "/diary/"+user.recent_diaries[0].diary_id;
     return (
         <>
@@ -15,6 +16,7 @@ export default function UserProfile() {
                         최근 일기 📝
                         </h2>
                         </div>
+                        {/* "See All" 버튼 */}
                         <div className="relative flex-1 flex-grow w-full max-w-full px-4 text-right">
                         <Link
                             className="px-3 py-1 mb-1 mr-1 text-xs font-bold text-white uppercase transition-all duration-150 ease-linear bg-indigo-500 rounded outline-none active:bg-indigo-600 focus:outline-none"

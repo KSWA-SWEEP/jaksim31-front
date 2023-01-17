@@ -26,7 +26,7 @@ export default function UserProfile() {
                     <div className="my-6 border-b-2"></div>
                     <div className='w-full'>
                         <div className="grid grid-cols-3">
-                            {/* 총 작성한 일기 */}
+                            {/* 총 작성한 일기 수 */}
                             <div className='col-span-3 mb-1 sm:col-span-1'>
                                 <div className="mb-1 text-lg text-zinc-600">
                                     작성한<br></br>일기장들

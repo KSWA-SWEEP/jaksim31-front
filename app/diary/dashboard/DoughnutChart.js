@@ -67,13 +67,14 @@ export default function DoughnutChart() {
           </div>
         </div>
           <div className="flex-auto p-4">
-            {/* Chart */}
+            {/* Doughnut Chart */}
           <div className="relative h-350-px">
             <canvas className="h-[300px] w-full" id="doughnut-chart" ></canvas>
           </div>
         </div>
       </div>
       <br></br>
+      {/* 월별 일기 작성률 모아보기 */}
       <div className="col-span-6 px-4 my-4 lg:col-span-3">
         <CardSocialTraffic/>
       </div>
