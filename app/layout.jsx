@@ -5,7 +5,7 @@ import './globals.css'
 import Drawer from './common/Drawer';
 import Header from './common/header/Header';
 import { usePathname } from 'next/navigation';
-import ReactQueryWrapper from './ReacQueryWrapper';
+import ReactQueryWrapper from './ReactQueryWrapper';
 
 export default function RootLayout({ children }) {  
   const [isOpen, setIsOpen] = useState(false);
