@@ -30,6 +30,7 @@ export default function DoughnutChart() {
       options: {
         maintainAspectRatio: true,
         responsive: false,
+        offset: 20,
         title: {
           display: false,
           text: "감정 비교",
@@ -44,7 +45,7 @@ export default function DoughnutChart() {
         },
         legend: {
           labels: {
-            fontColor: "rgba(0,0,0,.4)",
+            fontColor: "rgba(0,0,0,.8)",
           },
           align: "end",
           position: "bottom",
