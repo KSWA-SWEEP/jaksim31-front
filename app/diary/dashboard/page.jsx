@@ -7,6 +7,11 @@ import CardSocialTraffic from "./CardSocialTraffic"
 import userData from "../../../public/data/user.json";
 import UserProfile from "./UserProfile";
 import RecentDiaries from "./RecentDiaries";
+import EmotionCompare from "./EmotionCompare"
+import CardBarChart from "./CardBarChart";
+import DiaryCards from "./DiaryCards";
+import DoughnutChart from "./DoughnutChart";
+
 
 export default function diaryPage() {
     return (
@@ -19,18 +24,16 @@ export default function diaryPage() {
                     </div>
 
                     <div className="col-span-6 px-4 my-4 mb-10 lg:col-span-4 ">
-                        <CardLineChart/>
+                        <CardBarChart/>
                     </div>
 
+                    <div className="col-span-6 px-4 my-4 lg:col-span-3">
+                        <DoughnutChart/>
+                    </div>
 
                     <div className="col-span-6 px-4 my-4 lg:col-span-3">
                         {/*최근 일기*/}
-                        <RecentDiaries/>
-                    </div>
-
-
-                    <div className="col-span-6 px-4 my-4 lg:col-span-3">
-                        <CardSocialTraffic/>
+                        <DiaryCards/>
                     </div>
 
                 </div>

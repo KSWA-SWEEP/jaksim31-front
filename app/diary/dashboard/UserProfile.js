@@ -8,7 +8,7 @@ export default function UserProfile() {
             <div
                 className="w-full max-w-md p-6 pt-4 mb-6 overflow-hidden text-left align-middle transition-all transform bg-zinc-100 shadow-xl lg:max-w-lg rounded-xl">
                 <h2 className="text-xl font-semibold text-zinc-700">
-                My Profile 🙋
+                My Profile🙋
                 </h2>
                 <div className='flex flex-col text-center justify-items-center'>
                     {/* 프로필 사진 */}
