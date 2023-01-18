@@ -10,26 +10,26 @@ let date = `${tempDate.getFullYear()}${formatTwoDigits(tempDate.getMonth()+1)}${
 const menuAfterLogin = [
   {
     name: '📊  대시보드',
-    href: '/diary/dashboard',
+    href: 'diary/dashboard',
   },
   {
     name: '📅  일기 목록',
-    href: '/diary/list/calendar',
+    href: 'diary/list/calendar',
   },
   {
     name: '📇  오늘의 일기 쓰기',
-    href: '/diary/create/'+ encodeURIComponent(btoa(date)),
+    href: 'diary/create/'+ encodeURIComponent(btoa(date)),
   },
   {
     name: '🌼  튜토리얼',
-    href: '/diary/tutorial',
+    href: 'diary/tutorial',
   },
 ]
 
 const menuBeforeLogin = [
   {
     name: '🌼  튜토리얼',
-    href: '/diary/tutorial',
+    href: 'diary/tutorial',
   },
 ]
 

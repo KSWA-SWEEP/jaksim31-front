@@ -1,8 +1,23 @@
+'use client';
+
 import userData from "../../../public/data/user.json";
+import Loading from "../list/grid/loading";
+import Error from "../list/grid/error";
+import { useUserInfoQuery } from "../../hooks/queries/useUserInfoQuery";
+
 
 // app/common/header/Profile에서 거의 다 가져왔지만 일부 수정하기 위해 component 따로 생성.
-export default function UserProfile() {
+export default function UserProfile(userInfo) {
+
+    // 유저 정보 data fetching을 위한 useQuery
+    const { data, isLoading, isFetching, isFetched, isError } = useUserInfoQuery(userInfo);
+    // console.log("isFetching: " + isFetching + ", isLoading: " + isLoading);
+    // console.log(data);
     const user = userData;
+
+    if( isLoading || isFetching ) return <Loading className="flex justify-center"/>
+    if ( isError ) return <Error className="flex justify-center"/>
+
     return (
         <>
             <div
@@ -11,16 +26,16 @@ export default function UserProfile() {
                     {/* 프로필 사진 */}
                     <div className="justify-center m-5 avatar">
                         <div className="w-32 rounded-full">
-                            <img src={user.profile_photo}/>
+                            <img src={data.profileImage}/>
                         </div>
                     </div>
                     {/* 이름 */}
                     <div className='text-3xl font-extrabold text-zinc-700'>
-                        {user.name}
+                        {data.username}
                     </div>
                     {/* 사용자 ID (이메일) */}
                     <p className="text-sm text-zinc-500">
-                        {user.login_id}
+                        {data.loginId}
                     </p>
                     {/* divider */}
                     <div className="my-6 border-b-2"></div>
@@ -32,7 +47,7 @@ export default function UserProfile() {
                                     총 작성한 일기
                                 </div>
                                 <div className='text-3xl font-bold'>
-                                    {user.diary_total}
+                                    {data.diaryTotal}
                                 </div>
                             </div>
                             {/* 최근 일기 */}
