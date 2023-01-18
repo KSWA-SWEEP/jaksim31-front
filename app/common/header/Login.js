@@ -33,9 +33,9 @@ const Login = () => {
     const userPasswordCheck = useRef(""); 
 
     // 카카오 인증 창으로 넘어가는 URL 설정
-    const CLIENT_ID = process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID
-    const REDIRECT_URL = process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URL
-    const KAKAO_AUTH_URL = "https://kauth.kakao.com/oauth/authorize?client_id="+CLIENT_ID+"&redirect_uri="+REDIRECT_URL+"&response_type=code";
+    const NEXT_PUBLIC_KAKAO_CLIENT_ID = process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID
+    const NEXT_PUBLIC_KAKAO_REDIRECT_URL = process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URL
+    const KAKAO_AUTH_URL = "https://kauth.kakao.com/oauth/authorize?client_id="+NEXT_PUBLIC_KAKAO_CLIENT_ID+"&redirect_uri="+NEXT_PUBLIC_KAKAO_REDIRECT_URL+"&response_type=code";
 
     // 메일 인증 변수
     const userAuth = useRef(""); // 인증번호 입력값

@@ -10,8 +10,7 @@
 module.exports = {
   reactStrictMode: false,
   env: {
-    CLIENT_ID: process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID,
-    REDIRECT_URL: process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URL
+    BASE_URL: process.env.BASE_URL,
   },
   experimental: {
     appDir: true,
