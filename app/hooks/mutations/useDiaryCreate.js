@@ -1,4 +1,4 @@
-export const useDiaryCreate = () =>
+export const useDiaryListCreate = () =>
 {
 
 }

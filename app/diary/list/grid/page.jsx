@@ -1,7 +1,23 @@
+import { getDiaryList } from "../../../api/getDiaryList";
 import DiaryGridList from "./gridList";
 import SearchBox from "./SearchBox";
 
-export default function gridList() {
+async function getDiaryListData() {
+    // 로그인시 가져온 userId (db의 objectId) 를 쿠키 or Local Storage로부터 가져와서 넣어주기
+    // const res = await getDiaryList({userId});
+    // 지금은 test 용 하나의 userId 하드코딩으로 넣어줌..
+    const res = await getDiaryList("63c0cc06645d5d4a0786cea8");
+    
+    if (!res.ok) {
+      throw new Error('Failed to fetch data');
+    }
+  
+    return res.json();
+}
+
+export default async function gridList() {
+    const diaryList = await getDiaryListData();
+
     return (
         <>
             {/* 검색 영역 */}
@@ -10,7 +26,7 @@ export default function gridList() {
             </div>
 
             <div className="relative">
-                <DiaryGridList className="w-full"/>
+                <DiaryGridList className="w-full" diaryList={diaryList}/>
             </div>
         </>
     )
