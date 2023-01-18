@@ -12,7 +12,7 @@ export default function CardBarChart() {
       data: {
         /* X축 범주 */
         labels: [
-          "좋음",
+          "😊",
           "싫음",
           "놀람",
           "두려움",
@@ -20,6 +20,11 @@ export default function CardBarChart() {
           "지루함",
           "부끄러움",
         ],
+        title: {
+          font: {
+            family: "LeeSeoYun"
+          }
+        },
         datasets: [
           {
             label: "이번 달",
@@ -54,7 +59,8 @@ export default function CardBarChart() {
         },
         legend: {
           labels: {
-            fontColor: "rgba(0,0,0,.4)",
+            fontColor: "rgba(0,0,0,.8)",
+            fontFamily: "LeeSeoyun",
           },
           align: "end",
           position: "bottom",
@@ -65,6 +71,8 @@ export default function CardBarChart() {
               display: true,
               scaleLabel: {
                 display: true,
+                fontFamily: "LeeSeoyun",
+                fontSize: 15,
                 labelString: "감정 종류",
               },
               gridLines: {
@@ -81,6 +89,7 @@ export default function CardBarChart() {
             {
               display: true,
               scaleLabel: {
+                fontFamily: "LeeSeoyun",
                 display: false,
                 labelString: "Value",
               },

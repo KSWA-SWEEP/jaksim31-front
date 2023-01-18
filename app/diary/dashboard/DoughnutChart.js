@@ -1,6 +1,6 @@
 'use client';
 import userEmotion from "../../../public/data/emotions.json"
-import CardSocialTraffic from "./CardSocialTraffic"
+import CardSocialTraffic from "./MonthlyProgress"
 import React, { useEffect } from "react";
 import Chart from "chart.js";
 
@@ -45,13 +45,18 @@ export default function DoughnutChart() {
         },
         legend: {
           labels: {
+            fontFamily: "LeeSeoyun",
             fontColor: "rgba(0,0,0,.8)",
+            fontSize: 16,
+            position: "bottom",
+            align: "left",
+            boxWidth: 30,
           },
-          align: "end",
+          align: "center",
           position: "bottom",
         },
       },
-    };
+    }; 
     let ctx = document.getElementById("doughnut-chart").getContext("2d");
     window.myBar = new Chart(ctx, config);
   }, []);
@@ -70,7 +75,7 @@ export default function DoughnutChart() {
           <div className="flex-auto p-4">
             {/* Doughnut Chart */}
           <div className="relative h-350-px">
-            <canvas className="h-[300px] w-full" id="doughnut-chart" ></canvas>
+            <canvas style={{ width: '360px', height: '300px', margin: '0 auto' }} id="doughnut-chart" ></canvas>
           </div>
         </div>
       </div>
