@@ -5,6 +5,8 @@ import { EllipsisVerticalIcon } from '@heroicons/react/24/outline'
 import { Menu, Transition } from "@headlessui/react"
 import { Fragment } from "react"
 import diarysData from '../../../../public/data/diaryList.json'
+import Image from "next/image";
+import moment from "moment";
 
 const diarys = diarysData.diaryList;
 
@@ -41,17 +43,21 @@ export default function DiaryGridList() {
                                 <div className="absolute hidden text-3xl font-extrabold group-hover:block">
                                     {diary.emotion}
                                 </div>
-                                <img
-                                    src={diary.thumbnail}
-                                    alt={diary.emotion}
-                                    className="object-cover object-center aspect-[4/3] duration-200 hover:opacity-20 hover:scale-105"
-                                />
+                                <div className="relative object-cover object-center aspect-[4/3] w-full overflow-hidden">
+                                    <Image
+                                        src={diary.thumbnail}
+                                        alt={diary.emotion}
+                                        placeholder="empty"
+                                        fill
+                                        className="object-cover duration-200 hover:opacity-20 hover:scale-105"
+                                    />
+                                </div>
                             </Link>
                     </div>
                     <div className="flex justify-between mx-4 mt-5 mb-2">
                         <div className="w-full">
                             <div className="flex justify-between">
-                                <p className="ml-2 text-lg font-bold truncate text-zinc-900">{diary.date.split("T")[0].replace(/-/g, '').replace(/(\d{4})(\d{2})(\d{2})/g, '$1. $2. $3.')}</p>
+                                <p className="ml-2 text-lg font-bold truncate text-zinc-900">{moment(diary.date).format('YYYY. MM. DD.')}</p>
                                 <Menu as="div" className="relative ml-3">
                                     <div>
                                         <Menu.Button className="flex max-w-xs text-sm focus:outline-none">

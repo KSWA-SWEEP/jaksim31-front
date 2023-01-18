@@ -14,7 +14,7 @@ const menuAfterLogin = [
   },
   {
     name: '📅  일기 목록',
-    href: '/diary/list/grid',
+    href: '/diary/list/calendar',
   },
   {
     name: '📇  오늘의 일기 쓰기',
