@@ -1,14 +1,8 @@
 'use client';
 import React from "react";
 
-import CardLineChart from "./CardLineChart"
-import CardPageVisits from "./CardPageVisits"
-import CardSocialTraffic from "./CardSocialTraffic"
-import userData from "../../../public/data/user.json";
 import UserProfile from "./UserProfile";
-import RecentDiaries from "./RecentDiaries";
-import EmotionCompare from "./EmotionCompare"
-import CardBarChart from "./CardBarChart";
+import CardBarChart from "./EmotionCompare";
 import DiaryCards from "./DiaryCards";
 import DoughnutChart from "./DoughnutChart";
 
