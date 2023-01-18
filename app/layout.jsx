@@ -22,7 +22,7 @@ export default function RootLayout({ children }) {
       <body className='scrollbar-hide'>
         <div className='relative flex scrollbar-hide'>
           {/* Header */}
-          <Header className="z-50" isOpen={isOpen} setIsOpen={setIsOpen}/>
+          <ReactQueryWrapper><Header className="z-50" isOpen={isOpen} setIsOpen={setIsOpen}/></ReactQueryWrapper>
           
           {
             pathname.includes('/home') 

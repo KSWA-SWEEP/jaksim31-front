@@ -6,6 +6,9 @@ import userData from '../../../public/data/user.json'
 import { Fragment, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import moment from 'moment';
+import { useUserInfoQuery } from '../../hooks/queries/useUserInfoQuery';
+import Loading from '../../diary/list/grid/loading';
+import Error from '../../diary/list/grid/error';
 
 const Profile = () => {
 
@@ -37,6 +40,12 @@ const Profile = () => {
     const [isOldPassword, setIsOldPassword] = useState(false)
     const [isNewPassword, setIsNewPassword] = useState(false)
     const [isNewPasswordConfirm, setIsNewPasswordConfirm] = useState(false)
+
+    // 유저 정보 data fetching을 위한 useQuery
+    const { data, isLoading, isFetching, isFetched, isError } = useUserInfoQuery();
+
+    if( isLoading || isFetching ) return <Loading className="flex justify-center"/>
+    if ( isError ) return <Error className="flex justify-center"/>
 
     const onNameChange = (e) => {
       userName.current = e.target.value;
@@ -233,18 +242,18 @@ const Profile = () => {
                             {/* 프로필 사진 */}
                             <div className="justify-center m-5 avatar">
                               <div className="w-32 rounded-full">
-                                <img src={user.profile_photo} />
+                                <img src={data.profileImage} />
                               </div>
                             </div>
 
                             {/* 이름 */}
                             <div className='text-3xl font-extrabold text-zinc-700'>
-                              {user.name}
+                              {data.username}
                             </div>
 
                             {/* 사용자 ID (이메일) */}
                             <p className="text-sm text-zinc-500">
-                              {user.login_id}
+                              {data.loginId}
                             </p>
                             
                             <div className='justify-center '>
@@ -269,7 +278,7 @@ const Profile = () => {
                                     총 작성한 일기
                                   </div>
                                   <div className='text-3xl font-bold'>
-                                    {user.diary_total}
+                                    {data.diaryTotal}
                                   </div>
                                 </div>
 
@@ -344,7 +353,7 @@ const Profile = () => {
                             {/* 프로필 사진 */}
                             <div className="justify-center m-5 avatar">
                               <div className="relative top-0 flex items-start w-32 rounded-full group">
-                                <img src={userProfileImageURL ? userProfileImageURL : user.profile_photo} />
+                                <img src={userProfileImageURL ? userProfileImageURL : data.profileImage} />
                                 <div className='absolute top-0 flex items-center justify-center w-full h-full bg-black opacity-0 hover:opacity-50'>
                                   {/* 파일 선택 창 hidden 설정 */}
                                   <input
@@ -382,7 +391,7 @@ const Profile = () => {
                                 <label className="label">
                                   <div className="label-text">사용자 ID</div>
                                 </label>
-                                <input type="text" placeholder="이름을 입력하세요" value={user.login_id} className="w-full h-10 input input-bordered"  disabled/>
+                                <input type="text" placeholder="이름을 입력하세요" value={data.loginId} className="w-full h-10 input input-bordered"  disabled/>
                               </div>
                               
                               {/* 이름 */}
@@ -390,7 +399,7 @@ const Profile = () => {
                                 <label className="label">
                                   <div className="label-text">이름</div>
                                 </label>
-                                <input type="text" placeholder="이름을 입력하세요" defaultValue={user.name} className="w-full h-10 input input-bordered" onChange={onNameChange} />
+                                <input type="text" placeholder="이름을 입력하세요" defaultValue={data.username} className="w-full h-10 input input-bordered" onChange={onNameChange} />
                               </div>
 
                               {/* 소셜 로그인일 경우 비밀번호 변경 불가 */}
