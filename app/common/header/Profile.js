@@ -25,12 +25,13 @@ const Profile = () => {
     const router = useRouter();
 
     // 사용자 입력 변수
-    const userName = useRef();
+    const userName = useRef("");
     const userOldPassword = useRef("");
     const userNewPassword = useRef("");
     const userNewPasswordCheck = useRef("");
     const userProfileImage = useRef("");
     const [userProfileImageURL, setUserProfileImageURL] = useState("");   // 프로필 이미지 미리보기를 위한 임시 주소
+    const [isNameEdit, setIsNameEdit] = useState(false);
 
     // 오류 메시지 변수
     const [passwordMessage, setPasswordMessage] = useState('')
@@ -97,6 +98,12 @@ const Profile = () => {
         };
     };
 
+    // 이름 편집 아이콘 클릭 시 실행되는 함수
+    const onNameEdit = (e) => {
+      userName.current = "";
+      setIsNameEdit(!isNameEdit);
+    };
+
     async function requestLogout() {
 
       console.log("로그아웃 버튼 눌림");
@@ -124,40 +131,65 @@ const Profile = () => {
     async function requestChangeProfile(){
 
       console.log("프로필 저장하기 버튼 눌림");
+      /*
+      * TODO: 프로필 이미지 object storage에 올리기
+      * 이미지 URL 임의로 넣어둠
+      */
+      userProfileImage.current = "https://source.unsplash.com/random/?cheese";
 
-      // 이름, 비밀번호 데이터
       console.log("======= Change Profile Request");
-      const data = new Object();
+      const requestProfileData = new Object();
       console.log("userName : " + userName.current);
-      console.log("oldPassword : " + userOldPassword.current);
-      console.log("newPassword : " + userNewPassword.current);
-      data.username = userName.current;
-      data.OldPassword = userOldPassword.current;
-      data.newPassword = userNewPassword.current;
-
-      // 프로필 사진 데이터
-      const formData = new FormData();
-      formData.append("profileImage", userProfileImage);
-      for(let [key, value] of Object.entries(data)) {
-        formData.append(key, value);
-      }
-
-      console.log("==== formData ====");
-      for(let value of formData.values()) {
-        console.log(value);
-      }
-      console.log("=============");
+      console.log("profileImage: " + userProfileImage.current);
+      requestProfileData.username = userName.current;
+      requestProfileData.profileImage = userProfileImage.current;
 
       /*
       * TODO: 회원정보 수정 API 확정되면 수정 예정
       */
       
       try{
-          const responseChangeProfile = await fetch('/api/v1/members/{userId}', {
+          const responseChangeProfile = await fetch(process.env.NEXT_PUBLIC_API_URL+"/v0/members/"+`63c790475ff1ed187caf39da`, {
               method: 'PATCH',
-              body: formData,
+              body: requestProfileData,
               headers: {
-                  'Content-type': 'multipart/form-data',
+                  'Content-type': 'application/json',
+              }
+          });
+          
+          alert("개인정보가 저장되었습니다 😊");
+          
+      } catch (e) {
+          console.log(e);
+          alert("개인정보 수정에 실패했습니다. 다시 시도해 주세요.");
+      } finally {
+        // 변수 초기화
+        userName.current = "";
+        userProfileImage.current = "";
+        closeEditModal();
+      }
+    };
+
+    async function requestChangePassword(){
+
+      console.log("비밀번호 변경하기 버튼 눌림");
+      console.log("======= Change Password Request");
+      const requestPasswordData = new Object();
+      console.log("oldPassword : " + userOldPassword.current);
+      console.log("newPassword : " + userNewPassword.current);
+      requestPasswordData.OldPassword = userOldPassword.current;
+      requestPasswordData.newPassword = userNewPassword.current;
+
+      /*
+      * TODO: 비밀번호 수정 API 확정되면 수정 예정
+      */
+      
+      try{
+          const responseChangePassword = await fetch('/api/v1/members/{userId}/password', {
+              method: 'PUT',
+              body: requestPasswordData,
+              headers: {
+                  'Content-type': 'application/json',
               }
           });
           
@@ -241,29 +273,74 @@ const Profile = () => {
                           <div className='flex flex-col text-center justify-items-center'>
                             {/* 프로필 사진 */}
                             <div className="justify-center m-5 avatar">
-                              <div className="w-32 rounded-full">
-                                <img src={data.profileImage} />
+                              <div className="relative top-0 flex items-start w-32 rounded-full group">
+                                <img src={userProfileImageURL ? userProfileImageURL : data.profileImage} />
+                                <div className='absolute top-0 flex items-center justify-center w-full h-full bg-black opacity-0 hover:opacity-50'>
+                                  {/* 파일 선택 창 hidden 설정 */}
+                                  <input
+                                    hidden
+                                    type="file" 
+                                    onChange={onProfileImageChange} 
+                                    id="profileImage" 
+                                    ref={userProfileImage}
+                                    accept="image/*"
+                                  />
+
+                                  {/* 파일 선택 창 대신 아이콘 사용 */}
+                                  {user.is_social ? 
+                                    <PencilSquareIcon className='hidden text-white w-7 h-7 group-hover:block'/>
+                                    :
+                                    <label className="signup-profileImg-label" htmlFor="profileImage">
+                                      <PencilSquareIcon className='hidden text-white w-7 h-7 group-hover:block'/>
+                                     </label>
+                                  }
+                                </div>
                               </div>
                             </div>
-
-                            {/* 이름 */}
-                            <div className='text-3xl font-extrabold text-zinc-700'>
-                              {data.username}
+                            <div className='flex justify-center items-center'>
+                              {/* 이름 */}
+                              {isNameEdit ? 
+                                <div className="w-30 form-control justify-center">
+                                  <input type="text" placeholder="이름을 입력하세요" defaultValue={data.username} className="w-full h-10 input input-bordered" onChange={onNameChange} />
+                                </div>
+                                :
+                                <div className='text-3xl font-extrabold text-zinc-700'>
+                                  {data.username}
+                                </div>
+                              }
+                              <PencilSquareIcon
+                                className="text-black w-8 h-8 pl-2"
+                                onClick={onNameEdit}
+                              />
                             </div>
-
                             {/* 사용자 ID (이메일) */}
                             <p className="text-sm text-zinc-500">
                               {data.loginId}
                             </p>
-                            
-                            <div className='justify-center '>
+
+                            <div className='flex justify-center items-center'> 
                               <button
-                                type="button"
-                                className="px-3 py-2 mt-4 text-sm font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md w-fit hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                                onClick={openEditModal}
+                                  type="button"
+                                  className="inline-flex justify-center px-3 py-2 mr-2 text-sm font-medium text-red-700 bg-red-200 border border-transparent rounded-md mt-4 hover:bg-red-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
+                                  onClick={requestChangeProfile}
+                                  disabled={userName.current || userProfileImage.current ? false : true}
                               >
-                                개인정보 수정
+                                저장하기
                               </button>
+                              {/*소셜 로그인 사용자일 경우 비밀번호 변경 불가능*/}
+                              {user.is_social ? 
+                                <></>
+                                :
+                                <div className='justify-center '>
+                                <button
+                                  type="button"
+                                  className="px-3 py-2 mt-4 text-sm font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md w-fit hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                                  onClick={openEditModal}
+                                >
+                                  비밀번호 변경
+                                </button>
+                              </div>
+                              }
                             </div>
 
                             {/* divider */}
@@ -314,7 +391,7 @@ const Profile = () => {
                 </Dialog>
               </Transition>
 
-              {/* 개인정보 수정 Modal */}
+              {/* 비밀번호 변경 Modal */}
               <Transition className="overflow-auto" appear show={isEditModalOpen} as={Fragment}>
                 <Dialog as="div" className="relative z-50" onClose={closeEditModal}>
                   <Transition.Child
@@ -342,73 +419,22 @@ const Profile = () => {
                       >
                         <Dialog.Panel className="w-full max-w-md p-6 pt-4 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl lg:max-w-lg rounded-2xl">
                           
-                          <div className='flex justify-end'>
-                            <XMarkIcon
-                              className="w-6 h-6 text-sm text-zinc-500 "
-                              onClick={closeEditModal}
-                            />
-                          </div>
-
-                          <div className='flex flex-col text-center justify-items-center'>
-                            {/* 프로필 사진 */}
-                            <div className="justify-center m-5 avatar">
-                              <div className="relative top-0 flex items-start w-32 rounded-full group">
-                                <img src={userProfileImageURL ? userProfileImageURL : data.profileImage} />
-                                <div className='absolute top-0 flex items-center justify-center w-full h-full bg-black opacity-0 hover:opacity-50'>
-                                  {/* 파일 선택 창 hidden 설정 */}
-                                  <input
-                                    hidden
-                                    type="file" 
-                                    onChange={onProfileImageChange} 
-                                    id="profileImage" 
-                                    ref={userProfileImage}
-                                    accept="image/*"
-                                  />
-
-                                  {/* 파일 선택 창 대신 아이콘 사용 */}
-                                  {user.is_social ? 
-                                    <PencilSquareIcon className='hidden text-white w-7 h-7 group-hover:block'/>
-                                    :
-                                    <label className="signup-profileImg-label" htmlFor="profileImage">
-                                      <PencilSquareIcon className='hidden text-white w-7 h-7 group-hover:block'/>
-                                     </label>
-                                  }
-                                </div>
-                              </div>
+                            <div className='flex justify-end'>
+                              <XMarkIcon
+                                className="w-6 h-6 text-sm text-zinc-500 "
+                                onClick={closeProfileModal}
+                              />
                             </div>
-
-                            {/* <div className='text-3xl font-extrabold text-zinc-700'>
-                              {user.name}
-                            </div> */}
-
-                            {/* <p className="text-sm text-zinc-500">
-                              {user.login_id}
-                            </p> */}
                             
-                            <div className='pb-6 sm:px-16'>
-                              {/* 사용자 ID (이메일) */}
-                              <div className="w-full form-control">
-                                <label className="label">
-                                  <div className="label-text">사용자 ID</div>
-                                </label>
-                                <input type="text" placeholder="이름을 입력하세요" value={data.loginId} className="w-full h-10 input input-bordered"  disabled/>
-                              </div>
-                              
-                              {/* 이름 */}
-                              <div className="w-full form-control">
-                                <label className="label">
-                                  <div className="label-text">이름</div>
-                                </label>
-                                <input type="text" placeholder="이름을 입력하세요" defaultValue={data.username} className="w-full h-10 input input-bordered" onChange={onNameChange} />
-                              </div>
-
-                              {/* 소셜 로그인일 경우 비밀번호 변경 불가 */}
-                              {
-                                user.is_social
-                                ?
-                                <></>
-                                :              
-                                <div>
+                            <Dialog.Title
+                              as="h3"
+                              className="text-lg font-medium leading-6 text-center text-zinc-900"
+                            >
+                              비밀번호 변경하기
+                            </Dialog.Title>
+                          
+                          <div className='flex flex-col text-center justify-items-center mt-3'>          
+                              <div>
                                   <div className="w-full form-control">
                                     <label className="label">
                                       <div className="label-text">현재 비밀번호</div>
@@ -430,28 +456,24 @@ const Profile = () => {
                                     <input type="password" placeholder="변경할 비밀번호를 다시 입력하세요" className="w-full h-10 input input-bordered" onChange={onNewPasswordCheckChange} />
                                   </div>
                                   {userNewPasswordCheck.current.length > 0 && <span className={`message ${isNewPasswordConfirm ? 'success text-xs text-blue-500' : 'error text-xs text-red-500'}`}>{passwordConfirmMessage}</span>}
-                                </div> 
-                                
-                              }
-
+                              </div>
                               <button
                                 type="button"
-                                className="inline-flex justify-center px-3 py-2 mr-2 text-sm font-medium text-red-700 bg-red-200 border border-transparent rounded-md mt-7 hover:bg-red-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
-                                onClick={requestChangeProfile}
-                                disabled={(user.is_social || (userOldPassword.current.length == 0 && userNewPassword.current.length == 0 && userNewPasswordCheck.current.length == 0) ? false : !(isOldPassword && isNewPassword && isNewPasswordConfirm))}
+                                className="inline-flex justify-center px-3 py-2 text-sm font-medium text-red-700 bg-red-200 border border-transparent rounded-md mt-7 hover:bg-red-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
+                                onClick={requestChangePassword}
+                                disabled={(userOldPassword.current.length == 0 || userNewPassword.current.length == 0 || userNewPasswordCheck.current.length == 0) ? true : !(isOldPassword && isNewPassword && isNewPasswordConfirm)}        
                               >
-                                저장하기
+                                변경하기
                               </button>
 
                               <button
                                 type="button"
-                                className="inline-flex justify-center px-3 py-2 ml-2 text-sm font-medium border border-transparent rounded-md text-zinc-700 bg-zinc-200 mt-7 hover:bg-zinc-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500 focus-visible:ring-offset-2"
+                                className="inline-flex justify-center px-3 py-2 text-sm font-medium border border-transparent rounded-md text-zinc-700 bg-zinc-200 mt-7 hover:bg-zinc-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500 focus-visible:ring-offset-2"
                                 onClick={openProfileModal}
                               >
                                 뒤로가기
                               </button>
                             </div>
-                          </div>
                         </Dialog.Panel>
                       </Transition.Child>
                     </div>
