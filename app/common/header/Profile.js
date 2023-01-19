@@ -13,13 +13,13 @@ import Error from '../../diary/list/grid/error';
 const Profile = () => {
 
     let [isProfileModalOpen, setIsProfileModalOpen] = useState(false)
-    let [isEditModalOpen, setIsEditModalOpen] = useState(false)  
+    let [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false)  
 
-    function openProfileModal() { setIsEditModalOpen(false); setIsProfileModalOpen(true), setPasswordMessage(""), setPasswordConfirmMessage("") }
-    function closeProfileModal() { setIsProfileModalOpen(false); setIsEditModalOpen(false) }
+    function openProfileModal() { setIsPasswordModalOpen(false); setIsProfileModalOpen(true), setPasswordMessage(""), setPasswordConfirmMessage("") }
+    function closeProfileModal() { setIsProfileModalOpen(false); setIsPasswordModalOpen(false) }
   
-    function openEditModal() { setIsProfileModalOpen(false); setIsEditModalOpen(true) }
-    function closeEditModal() { setIsProfileModalOpen(false); setIsEditModalOpen(false) }
+    function openPasswordModal() { setIsProfileModalOpen(false); setIsPasswordModalOpen(true) }
+    function closePasswordModal() { setIsProfileModalOpen(false); setIsPasswordModalOpen(false) }
 
     const user = userData;
     const router = useRouter();
@@ -166,7 +166,7 @@ const Profile = () => {
         // 변수 초기화
         userName.current = "";
         userProfileImage.current = "";
-        closeEditModal();
+        closePasswordModal();
       }
     };
 
@@ -177,7 +177,7 @@ const Profile = () => {
       const requestPasswordData = new Object();
       console.log("oldPassword : " + userOldPassword.current);
       console.log("newPassword : " + userNewPassword.current);
-      requestPasswordData.OldPassword = userOldPassword.current;
+      requestPasswordData.oldPassword = userOldPassword.current;
       requestPasswordData.newPassword = userNewPassword.current;
 
       /*
@@ -207,7 +207,7 @@ const Profile = () => {
         setIsOldPassword(false);
         setIsNewPassword(false);
         setIsNewPasswordConfirm(false);
-        closeEditModal();
+        closePasswordModal();
       }
     };
 
@@ -335,7 +335,7 @@ const Profile = () => {
                                 <button
                                   type="button"
                                   className="px-3 py-2 mt-4 text-sm font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md w-fit hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                                  onClick={openEditModal}
+                                  onClick={openPasswordModal}
                                 >
                                   비밀번호 변경
                                 </button>
@@ -392,8 +392,8 @@ const Profile = () => {
               </Transition>
 
               {/* 비밀번호 변경 Modal */}
-              <Transition className="overflow-auto" appear show={isEditModalOpen} as={Fragment}>
-                <Dialog as="div" className="relative z-50" onClose={closeEditModal}>
+              <Transition className="overflow-auto" appear show={isPasswordModalOpen} as={Fragment}>
+                <Dialog as="div" className="relative z-50" onClose={closePasswordModal}>
                   <Transition.Child
                     as={Fragment}
                     enter="ease-out duration-300"
