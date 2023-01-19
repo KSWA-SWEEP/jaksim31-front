@@ -17,6 +17,8 @@ import diarysData from '../../../../public/data/diaryList.json'
 import { PlusCircleIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import './Calendar.css'
+import Loading from './loading';
+import { useDiaryListQuery } from '../../../hooks/queries/useDiaryListQuery';
 
 const emotions = [
   {
@@ -66,19 +68,26 @@ const emotions = [
   },
 ]
 
-// react-calendar에서 각 day에 대한 날짜를 date라는 변수로 관리하기에 date에서의 변수와 중복되어 오류 발생
-// data 로 받는 변수의 key값을 임의로 변경해주기 (date=>diaryDate)
-const diarys = diarysData.diaryList;
-function renameKey ( obj, oldKey, newKey ) {
-  obj[newKey] = obj[oldKey];
-  delete obj[oldKey];
-}
-diarys.forEach( obj => renameKey( obj, 'date', 'diaryDate' ) );
-
-export default function CalendarList() {
+export default function CalendarList(props) {
   const [clickState, setClickState] = useState([]);
   const Calendar = dynamic(() => import('react-calendar'), { ssr: false, })
+  
+  // react-query
+  const { data, isLoading, isPlaceholderData, isPreviousData, isRefetching, isFetching, isFetched, isError } = useDiaryListQuery(props.diaryList, "31")
 
+  // loading
+  if ( isLoading || isFetching ) return <Loading className="flex justify-center"/>
+
+  // error
+  if ( isError ) return <Error className="flex justify-center"/>
+
+  // react Query로 받은 값 diarys에 넣어주기
+  const diarys = data.content;
+
+  // react-calendar에서 각 day에 대한 날짜를 date라는 변수로 관리하기에 date에서의 변수와 중복되어 오류 발생
+  // data 로 받는 변수의 key값을 임의로 변경해주기 (date=>diaryDate)
+  diarys.forEach( obj => obj.diaryDate = obj.date );
+  
   // TODO - 선택된 감정에 대한 일기 조회 API 호출
   // 선택된 감정에 대한 일기 목록 조회
   function findDiaryByEmotion(e, emotion) {

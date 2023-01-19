@@ -40,7 +40,7 @@ const CreateDiary = (props) => {
           <div className="my-5 text-lg">
             날짜가 잘못되었습니다. 
           </div>
-          <Link href="/diary/list/calendar" className="mx-2 mb-4 text-base font-semibold duration-200 border-opacity-0 outline-none text-zinc-50 bg-zinc-400 hover:bg-zinc-500 btn outline-0 border-spacing-0 hover:scale-105">목록으로</Link>
+          <Link href="diary/list/calendar" className="mx-2 mb-4 text-base font-semibold duration-200 border-opacity-0 outline-none text-zinc-50 bg-zinc-400 hover:bg-zinc-500 btn outline-0 border-spacing-0 hover:scale-105">목록으로</Link>
         </div>
       }
           

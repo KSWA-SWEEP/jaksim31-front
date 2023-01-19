@@ -1,18 +1,15 @@
 import { useQuery } from "react-query";
 import { getDiaryList } from "../../api/getDiaryList";
 
-export const useDiaryListQuery = () =>
+export const useDiaryListQuery = (diaryList, size) =>
     useQuery(
         ['DIARY_LIST'], 
         async () => {
-            const response = await getDiaryList("63c0cc06645d5d4a0786cea8");
-
-            if (!response.ok) {
-            throw new Error('Failed to fetch data');
-            }
+            const response = await getDiaryList("63c78cb847558c27220ad503", "0", size);
             return response.json()
         },
-        { 
-            staleTime: 20 * 1000,
+        {
+            initialData: diaryList,
+            staleTime: 5 * 60 * 1000,
         }
     );

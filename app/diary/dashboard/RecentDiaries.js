@@ -65,7 +65,7 @@ export default function RecentDiaries() {
                                     </td>
                                     <td className="p-2 px-3 text-xs text-left align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
                                         {/*일기 조회 페이지로 이동*/}
-                                        <Link href={'/diary/'+diary_id}>
+                                        <Link href={'diary/'+diary_id}>
                                             <button className="px-3 py-2 text-blue-900 bg-blue-100 border border-transparent rounded-md">
                                                 조회하기
                                             </button>

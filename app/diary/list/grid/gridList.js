@@ -3,21 +3,18 @@
 import Link from "next/link"
 import { EllipsisVerticalIcon } from '@heroicons/react/24/outline'
 import { Menu, Transition } from "@headlessui/react"
-import { Fragment } from "react"
-import diarysData from '../../../../public/data/diaryList.json'
+import { Fragment, useState } from "react"
 import Image from "next/image";
 import moment from "moment";
-import { useQuery } from "react-query";
-import { getDiaryList } from "../../../api/getDiaryList";
 import Loading from "./loading";
 import Error from "./error";
 import { useDiaryListQuery } from "../../../hooks/queries/useDiaryListQuery";
 
-const diarys = diarysData.diaryList;
+// const diarys = diarysData.diaryList;
 
 // 진행중 일기 세부 메뉴
 const diaryMenu = [
-  { name: '일기 수정', href: '/diary/' },
+  { name: '일기 수정', href: 'diary/' },
   { name: '일기 삭제', href: 'deleteDiary' },
 ]
 
@@ -34,23 +31,24 @@ export default function DiaryGridList(props) {
     
     // 로그인시 가져온 userId (db의 objectId) 를 쿠키 or Local Storage로부터 가져와서 넣어주기
     // 지금은 test 용 하나의 userId 하드코딩으로 넣어줌..
-    const { data, isLoading, isFetching, isFetched, isError } = useDiaryListQuery()
+    const { data, isLoading, isFetching, isFetched, isError } = useDiaryListQuery(props.diaryList, "")
 
     if ( isLoading || isFetching ) return <Loading className="flex justify-center"/>
  
     if ( isError ) return <Error className="flex justify-center"/>
 
+    const diarys = data.content;
+
     return (
         <div className="bg-white">
         <div className="px-4 py-8 mx-auto sm:py-8 sm:px-6 lg:px-8 lg:py-3">
-            <h2 className="sr-only">diarys</h2>
             <div className="grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 2xl:grid-cols-3">
                 {diarys.map((diary) => (
                     <div key={diary.diaryId} className="rounded-2xl bg-zinc-200/50">
                         <div className="w-full overflow-hidden rounded-t-lg bg-zinc-200 aspect-w-4 aspect-h-3 xl:aspect-w-4 xl:aspect-h-3">
                                 <Link
                                     href={{
-                                        pathname: '/diary/'+diary.diaryId
+                                        pathname: 'diary/'+diary.diaryId
                                         }} 
                                     className="relative flex items-center justify-center w-full group"
                                     >
