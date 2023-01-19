@@ -128,7 +128,7 @@ export default function CalendarList(props) {
         </div>
       </div>
       {/* Calendar */}
-      <div className='flex justify-center mb-5 sm:mt-5 md:mt-10'>
+      <div className='flex justify-center mb-5 md:mb-12 sm:mt-5 md:mt-10'>
         <Calendar
           className="w-[75vw] lg:w-[65vw] xl:w-[50vw]"
           value={new Date()}

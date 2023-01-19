@@ -60,7 +60,7 @@ export default function DiaryGridList(props) {
             <div className="text-2xl font-extrabold">{moment(diaryData.date).format("YYYY. MM. DD.")}</div>
             <div className="flex flex-wrap mt-3">
                 {diaryData.keywords.map((keyword) => (
-                    <div key={keyword} className="px-3 mb-2 py-1 mr-2.5 text-base font-medium text-zinc-500 bg-zinc-200 rounded-xl dark:bg-zinc-200 dark:text-zinc-800 ">
+                    <div key={keyword} className="px-3 mb-2 py-1 mr-2.5 text-sm font-medium text-zinc-500 bg-zinc-200 rounded-xl dark:bg-zinc-200 dark:text-zinc-800 ">
                         #{keyword}
                     </div>
                 ))}
@@ -83,9 +83,9 @@ export default function DiaryGridList(props) {
           {/* 목록, 수정, 삭제 */}
           <div className="flex items-center justify-center col-span-3 mt-4">
             <div className="text-xl">
-              <Link href={"diary/"+props.diaryId+"/modify"} className="mx-2 text-base font-semibold duration-200 btn btn-secondary hover:scale-105">수정하기</Link>
-              <button onClick={openDeleteModal} className="mx-2 text-base font-semibold duration-200 btn btn-accent hover:scale-105">삭제하기</button>
-              <Link href="diary/list/calendar" className="mx-2 text-base font-semibold duration-200 border-opacity-0 outline-none text-zinc-50 bg-zinc-400 hover:bg-zinc-500 btn outline-0 border-spacing-0 hover:scale-105">목록으로</Link>
+              <Link href={"diary/"+props.diaryId+"/modify"} className="mr-2 font-semibold duration-200 sm:text-base btn btn-secondary hover:scale-105">수정하기</Link>
+              <button onClick={openDeleteModal} className="mx-2 font-semibold duration-200 sm:text-base btn btn-accent hover:scale-105">삭제하기</button>
+              <Link href="diary/list/calendar" className="ml-2 font-semibold duration-200 border-opacity-0 outline-none sm:text-base text-zinc-50 bg-zinc-400 hover:bg-zinc-500 btn outline-0 border-spacing-0 hover:scale-105">목록으로</Link>
             </div>
           </div>
         </div>

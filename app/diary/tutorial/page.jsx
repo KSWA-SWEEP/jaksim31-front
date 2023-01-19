@@ -4,7 +4,7 @@ import Tutorial from "../../common/Tutorial";
 export default function diaryTutorial() {
   return (
       <>
-        <div className='min-h-screen'>
+        <div className='sm:min-h-screen'>
           <Tutorial/>
         </div>
       </>
