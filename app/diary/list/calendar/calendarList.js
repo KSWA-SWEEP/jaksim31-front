@@ -140,7 +140,7 @@ export default function CalendarList(props) {
               // 일기가 있을 경우 해당 일기에 맞는 아이콘 보여주기 => 클릭시 일기 조회 페이지로 이동
               if(matchedDiary != undefined) {
                 // 데이터의 emotion과 일치하는 emotionSet 설정 (아이콘 src 가져오기 위함)
-                let matchedEmotion = emotions.find(({name}) => name == matchedDiary.emotion)
+                let matchedEmotion = emotions.find(({name}) => matchedDiary.emotion.includes(name))
                 return (
                 <>
                   <Link href={"/diary/"+matchedDiary.diaryId} className="flex items-center justify-center mt-2 dayBox">

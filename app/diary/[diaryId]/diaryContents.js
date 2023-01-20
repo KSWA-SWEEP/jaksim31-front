@@ -26,9 +26,9 @@ export default function DiaryGridList(props) {
     // 지금은 test 용 하나의 userId 하드코딩으로 넣어줌..
     const { data, isLoading, isFetching, isFetched, isError } = useDiaryQuery(props.diaryId, props.diary)
 
-    if ( isLoading ) return <Loading className="flex justify-center"/>
+    if ( isLoading ) return <Loading className="flex justify-center w-full"/>
  
-    if ( isError ) return <Error className="flex justify-center"/>
+    if ( isError ) return <Error className="flex justify-center w-full"/>
 
     const diaryData = data;
 

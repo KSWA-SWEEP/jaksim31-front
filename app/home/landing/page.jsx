@@ -37,17 +37,14 @@ const features = [
 async function getBgImg() {
   const Access_Key = process.env.NEXT_PUBLIC_UNSPLASH_ACCESSKEY; 
 
-  // API 호출 횟수 제한으로 개발시 아래 url로 하고, 배포시 아래 API 호출로 넣기
-  let imgUrl = "https://source.unsplash.com/random/?diary";
+  const res = await fetch(`https://api.unsplash.com/photos/random?query=diary&client_id=${Access_Key}`);
 
-  // const res = await fetch(`https://api.unsplash.com/photos/random?query=diary&client_id=${Access_Key}`);
+  if (!res.ok) {
+    throw new Error('Failed to fetch data');
+  }
 
-  // if (!res.ok) {
-  //   throw new Error('Failed to fetch data');
-  // }
-
-  // let jsonData = await res.json();
-  // let imgUrl = jsonData.urls.full;
+  let jsonData = await res.json();
+  let imgUrl = jsonData.urls.full;
   
   return imgUrl;
 }

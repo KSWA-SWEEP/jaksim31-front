@@ -7,7 +7,7 @@ import { Fragment, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import moment from 'moment';
 import { useUserInfoQuery } from '../../hooks/queries/useUserInfoQuery';
-import Loading from '../../diary/list/grid/loading';
+import Loading from './loading';
 import Error from '../../diary/list/grid/error';
 
 const Profile = () => {
@@ -297,10 +297,10 @@ const Profile = () => {
                                 </div>
                               </div>
                             </div>
-                            <div className='flex justify-center items-center'>
+                            <div className='flex items-center justify-center'>
                               {/* 이름 */}
                               {isNameEdit ? 
-                                <div className="w-30 form-control justify-center">
+                                <div className="justify-center w-30 form-control">
                                   <input type="text" placeholder="이름을 입력하세요" defaultValue={data.username} className="w-full h-10 input input-bordered" onChange={onNameChange} />
                                 </div>
                                 :
@@ -309,7 +309,7 @@ const Profile = () => {
                                 </div>
                               }
                               <PencilSquareIcon
-                                className="text-black w-8 h-8 pl-2"
+                                className="w-8 h-8 pl-2 text-black"
                                 onClick={onNameEdit}
                               />
                             </div>
@@ -318,10 +318,10 @@ const Profile = () => {
                               {data.loginId}
                             </p>
 
-                            <div className='flex justify-center items-center'> 
+                            <div className='flex items-center justify-center'> 
                               <button
                                   type="button"
-                                  className="inline-flex justify-center px-3 py-2 mr-2 text-sm font-medium text-red-700 bg-red-200 border border-transparent rounded-md mt-4 hover:bg-red-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
+                                  className="inline-flex justify-center px-3 py-2 mt-4 mr-2 text-sm font-medium text-red-700 bg-red-200 border border-transparent rounded-md hover:bg-red-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
                                   onClick={requestChangeProfile}
                                   disabled={userName.current || userProfileImage.current ? false : true}
                               >
@@ -433,7 +433,7 @@ const Profile = () => {
                               비밀번호 변경하기
                             </Dialog.Title>
                           
-                          <div className='flex flex-col text-center justify-items-center mt-3'>          
+                          <div className='flex flex-col mt-3 text-center justify-items-center'>          
                               <div>
                                   <div className="w-full form-control">
                                     <label className="label">
