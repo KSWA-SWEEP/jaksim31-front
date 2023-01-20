@@ -29,6 +29,11 @@ export default function UserProfile() {
                     </div>
                 </div>
                 <div className='flex flex-col text-center justify-items-center'>
+                    <br></br>
+                    {/* 날짜 */}
+                    <div className='text-xl font-extrabold text-zinc-700'>
+                        {user.recent_diaries[0].date}
+                    </div>
                     {/* 썸네일 사진 */}
                     <div className="justify-center m-5 avatar">
                         <Link 
@@ -38,11 +43,6 @@ export default function UserProfile() {
                             <img src={user.recent_diaries[0].thumbnail}/>
                         </Link>
                     </div>
-                    {/* 날짜 */}
-                    <div className='text-xl font-extrabold text-zinc-700'>
-                        {user.recent_diaries[0].date}
-                    </div>
-                    <br></br>
                     {/* Keywords */}
                     <div className='flex flex-row justify-items-center align-middle'>
                                         {user.recent_diaries[0].keywords.map((keyword) => (
