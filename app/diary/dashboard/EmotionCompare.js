@@ -1,16 +1,18 @@
 'use client';
 
+import userEmotion from "../../../public/data/emotions.json"
 import React, { useEffect } from "react";
 import Chart from "chart.js";
 
-export default function CardLineChart() {
-  
-    useEffect(() => {
-    var config = {
-      type: "line",
+export default function CardBarChart() {
+  const emotions = userEmotion;
+  useEffect(() => {
+    let config = {
+      type: "bar",
       data: {
+        /* X축 범주 */
         labels: [
-          "좋음",
+          "😊",
           "싫음",
           "놀람",
           "두려움",
@@ -18,16 +20,21 @@ export default function CardLineChart() {
           "지루함",
           "부끄러움",
         ],
+        title: {
+          font: {
+            family: "LeeSeoYun"
+          }
+        },
         datasets: [
           {
-            label: "1월",
+            label: "이번 달",
             backgroundColor: "#4c51bf",
             borderColor: "#4c51bf",
-            data: [10, 5, 2, 4, 5, 2, 2],
-            fill: false,
+            data: [emotions.monthEmotions.좋음, emotions.monthEmotions.싫음, emotions.monthEmotions.놀람, emotions.monthEmotions.두려움, emotions.monthEmotions.감정없음, emotions.monthEmotions.지루함, emotions.monthEmotions.부끄러움],
+            fill: false
           },
           {
-            label: "12월",
+            label: "저번 달",
             fill: false,
             backgroundColor: "#ed64a6",
             borderColor: "#ed64a6",
@@ -40,15 +47,7 @@ export default function CardLineChart() {
         responsive: true,
         title: {
           display: false,
-          text: "Sales Charts",
-          fontColor: "black",
-        },
-        legend: {
-          labels: {
-            fontColor: "black",
-          },
-          align: "end",
-          position: "bottom",
+          text: "감정 비교",
         },
         tooltips: {
           mode: "index",
@@ -58,24 +57,29 @@ export default function CardLineChart() {
           mode: "nearest",
           intersect: true,
         },
+        legend: {
+          labels: {
+            fontColor: "rgba(0,0,0,.8)",
+            fontFamily: "LeeSeoyun",
+          },
+          align: "end",
+          position: "bottom",
+        },
         scales: {
           xAxes: [
             {
-              ticks: {
-                fontColor: "rgba(156,147,200,.7)",
-              },
               display: true,
               scaleLabel: {
-                display: false,
-                labelString: "Month",
-                fontColor: "black",
+                display: true,
+                fontFamily: "LeeSeoyun",
+                fontSize: 15,
+                labelString: "감정 종류",
               },
               gridLines: {
-                display: false,
                 borderDash: [2],
                 borderDashOffset: [2],
                 color: "rgba(33, 37, 41, 0.3)",
-                zeroLineColor: "rgba(0, 0, 0, 0)",
+                zeroLineColor: "rgba(33, 37, 41, 0.3)",
                 zeroLineBorderDash: [2],
                 zeroLineBorderDashOffset: [2],
               },
@@ -83,21 +87,18 @@ export default function CardLineChart() {
           ],
           yAxes: [
             {
-              ticks: {
-                fontColor: "rgba(51,34,156,.7)",
-              },
               display: true,
               scaleLabel: {
+                fontFamily: "LeeSeoyun",
                 display: false,
                 labelString: "Value",
-                fontColor: "blue",
               },
               gridLines: {
-                borderDash: [3],
-                borderDashOffset: [3],
+                borderDash: [2],
                 drawBorder: false,
-                color: "rgba(51, 34, 156, 0.15)",
-                zeroLineColor: "rgba(33, 37, 41, 0)",
+                borderDashOffset: [2],
+                color: "rgba(33, 37, 41, 0.2)",
+                zeroLineColor: "rgba(33, 37, 41, 0.15)",
                 zeroLineBorderDash: [2],
                 zeroLineBorderDashOffset: [2],
               },
@@ -106,29 +107,28 @@ export default function CardLineChart() {
         },
       },
     };
-    var ctx = document.getElementById("line-chart").getContext("2d");
-    window.myLine = new Chart(ctx, config);
+    let ctx = document.getElementById("bar-chart").getContext("2d");
+    window.myBar = new Chart(ctx, config);
   }, []);
   return (
-      <>
-        <div className="relative flex flex-col w-full h-full min-w-0 mb-6 break-words shadow-lg rounded-xl bg-zinc-100">
-          <div className="px-4 py-6 mb-0 bg-transparent rounded-t">
-            <div className="flex flex-wrap items-center">
-              <div className="relative flex-1 flex-grow w-full max-w-full">
-                <h6 className="mb-1 text-xs font-semibold uppercase text-zinc-100">
-                  Overview
-                </h6>
-                <h2 className="text-xl font-semibold text-zinc-700">Sales value</h2>
-              </div>
-            </div>
-          </div>
-          <div className="flex-auto p-4">
-            {/* Chart */}
-            <div className="relative h-350-px">
-              <canvas id="line-chart"></canvas>
+    <>
+      <div className="relative flex flex-col w-full min-w-0 mb-6 break-words shadow-lg rounded-xl bg-zinc-100">
+        <div className="px-4 py-3 mb-0 bg-transparent rounded-t">
+          <div className="flex flex-wrap items-center">
+            <div className="relative flex-1 flex-grow w-full max-w-full">
+              <h2 className="text-xl font-semibold text-zinc-700">
+                저번 달과 감정 빈도를 비교해봐요!😊
+              </h2>
             </div>
           </div>
         </div>
-      </>
+        <div className="flex-auto p-4">
+          {/* Chart */}
+          <div className="relative h-350-px">
+            <canvas id="bar-chart"></canvas>
+          </div>
+        </div>
+      </div>
+    </>
   );
 }

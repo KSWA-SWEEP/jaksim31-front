@@ -7,6 +7,7 @@ import KakaoLoginBtn from '../../../public/images/KakaoLogin.png'
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { useRouter } from 'next/navigation';
 import { init, send } from 'emailjs-com';
+import Link from 'next/link'
 
 const Login = () => {
     let [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
@@ -29,7 +30,12 @@ const Login = () => {
     const userName = useRef("");
     const userEmail = useRef("");
     const userPassword = useRef("");
-    const userPasswordCheck = useRef("");
+    const userPasswordCheck = useRef(""); 
+
+    // 카카오 인증 창으로 넘어가는 URL 설정
+    const NEXT_PUBLIC_KAKAO_CLIENT_ID = process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID
+    const NEXT_PUBLIC_KAKAO_REDIRECT_URL = process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URL
+    const KAKAO_AUTH_URL = "https://kauth.kakao.com/oauth/authorize?client_id="+NEXT_PUBLIC_KAKAO_CLIENT_ID+"&redirect_uri="+NEXT_PUBLIC_KAKAO_REDIRECT_URL+"&response_type=code";
 
     // 메일 인증 변수
     const userAuth = useRef(""); // 인증번호 입력값
@@ -52,6 +58,10 @@ const Login = () => {
     const onNameChange = (e) => {
       userName.current = e.target.value;
     };
+
+    async function kakaologin (){
+      window.location.href = KAKAO_AUTH_URL;
+    }
 
     // 이메일 검증
     const onEmailChange = (e) => {
@@ -453,7 +463,9 @@ const Login = () => {
                               <button
                                 className="items-center mb-1 mr-2 text-xs font-bold duration-150 hover:scale-105"
                               >
-                                <Image src={KakaoLoginBtn} />
+                                <button onClick={kakaologin}>
+                                  <Image src ={KakaoLoginBtn}></Image>
+                                </button>
                               </button>
                             </div>
                           </div>
