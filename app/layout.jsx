@@ -5,6 +5,7 @@ import './globals.css'
 import Drawer from './common/Drawer';
 import Header from './common/header/Header';
 import { usePathname } from 'next/navigation';
+import ReactQueryWrapper from './ReactQueryWrapper';
 
 export default function RootLayout({ children }) {  
   const [isOpen, setIsOpen] = useState(false);
@@ -21,19 +22,19 @@ export default function RootLayout({ children }) {
       <body className='scrollbar-hide'>
         <div className='relative flex scrollbar-hide'>
           {/* Header */}
-          <Header className="z-50" isOpen={isOpen} setIsOpen={setIsOpen}/>
+          <ReactQueryWrapper><Header className="z-50" isOpen={isOpen} setIsOpen={setIsOpen}/></ReactQueryWrapper>
           
           {
             pathname.includes('/home') 
             ?
             <div className="relative z-0 flex flex-col w-full min-h-screen">
-              {children}
+              <ReactQueryWrapper>{children}</ReactQueryWrapper>
             </div>
             :
             <div className="relative z-0 flex flex-col w-full min-h-[100vh] mx-5 mt-20 mb-5 xl:mb-10 scrollbar-hide md:mt-24 md:mx-20 lg:mx-36 xl:mx-56 2xl:mx-72">
               {/* 하위 Page 표시 영역 */}
               <div className='p-2 bg-white min-h-fit rounded-2xl scrollbar-hide'>
-              {children}
+                <ReactQueryWrapper>{children}</ReactQueryWrapper>
               </div>
             
               {/* copyright */}

@@ -3,18 +3,27 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '../../../ckeditor5';
 import { Dialog, Transition } from '@headlessui/react';
 import { ArrowPathIcon, XMarkIcon } from '@heroicons/react/24/outline';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import Spinner from '../../../public/svgs/spinner.svg'
+import { useQueryClient } from 'react-query';
+import { useDiarySave } from '../../hooks/mutations/useDiarySave';
+import moment from 'moment';
 
-function Editor({ onClick, editorLoaded, name, value, date }) {
+function Editor({ editorLoaded, name, value, date, diaryId }) {
     // TODO 사용자 ID 상태 관리 설정이 되면 그 값으로 변경하기
     // 사용자 ID(Object ID)
-    let userId = "";
+    let userId = "63c78cb847558c27220ad503";
 
     let [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
+    const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
 
-    let [keywords, setKeywords] = useState([]);
-    let [emotion, setEmotion] = useState("");
+    let [englishKeywords, setEnglishKeywords] = useState([]);
+    let [koreanKeywords, setKoreankeywords] = useState([]);
+    let [englishEmotion, setEnglishEmotion] = useState("");
+    let [koreanEmotion, setKoreanEmotion] = useState("");
+    
+    // 일기 생성/수정 구분을 위해 pathname 확인할 변수 선언
+    let pathname = usePathname();
 
     // 작성한 일기 내용
     const [text, setText] = useState(value);
@@ -34,43 +43,107 @@ function Editor({ onClick, editorLoaded, name, value, date }) {
     const [saveMessage, setSaveMessage] = useState('썸네일을 선택해주세요😲');
     const [isSaved, setIsSaved] = useState(false);
   
-    // async로 인해 setKeywords가 getThumbnail보다 늦게 실행되는 현상 있음 => useEffect 사용하여 keywords 변경되면 getThumbnail 실행
+    // async로 인해 setEnglishKeywords가 getThumbnail보다 늦게 실행되는 현상 있음 => useEffect 사용하여 englishKeywords 변경되면 getThumbnail 실행
     useEffect(() => {
         getThumbnail();
-    }, [keywords])
+    }, [englishKeywords])
 
     const router = useRouter();
 
     function closeSaveModal() { setIsSaveModalOpen(false) }
     function openSaveModal() { setIsSaveModalOpen(true) }
 
-    // 작성한 일기 내용 분석하여 키워드 및 감정 가져오는 함수
-    function analyzeDiary() {
+    function openSuccessModal() { setIsSuccessModalOpen(true) }
+    function closeSuccessModal() { 
+        setIsSuccessModalOpen(false);
+        router.push('diary/list/calendar');
+    }
+    
 
-        // TODO 키워드 및 감정 분석 API 호출 추가
-        setKeywords(["apple", "orange", "kiwi", "grape"]);
-        setEmotion("Sad")
+    // react-query query client (mutation에서 사용하기 위함)
+    const queryClient = useQueryClient();
+
+    // 일기 수정/생성을 구분하기 위한 saveType 설정
+    let saveType = ""
+    if(pathname.includes("create")) {
+        saveType = "create"
+    } else {
+        saveType = "modify"
+    }
+    
+    // diary data 저장을 위한 useMutation
+    const { status, mutate } = useDiarySave(queryClient, saveType, diaryId)
+
+    // 작성한 일기 내용 분석하여 키워드 및 감정 가져오는 함수
+    async function analyzeDiary() {
+
+        let data = new Object();
+
+        data.sentences = [text.replace(/<[^>]*>/g, '')];
+
+        const res = await fetch(process.env.NEXT_PUBLIC_API_URL+"/v0/diaries/analyze", {
+            method:"POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then((response) => {
+            response.json()
+        })
+        .then((responseData) => {
+            return responseData;
+        });
+        
+        if (res == undefined){
+            setEnglishKeywords(["no keyword"]);
+            setKoreankeywords(["키워드 없음"]);
+            setEnglishEmotion("no emotion");
+            setKoreanEmotion("감정없음");
+        } else  {
+            setEnglishKeywords(res.englishKeywords);
+            setKoreankeywords(res.koreanKeywords);
+            setEnglishEmotion(res.englishEmotion);
+            setKoreanEmotion(res.koreanEmotion);
+        }
     }
 
     const getThumbnail = async () => {
-        // keywords 에 하나 이상의 keyword 있을 경우에 thumbnail 가져오기
-        if(keywords.length != 0)
+        // englishKeywords 에 하나 이상의 keyword 있을 경우에 thumbnail 가져오기
+        if(englishKeywords != undefined)
         {
             // keyword + 감정 목록 중 1개의 단어를 랜덤으로 골라 썸네일 생성
-            let randNum = Math.floor(Math.random() * (keywords.length + 1));
+            let randNum = Math.floor(Math.random() * (englishKeywords.length + 1));
             let randKeywordList=[]
-            randKeywordList.push(...keywords)
-            randKeywordList.push(emotion)
-            console.log("Find image with keyword "+randKeywordList[randNum])
+            randKeywordList.push(...englishKeywords)
+            randKeywordList.push(englishEmotion)
+            console.log(randKeywordList)
+
+            // space를 _로 대체 (검색시 url에 사용하기 위함)
+            randKeywordList = randKeywordList.map(word => word.replace(' ', '_'));
 
             // thumbnail 가져오는 부분
-            // 운영용 - token당 API 호출 횟수 정해져 있으니 개발시 아래 API 호출 부분과 setState 부분들 주석처리 해서 진행
+            console.log("Find image with keyword "+randKeywordList[randNum])
             let res = await fetch(`https://api.unsplash.com/photos/random?query=${randKeywordList[randNum]}&client_id=${Access_Key}`);
 
-            // 키워드 랜덤으로 돌렸을 때 오류나면 emotion으로 검색하도록
+            // 키워드 랜덤으로 돌렸을 때 오류나면 englishEmotion으로 검색하도록
             if(res.status != 200) {
-                res = await fetch(`https://api.unsplash.com/photos/random?query=${emotion}&client_id=${Access_Key}`);
+                console.log("Find image with keyword "+englishEmotion)
+                res = await fetch(`https://api.unsplash.com/photos/random?query=${englishEmotion}&client_id=${Access_Key}`);
+                
+                // 영어로도 없으면 한국어 keyword 검색
+                if(res.status != 200) {
+                    console.log("Find image with keyword "+koreanEmotion)
+                    res = await fetch(`https://api.unsplash.com/photos/random?query=${koreanEmotion}&client_id=${Access_Key}`);
+                     
+                    // 다 안되면 diary라는 단어 넣어서 이미지 얻기
+                    if(res.status != 200) {
+                        console.log("Find image with keyword diary")
+                        res = await fetch(`https://api.unsplash.com/photos/random?query=diary&client_id=${Access_Key}`);                       
+                    }
+                }
             }
+
             let jsonData = await res.json();
             setRegularThumbnailLink(jsonData.urls.regular);
             setSmallThumbnailLink(jsonData.urls.small);
@@ -78,17 +151,76 @@ function Editor({ onClick, editorLoaded, name, value, date }) {
             setUserName(jsonData.user.username);
             setThumbnailId(jsonData.id);
 
-            // 개발용 - URL로 이미지 불러오기 (API 호출 없음)
-            // setRegularThumbnailLink("https://source.unsplash.com/random/?"+emotion);
-            // setSmallThumbnailLink("https://source.unsplash.com/random/?"+emotion);
+        }
+        // 키워드 추출이 안되었을 경우 
+        else {
+            // diary라는 단어 넣어서 이미지 얻기
+            let res = await fetch(`https://api.unsplash.com/photos/random?query=diary&client_id=${Access_Key}`);             
 
+            let jsonData = await res.json();
+            setRegularThumbnailLink(jsonData.urls.regular);
+            setSmallThumbnailLink(jsonData.urls.small);
+            setUserProfileLink(jsonData.user.links.html+"?utm_source=jaksim31&utm_medium=referral");
+            setUserName(jsonData.user.username);
+            setThumbnailId(jsonData.id);
         }
     };
+
+    function addEmoji() {
+        let val = "";
+        switch (koreanEmotion){
+            case "싫음": 
+                setKoreanEmotion("😕 싫음");
+                val = "😕 싫음";
+                break; 
+            case "지루함":
+                setKoreanEmotion("😑 지루함");
+                val = "😑 지루함";
+                break;
+            case "창피함":
+                setKoreanEmotion("🤢 창피함");
+                val = "🤢 창피함";
+                break;
+            case "좋음":
+                setKoreanEmotion("🥰 좋음");
+                val = "🥰 좋음";
+                break; 
+            case "감정없음":
+                setKoreanEmotion("😶 감정없음");
+                val = "😶 감정없음";
+                break; 
+            case "놀람":
+                setKoreanEmotion("😯 놀람");
+                val = "😯 놀람";
+                break; 
+            case "두려움":
+                setKoreanEmotion("😬 두려움");
+                val = "😬 두려움";
+                break; 
+            case "슬픔":
+                setKoreanEmotion("😭 슬픔");
+                val = "😭 슬픔";
+                break; 
+            case "불확실":
+                setKoreanEmotion("🤔 불확실");
+                val = "🤔 불확실";
+                break;
+            default:
+                val = "😶 감정없음"
+                break;        
+        }
+        return val;
+    }
 
     // 일기 내용 저장 함수
     function saveDiary() {
 
+        // 저장할 일기 데이터를 담을 Object
         let data = new Object();
+
+        // 로그인시 가져온 userId (db의 objectId) 를 쿠키 or Local Storage로부터 가져와서 넣어주기
+        // 지금은 test 용 하나의 userId 하드코딩으로 넣어줌..
+        data.userId = userId;
 
         date = date.replace(/(\d{4})(\d{2})(\d{2})/g, '$1-$2-$3');
         data.date = date;
@@ -97,10 +229,12 @@ function Editor({ onClick, editorLoaded, name, value, date }) {
         data.content = text;
 
         // emotion : 감정
-        data.emotion = emotion;
+        // 감정 저장 전에 emoji 붙이기
+        let emotionWithEmoij = addEmoji();
+        data.emotion = emotionWithEmoij;
 
         // keywords
-        data.keywords = keywords;
+        data.keywords = koreanKeywords;
 
         // thumbnail에 이미지 url 넣기
         data.thumbnail = thumbnailDirectory;
@@ -108,8 +242,10 @@ function Editor({ onClick, editorLoaded, name, value, date }) {
         // let thumbnailFile = urlToObject(regularThumbnailLink);
         // data.thumbnail = thumbnailFile;
         
-        // TODO 일기 저장 API 호출 추가
-        console.log("Saved")
+        // 일기 생성/수정에 따른 mutation 실행
+        mutate({data})
+        closeSaveModal()
+        openSuccessModal()
         
     };
 
@@ -128,13 +264,16 @@ function Editor({ onClick, editorLoaded, name, value, date }) {
         data.userId = userId;
         data.thumbnail = regularThumbnailLink;
 
-        // TODO thumbnail 저장 API 호출 추가
+        // TODO 
+        // thumbnail 저장 API 호출 추가 (그냥 FE에서 바로 오브젝트 스토리지로 저장하기..!)
         const res = "thumbnail Directory"; // thumbnail API 응답으로 이미지가 저장 된 Object Storage directory 경로가 return 됨.
 
         // 이미지 저장 후 message 변경
         setSaveMessage("썸네일이 생성되었습니다. \"저장하기\" 버튼을 눌러 일기 작성을 마무리하세요🤗");
         setIsSaved(true);
-        setThumbnailDirectory(res);
+        // setThumbnailDirectory(res);
+        // 우선 임시로 랜덤 경로 넣어둠
+        setThumbnailDirectory("https://source.unsplash.com/random/?"+englishEmotion);
     }
 
     return (
@@ -157,14 +296,23 @@ function Editor({ onClick, editorLoaded, name, value, date }) {
                         },
                     }}
                 />
-            ) : (
-                <div>Editor loading</div>
+            ) : (        
+                <div className='relative flex items-center justify-center'>
+                    <Spinner className="w-12 sm:w-24"/>
+                    <div className='text-sm text-white sm:text-lg'>에디터를 로딩하고 있습니다</div>
+                </div>
             )}
             </div>
             
             <div className='flex justify-center w-full mb-2'>
-                <button className="inline-flex justify-center px-3 py-2 mr-2 text-sm font-medium text-red-700 duration-200 bg-red-200 border border-transparent rounded-md mt-7 hover:bg-red-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
-                        onClick={() => { analyzeDiary(); setThumbnailDirectory(""); openSaveModal(); setSaveMessage("썸네일을 선택해주세요😲"); setIsSaved(false); }}>
+                <button className={"inline-flex justify-center px-3 py-2 mr-2 text-sm font-medium border border-transparent rounded-md mt-7" +
+                                    ((text == undefined||text == "")
+                                        ? " text-zinc-700 bg-zinc-200"
+                                        : " text-red-700 duration-200 bg-red-200 hover:bg-red-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
+                                    )
+                                }
+                        disabled={((text == undefined)||(text == ""))}
+                        onClick={() => { analyzeDiary(); setThumbnailDirectory(""); console.log(koreanKeywords); openSaveModal(); setSaveMessage("썸네일을 선택해주세요😲"); setIsSaved(false); }}>
                     저장하기
                 </button>
                 <button className="inline-flex justify-center px-3 py-2 ml-2 text-sm font-medium duration-200 border border-transparent rounded-md text-zinc-700 bg-zinc-200 mt-7 hover:bg-zinc-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500 focus-visible:ring-offset-2" onClick={() => router.push('/diary/list/calendar')}>취소하기</button>
@@ -210,18 +358,18 @@ function Editor({ onClick, editorLoaded, name, value, date }) {
                         </Dialog.Title>
 
                         {/* 날짜 */}
-                        <div className="text-center text-zinc-600">{date.replace(/(\d{4})(\d{2})(\d{2})/g, '$1. $2. $3.')}</div>
+                        <div className="text-center text-zinc-600">{moment(date).format("YYYY. MM. DD.")}</div>
 
-                        {/* 감정 분석이 제대로 이루어져 keywords 값이 들어있는 상태에서만 키워드 및 썸네일 표시 */}
+                        {/* 감정 분석이 제대로 이루어져 englishKeywords 값이 들어있는 상태에서만 키워드 및 썸네일 표시 */}
                         {
-                            keywords
+                            englishKeywords
                             ?
                             <div>
-                                {/* keywords */}
+                                {/* englishKeywords */}
                                 <div className='px-3 my-2 sm:mt-5 '>
                                     <p className='pb-2 pl-2'>💡 키워드</p>
                                     <div className="flex flex-wrap my-2">
-                                        {keywords.map((keyword) => (
+                                        {koreanKeywords.map((keyword) => (
                                             <div key={keyword} className="px-2 py-1 mb-3 mr-2 font-medium sm:px-3 sm:text-base w-fit text-zinc-500 bg-zinc-200 rounded-3xl dark:bg-zinc-200 dark:text-zinc-800 ">
                                                 #{keyword}
                                             </div>
@@ -315,6 +463,61 @@ function Editor({ onClick, editorLoaded, name, value, date }) {
                 </div>
                 </div>
             </Dialog>
+            </Transition>
+            
+
+            <Transition appear show={isSuccessModalOpen} as={Fragment}>
+                <Dialog as="div" className="relative z-10" onClose={closeSuccessModal}>
+                <Transition.Child
+                    as={Fragment}
+                    enter="ease-out duration-300"
+                    enterFrom="opacity-0"
+                    enterTo="opacity-100"
+                    leave="ease-in duration-200"
+                    leaveFrom="opacity-100"
+                    leaveTo="opacity-0"
+                >
+                    <div className="fixed inset-0 bg-black bg-opacity-25" />
+                </Transition.Child>
+
+                <div className="fixed inset-0 overflow-y-auto">
+                    <div className="flex items-center justify-center min-h-full p-4 text-center">
+                    <Transition.Child
+                        as={Fragment}
+                        enter="ease-out duration-300"
+                        enterFrom="opacity-0 scale-95"
+                        enterTo="opacity-100 scale-100"
+                        leave="ease-in duration-200"
+                        leaveFrom="opacity-100 scale-100"
+                        leaveTo="opacity-0 scale-95"
+                    >
+                        <Dialog.Panel className="w-full max-w-md p-6 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+                        <Dialog.Title
+                            as="h3"
+                            className="text-base font-extrabold leading-6 text-zinc-900"
+                        >
+                            일기 저장 성공
+                        </Dialog.Title>
+                        <div className="mt-2">
+                            <p className="text-lg text-zinc-500">
+                            일기가 성공적으로 저장되었습니다!
+                            </p>
+                        </div>
+
+                        <div className="flex justify-center mt-4">
+                            <button
+                                type="button"
+                                className="justify-center px-2 py-1.5 mx-2 text-base font-semibold text-green-700 duration-200 bg-green-200 border border-transparent rounded-md hover:bg-green-300 focus:outline-none "
+                                onClick={closeSuccessModal}
+                                >
+                                확인
+                            </button>
+                        </div>
+                        </Dialog.Panel>
+                    </Transition.Child>
+                    </div>
+                </div>
+                </Dialog>
             </Transition>
         </>
     );

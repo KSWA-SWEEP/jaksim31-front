@@ -13,7 +13,7 @@ export default function listLayout ({ children }) {
             </nav>
 
             {/* 하위 page 영역 */}
-            <div className='flex justify-center min-h-screen lg:m-10'>
+            <div className='flex justify-center sm:min-h-screen lg:m-10'>
                 <ListBox>
                     {children}
                 </ListBox>

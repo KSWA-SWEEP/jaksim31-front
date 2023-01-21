@@ -1,14 +1,27 @@
 import BackButton from "../../common/backButton";
 import DiaryInputFormat from "../../common/diaryInputFormat";
-import diaryData from '../../../../public/data/dairy.json'
+import moment from "moment";
+import { getDiary } from "../../../api/getDiary";
 
-export default function diaryModify() {  
-  const diary = diaryData;
+async function getDiaryData(diaryId) {
+  // TODO
+  // 로그인시 가져온 userId (db의 objectId) 를 쿠키 or Local Storage로부터 가져와서 넣어주기
+  // 지금은 test 용 하나의 userId 하드코딩으로 넣어줌..
+  const res = await getDiary("63c78cb847558c27220ad503", diaryId);
+
+  if (res.status != 200) {
+    throw new Error('Failed to fetch data');  
+  }
+
+  return res.json();
+}
+
+export default async function diaryModify({ params }) {  
+
+  const { diaryId } = params;
+  const diary = await getDiaryData(diaryId);  
+
   let date = diary.date;
-  
-  // 일기 작성 페이지와 형식 맞추기 위해 가져온 데이터의 date(ISODate 형식)를 YYYYMMDD로 변환
-  date = date.split("T")[0];
-  date = date.replace(/-/g, '');
 
   return (
     <>
@@ -23,11 +36,11 @@ export default function diaryModify() {
         {/* 입력 구간 */}
         <div className="lg:px-28">
           <div className="m-6 text-2xl font-bold">
-            {date.replace(/(\d{4})(\d{2})(\d{2})/g, '$1. $2. $3.')} 
+            {moment(date).format("YYYY. MM. DD.")} 
           </div>
           <div className="relative text-sm sm:text-lg">
             <div>
-              <DiaryInputFormat content={diary.content.toString()} date={date}/>
+              <DiaryInputFormat diaryId={diaryId} content={diary.content.toString()} date={date}/>
             </div>
           </div>      
         </div>
