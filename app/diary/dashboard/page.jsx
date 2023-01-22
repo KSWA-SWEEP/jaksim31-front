@@ -6,21 +6,14 @@ import DiaryCards from "./DiaryCards";
 import DoughnutChart from "./DoughnutChart";
 import { getUserInfo } from "../../api/getUserInfo";
 
- async function getUserInfoData() {
-    // 유저 정보 조회 API 호출 함수
-    // 테스트용 userId 넣어둠
-    const res = await getUserInfo("63c790475ff1ed187caf39da");
-
-    // if (!res.status) {
-    //   throw new Error('Failed to fetch data');
-    // }
- 
-    return res.json();
-}
-
 export default async function diaryPage() {
+
+    // TODO 사용자 ID 상태 관리 설정이 되면 그 값으로 변경하기
+    // 사용자 ID(Object ID)
+    let userId = "63cb7ded2f289e0f2db8292b";
     // 유저 정보 초기화를 위한 데이터
-    const userInfo = await getUserInfoData();
+    const userInfo = await getUserInfo(userId);
+    console.log(userInfo)
 
     return (
         <>

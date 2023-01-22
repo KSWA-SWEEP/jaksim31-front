@@ -9,8 +9,15 @@ import moment from 'moment';
 import { useUserInfoQuery } from '../../hooks/queries/useUserInfoQuery';
 import Loading from './loading';
 import Error from '../../diary/list/grid/error';
+import { useQueryClient } from 'react-query';
+import { useUserInfoUpdate } from '../../hooks/mutations/useUserInfoUpdate';
 
 const Profile = () => {
+
+    // TODO 사용자 ID 상태 관리 설정이 되면 그 값으로 변경하기
+    // 사용자 ID(Object ID)
+    let userId = "63cb7ded2f289e0f2db8292b";
+    let loginId = "test@gmail.com"
 
     let [isProfileModalOpen, setIsProfileModalOpen] = useState(false)
     let [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false)  
@@ -42,8 +49,14 @@ const Profile = () => {
     const [isNewPassword, setIsNewPassword] = useState(false)
     const [isNewPasswordConfirm, setIsNewPasswordConfirm] = useState(false)
 
+    // react-query
+    const queryClient = useQueryClient();
+    
     // 유저 정보 data fetching을 위한 useQuery
-    const { data, isLoading, isFetching, isFetched, isError } = useUserInfoQuery();
+    const { data, isLoading, isFetching, isFetched, isError } = useUserInfoQuery(userId);
+
+    // 유저 정보 수정을 위한 useMutation
+    const { status, mutate } = useUserInfoUpdate(userId, queryClient);
 
     if( isLoading || isFetching ) return <Loading className="flex justify-center"/>
     if ( isError ) return <Error className="flex justify-center"/>
@@ -137,28 +150,13 @@ const Profile = () => {
       */
       userProfileImage.current = "https://source.unsplash.com/random/?cheese";
 
-      console.log("======= Change Profile Request");
-      const requestProfileData = new Object();
-      console.log("userName : " + userName.current);
-      console.log("profileImage: " + userProfileImage.current);
-      requestProfileData.username = userName.current;
-      requestProfileData.profileImage = userProfileImage.current;
-
-      /*
-      * TODO: 회원정보 수정 API 확정되면 수정 예정
-      */
+      let data = new Object();
+      data.username = userName.current;
+      data.profileImage = userProfileImage.current;
       
       try{
-          const responseChangeProfile = await fetch(process.env.NEXT_PUBLIC_API_URL+"/v0/members/"+`63c790475ff1ed187caf39da`, {
-              method: 'PATCH',
-              body: requestProfileData,
-              headers: {
-                  'Content-type': 'application/json',
-              }
-          });
-          
+          mutate({data});
           alert("개인정보가 저장되었습니다 😊");
-          
       } catch (e) {
           console.log(e);
           alert("개인정보 수정에 실패했습니다. 다시 시도해 주세요.");
