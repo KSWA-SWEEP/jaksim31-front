@@ -11,6 +11,8 @@ import Loading from './loading';
 import Error from '../../diary/list/grid/error';
 import { useQueryClient } from 'react-query';
 import { useUserInfoUpdate } from '../../hooks/mutations/useUserInfoUpdate';
+import { updatePassword } from '../../api/updatePassword';
+import { checkPassword } from '../../api/checkPassword';
 
 const Profile = () => {
 
@@ -141,9 +143,8 @@ const Profile = () => {
       }
     }
 
-    async function requestChangeProfile(){
+    function requestChangeProfile(){
 
-      console.log("프로필 저장하기 버튼 눌림");
       /*
       * TODO: 프로필 이미지 object storage에 올리기
       * 이미지 URL 임의로 넣어둠
@@ -170,35 +171,23 @@ const Profile = () => {
 
     async function requestChangePassword(){
 
-      console.log("비밀번호 변경하기 버튼 눌림");
-      console.log("======= Change Password Request");
-      const requestPasswordData = new Object();
-      console.log("oldPassword : " + userOldPassword.current);
-      console.log("newPassword : " + userNewPassword.current);
-      requestPasswordData.oldPassword = userOldPassword.current;
-      requestPasswordData.newPassword = userNewPassword.current;
-
-      /*
-      * TODO: 비밀번호 수정 API 확정되면 수정 예정
-      */
+      let checkData = new Object();
+      let updateData = new Object();
       
-      try{
-          const responseChangePassword = await fetch('/api/v1/members/{userId}/password', {
-              method: 'PUT',
-              body: requestPasswordData,
-              headers: {
-                  'Content-type': 'application/json',
-              }
-          });
-          
-          alert("개인정보가 저장되었습니다 😊");
-          
-      } catch (e) {
-          console.log(e);
-          alert("개인정보 수정에 실패했습니다. 다시 시도해 주세요.");
+      checkData.password = userOldPassword.current;
+      updateData.newPassword = userNewPassword.current;
+      
+      // 비밀번호 검증 API & 비밀번호 변경 API 모두 호출
+      // TODO: 에러 코드에 따른 예외 처리
+      try {
+          checkPassword(checkData, loginId);
+          updatePassword(updateData, loginId);
+          alert("비밀번호가 변경되었습니다 😊");
+      } catch(e) {
+        console.log(e);
+        alert("비밀번호 변경에 실패했습니다. 다시 시도해 주세요.")
       } finally {
         // 변수 초기화
-        userName.current = "";
         userOldPassword.current = "";
         userNewPassword.current = "";
         userNewPasswordCheck.current = "";
