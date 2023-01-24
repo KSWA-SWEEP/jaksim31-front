@@ -131,7 +131,7 @@ function Editor({ editorLoaded, name, value, date, diaryId }) {
                 console.log("Find image with keyword "+englishEmotion)
                 res = await fetch(`https://api.unsplash.com/photos/random?query=${englishEmotion}&client_id=${Access_Key}`);
                 
-                // 영어로도 없으면 한국어 keyword 검색
+                // 영어로도 없으면 koreanEmotion 검색
                 if(res.status != 200) {
                     console.log("Find image with keyword "+koreanEmotion)
                     res = await fetch(`https://api.unsplash.com/photos/random?query=${koreanEmotion}&client_id=${Access_Key}`);
