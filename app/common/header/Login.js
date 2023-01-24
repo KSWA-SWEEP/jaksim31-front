@@ -8,6 +8,8 @@ import { XMarkIcon } from '@heroicons/react/24/outline';
 import { useRouter } from 'next/navigation';
 import { init, send } from 'emailjs-com';
 import Link from 'next/link'
+import { updatePassword } from "../../api/updatePassword";
+import { checkIsMember } from "../../api/checkIsMember";
 
 const Login = () => {
     let [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
@@ -183,46 +185,11 @@ const Login = () => {
     }
 
     async function requestIsMember(){
-      
-      console.log("======= isMember Request");
-      console.log("userEmail : " + userEmail.current);
 
-      const data = new Object();
+      let data = new Object();
       data.loginId = userEmail.current;
       
-      try{
-          let resData = new Object();
-        /*
-        * TODO: 회원가입 여부 확인 API 확정되면 수정하기
-
-          const responseLogin = await fetch('/api/v0/members', {
-              method: 'POST',
-              body: JSON.stringify(data),
-              headers: {
-                  'Content-type': 'application/json',
-              }
-          })
-          .then((response) => response.json())
-          .then((result) => {
-              resData = result;
-          });
-
-        */
-
-          /*
-          * API 확정 전 테스트 코드
-          */
-          throw "API 확정 전 테스트용 오류 발생";
-          // 임의로 userName 설정
-          resData.userName = userName.current;
-          let resDataTmp = new Array();
-          resDataTmp.push(resData);
-          setEmailMessage('이미 가입된 메일입니다.');
-          return resDataTmp;
-      }catch(e){
-          console.log(e);
-          if(!isChangePasswordMoal) setEmailMessage('등록되지 않은 메일입니다. 회원가입을 진행해 주세요 🤗')
-      }
+      return checkIsMember(data);
     }
 
     async function requestSignup(){
@@ -272,25 +239,11 @@ const Login = () => {
 
     async function requestChangePassword(){
 
-      console.log("비밀번호 변경하기 버튼 눌림");
+      let data = new Object();
+      data.newPassword = userPassword.current;
 
-      //비밀번호 재설정 api 호출
-      console.log("======= Change Password Request");
-      console.log("newPassword : " + userPassword.current);
-
-      const requestSignupBody = {
-          newPassword: userPassword.current,
-      }
-      
       try{
-          const responseChangePassword = await fetch('/api/v0/members/{loginId}/password', {
-              method: 'POST',
-              body: JSON.stringify(requestSignupBody),
-              headers: {
-                  'Content-type': 'application/json',
-              }
-          });
-          
+          updatePassword(data, userEmail.current);
           alert("비밀번호가 변경되었습니다 😊");
           openLoginModal();
       } catch (e) {
@@ -301,31 +254,41 @@ const Login = () => {
 
     const sendAuthMail =()=>{
 
-      // 인증메일 전송 전, 회원 여부 검증
+      // 인증메일 전송 전, 회원 여부 검증 API 호출
       requestIsMember().then(resp => {
 
-        console.log(resp);
-
-        if(resp == undefined) {  // API 응답 데이터가 없는 경우, 인증 메일 전송
+        if(resp.status == 200) {  // 응답코드가 200인 경우, 인증 메일 전송
           
           setIsAuthIng(true);
 
+          // 인증메일 전송
           send("service_xefuilp", "template_flcknvq", {
             message: "인증번호는 " + randNum.current + " 입니다.",
             user_email: userEmail.current,
           },"cPndipwNGrbp1LMBT").then(resp => {});
 
-          // 인증번호 test 코드
-          console.log("============== "+randNum.current)
+          console.log("전송한 인증번호: "+randNum.current)
           setIsAuthIng(true)
           setCheckAuthMessage("메일을 전송하였습니다. 확인 후 인증번호를 입력해 주세요.");
         }
-        else {  // API 응답 데이터가 있는 경우, 계정 존재
-          console.log("계정 존재");
+        else {  // 응답코드가 404인 경우, 계정 없음
+          alert("찾을 수 없는 계정입니다. 회원 정보를 확인해 주세요.");
           return;
         }
       });
     };
+
+    const checkEmail = () => {
+      requestIsMember().then(resp => {
+
+        if(resp.status == 200) {  // 응답코드가 200인 경우, 계정 존재
+          alert("가입된 계정입니다. 로그인 해주세요.");
+        }
+        else {  // 응답코드가 404인 경우, 계정 없음
+          alert("찾을 수 없는 계정입니다. 회원가입 해주세요.");
+        }
+      });
+    }
 
     return (
       <div>
@@ -545,7 +508,7 @@ const Login = () => {
                                 <button
                                   className="w-full px-6 py-3 mb-1 mr-1 text-sm font-bold text-white uppercase transition-all duration-150 ease-linear rounded shadow outline-none bg-zinc-800 active:bg-zinc-600 hover:shadow-lg focus:outline-none"
                                   type="button"
-                                  onClick={requestIsMember}
+                                  onClick={checkEmail}
                                   disabled={!isEmail}
                                 >
                                   조회하기
