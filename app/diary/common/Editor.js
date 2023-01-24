@@ -12,7 +12,7 @@ import moment from 'moment';
 function Editor({ editorLoaded, name, value, date, diaryId }) {
     // TODO 사용자 ID 상태 관리 설정이 되면 그 값으로 변경하기
     // 사용자 ID(Object ID)
-    let userId = "63c78cb847558c27220ad503";
+    let userId = process.env.NEXT_PUBLIC_USER_ID;
 
     let [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
     const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)

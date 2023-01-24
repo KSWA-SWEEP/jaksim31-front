@@ -32,7 +32,7 @@ export default function UserProfile() {
                     <br></br>
                     {/* 날짜 */}
                     <div className='text-xl font-extrabold text-zinc-700'>
-                        {user.recent_diaries[0].date}
+                        {user.recent_diaries[0].diaryDate}
                     </div>
                     {/* 썸네일 사진 */}
                     <div className="justify-center m-5 avatar">

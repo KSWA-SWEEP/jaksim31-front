@@ -5,7 +5,7 @@ export const useUserInfoQuery = (userInfo) =>
     useQuery(
         ['USER_INFO'], 
         async () => {
-            const response = await getUserInfo("63c790475ff1ed187caf39da");
+            const response = await getUserInfo(process.env.NEXT_PUBLIC_USER_ID);
             return response.json();
         },
         { 

@@ -57,7 +57,7 @@ export default function DiaryGridList(props) {
           
           {/* 날짜 및 키워드 */}
           <div className="col-span-3 sm:col-span-2">
-            <div className="text-2xl font-extrabold">{moment(diaryData.date).format("YYYY. MM. DD.")}</div>
+            <div className="text-2xl font-extrabold">{moment(diaryData.diaryDate).format("YYYY. MM. DD.")}</div>
             <div className="flex flex-wrap mt-3">
                 {diaryData.keywords.map((keyword) => (
                     <div key={keyword} className="px-3 mb-2 py-1 mr-2.5 text-sm font-medium text-zinc-500 bg-zinc-200 rounded-xl dark:bg-zinc-200 dark:text-zinc-800 ">

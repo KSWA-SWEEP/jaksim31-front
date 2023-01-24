@@ -5,7 +5,7 @@ export const useDiaryQuery = (diaryId, diary) =>
     useQuery(
         ['DIARY', diaryId], 
         async () => {
-            const response = await getDiary("63c78cb847558c27220ad503", diaryId);
+            const response = await getDiary(process.env.NEXT_PUBLIC_USER_ID, diaryId);
 
             if (!response.status != 200) {
                 throw new Error('Failed to fetch data');

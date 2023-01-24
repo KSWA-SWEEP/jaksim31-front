@@ -72,8 +72,7 @@ export default function CalendarList(props) {
   const Calendar = dynamic(() => import('react-calendar'), { ssr: false, })
 
   // react-query
-  const { data, isLoading, isPlaceholderData, isPreviousData, isRefetching, isFetching, isFetched, isError } = useDiaryListQuery(props.diaryList, "31")
-
+  const { data, isLoading, isPlaceholderData, isPreviousData, isRefetching, isFetching, isFetched, isError } = useDiaryListQuery(props.diaryList)
 
   // react Query로 받은 값 diarys에 넣어주기
   let diarys = data.content;
@@ -97,14 +96,9 @@ export default function CalendarList(props) {
 
   // error
   if ( isError ) return <Error className="flex justify-center"/>
-
-  // react-calendar에서 각 day에 대한 날짜를 date라는 변수로 관리하기에 date에서의 변수와 중복되어 오류 발생
-  // data 로 받는 변수의 key값을 임의로 변경해주기 (date=>diaryDate)
-  diarys.forEach( obj => obj.diaryDate = obj.date );
   
-  // TODO - 선택된 감정에 대한 일기 조회 API 호출
-  // 선택된 감정에 대한 일기 목록 조회
-  function findDiaryByEmotion(e, emotion) {
+  // 감정 선택 상태 관리
+  function setEmotionState(e, emotion) {
     // 선택되어 있지 않은 경우 (새로운 감정 추가)
     if(!clickState.includes(emotion)){
       setClickState([...clickState, emotion])
@@ -126,8 +120,8 @@ export default function CalendarList(props) {
           {/* 감정 아이콘 버튼 */}
           {/* TODO - 감정 아이콘 클릭시 해당 감정 일기 가져오는 함수 만들기 */}
           {emotions.map((emotion) => (
-            <div key={emotion.name} className="relative w-6 h-6 sm:w-10 sm:h-10 lg:w-12 lg:h-12 tooltip" onClick={(e) => findDiaryByEmotion(e, emotion.name)} data-tip={emotion.name}>
               <Image src={emotion.src} alt={emotion.alt} placeholder='empty' className='duration-200 opacity-60 hover:scale-105 hover:opacity-100'/>
+            <div key={emotion.name} className="relative w-6 h-6 sm:w-10 sm:h-10 lg:w-12 lg:h-12 tooltip" onClick={(e) => setEmotionState(e, emotion.name)} data-tip={emotion.name}>
             </div>
           ))}
         </div>

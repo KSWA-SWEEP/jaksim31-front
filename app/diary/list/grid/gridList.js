@@ -31,7 +31,7 @@ export default function DiaryGridList(props) {
     
     // 로그인시 가져온 userId (db의 objectId) 를 쿠키 or Local Storage로부터 가져와서 넣어주기
     // 지금은 test 용 하나의 userId 하드코딩으로 넣어줌..
-    const { data, isLoading, isFetching, isFetched, isError } = useDiaryListQuery(props.diaryList, "")
+    const { data, isLoading, isFetching, isFetched, isError } = useDiaryListQuery(props.diaryList)
 
     if ( isLoading || isFetching ) return <Loading className="flex justify-center"/>
  
@@ -69,7 +69,7 @@ export default function DiaryGridList(props) {
                         <div className="flex justify-between mx-4 mt-5 mb-2">
                             <div className="w-full">
                                 <div className="flex justify-between">
-                                    <p className="ml-2 text-lg font-bold truncate text-zinc-900">{moment(diary.date).format('YYYY. MM. DD.')}</p>
+                                    <p className="ml-2 text-lg font-bold truncate text-zinc-900">{moment(diary.diaryDate).format('YYYY. MM. DD.')}</p>
                                     <Menu as="div" className="relative ml-3">
                                         <div>
                                             <Menu.Button className="flex max-w-xs text-sm focus:outline-none">

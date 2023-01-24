@@ -5,7 +5,7 @@ export const useDiaryListQuery = (diaryList, size) =>
     useQuery(
         ['DIARY_LIST'], 
         async () => {
-            const response = await getDiaryList("63c78cb847558c27220ad503", "0", size);
+            const response = await getDiaryList(process.env.NEXT_PUBLIC_USER_ID);
             return response.json()
         },
         {
