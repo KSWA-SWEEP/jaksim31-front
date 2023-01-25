@@ -13,13 +13,11 @@ import { useQueryClient } from 'react-query';
 import { useUserInfoUpdate } from '../../hooks/mutations/useUserInfoUpdate';
 import { updatePassword } from '../../api/updatePassword';
 import { checkPassword } from '../../api/checkPassword';
+import { getCookie } from 'cookies-next';
 
 const Profile = () => {
 
-    // TODO 사용자 ID 상태 관리 설정이 되면 그 값으로 변경하기
-    // 사용자 ID(Object ID)
-    let userId = "63cb7ded2f289e0f2db8292b";
-    let loginId = "test@gmail.com"
+    const userId = getCookie("userId");
 
     let [isProfileModalOpen, setIsProfileModalOpen] = useState(false)
     let [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false)  

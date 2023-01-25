@@ -10,6 +10,10 @@ import { init, send } from 'emailjs-com';
 import Link from 'next/link'
 import { updatePassword } from "../../api/updatePassword";
 import { checkIsMember } from "../../api/checkIsMember";
+import { signUp } from "../../api/signUp";
+import { useQueryClient } from "react-query";
+import { useLogin } from "../../hooks/mutations/useLogin";
+import { getCookie } from "cookies-next";
 
 const Login = () => {
     let [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
@@ -57,6 +61,12 @@ const Login = () => {
     const [isPassword, setIsPassword] = useState(false)
     const [isPasswordConfirm, setIsPasswordConfirm] = useState(false)
     
+    // react-query
+    const queryClient = useQueryClient();
+
+    // 로그인을 위한 useMutation
+    const { status, mutate: mutateLogin } = useLogin(queryClient);
+
     const onNameChange = (e) => {
       userName.current = e.target.value;
     };
@@ -140,50 +150,13 @@ const Login = () => {
       }
 
       //로그인 api 호출
-      console.log("======= Login Request");
-      const data = new Object();
-      console.log("userEmail : " + userEmail.current);
-      console.log("userPassword : " + userPassword.current);
+      let data = new Object();
       data.loginId = userEmail.current;
       data.password = userPassword.current;
       
-      const requestLoginBody = {
-          loginId: userEmail.current,
-          password: userPassword.current
-      }
-      
-      try{
-          const responseLogin = await fetch('/api//v0/members/login', {
-              method: 'POST',
-              body: JSON.stringify(requestLoginBody),
-              headers: {
-                  'Content-type': 'application/json',
-              }
-          });
-
-          /*
-          * TODO: accessToken / 로그인 상태 / 만료 시간 저장 기능
-          
-          const responseData = await responseLogin.json();
-          let responseDataJson = JSON.parse(responseData);
-
-          //recoil에 accessToken 저장
-          setAcctoken(responseDataJson.accessToken);
-          
-          //로그인 상태와 만료 시간 sessionStorage에 저장
-          sessionStorage.setItem("isLogin","true")
-          sessionStorage.setItem("expTime",responseDataJson.expTime)
-
-          */
-
-          router.push('/diary/dashboard');
-          return;
-      }catch(e){
-          console.log(e);
-          alert("로그인에 실패했습니다. 다시 시도해 주세요.");
-      }
+      mutateLogin({data});
     }
-
+    
     async function requestIsMember(){
 
       let data = new Object();
@@ -202,33 +175,15 @@ const Login = () => {
       }
 
       //회원가입 api 호출
-      console.log("======= SignUp Request");
       const data = new Object();
-      console.log("userEmail : " + userEmail.current);
-      console.log("userPassword : " + userPassword.current);
-      console.log("userName : " + userName.current);
       data.loginId = userEmail.current;
       data.password = userPassword.current;
       data.username = userName.current;
+      // TODO: default 프로필 이미지 object storage에 올리기
+      data.profileImage = "https://source.unsplash.com/random/?user";
 
-      const requestSignupBody = {
-          loginId: userEmail.current,
-          password: userPassword.current,
-          username: userName.current
-      }
-      
       try{
-          const responseSignup = await fetch('/api/v0/members/register', {
-              method: 'POST',
-              body: JSON.stringify(requestSignupBody),
-              headers: {
-                  'Content-type': 'application/json',
-              }
-          });
-          //check
-          // console.log("Result : " + JSON.stringify(responseSignup));
-          // console.log("User email : "+ response["email"]);
-          
+          signUp(data);
           alert("회원가입이 완료되었습니다 😊");
           openLoginModal();
       } catch (e) {
@@ -257,7 +212,9 @@ const Login = () => {
       // 인증메일 전송 전, 회원 여부 검증 API 호출
       requestIsMember().then(resp => {
 
-        if(resp.status == 200) {  // 응답코드가 200인 경우, 인증 메일 전송
+        // 비밀번호 재설정일 경우 회원이 존재해야 하는 경우와
+        // 회원가입일 경우 회원이 존재하지 않는 경우
+        if((isChangePasswordMoal && resp.status == 200) || (!isChangePasswordMoal && resp.status == 404)) {
           
           setIsAuthIng(true);
 
@@ -271,9 +228,13 @@ const Login = () => {
           setIsAuthIng(true)
           setCheckAuthMessage("메일을 전송하였습니다. 확인 후 인증번호를 입력해 주세요.");
         }
-        else {  // 응답코드가 404인 경우, 계정 없음
+        else if(!isChangePasswordMoal && resp.status == 200) {  // 회원가입일 경우 이미 회원이 존재하는 경우
+          console.log(resp);
+          alert("이미 가입된 계정입니다.");
+        }
+        else if(isChangePasswordMoal && resp.status == 404) {  // 비밀번호 재설정일 경우 회원이 존재하지 않는 경우
+          console.log(resp);
           alert("찾을 수 없는 계정입니다. 회원 정보를 확인해 주세요.");
-          return;
         }
       });
     };
@@ -288,6 +249,14 @@ const Login = () => {
           alert("찾을 수 없는 계정입니다. 회원가입 해주세요.");
         }
       });
+    }
+
+    // TODO: BE에서 redirect 하는 게 나을 듯
+    const moveDashboard = () => {
+      // 로그인에 성공할 경우 대시보드로 이동
+      if(getCookie("loginId") != undefined) {
+        router.push("/diary/dashboard");
+      }
     }
 
     return (
@@ -389,7 +358,7 @@ const Login = () => {
                                 <button
                                   className="w-full px-6 py-3 mb-1 mr-1 text-sm font-bold text-white uppercase transition-all duration-150 ease-linear rounded shadow outline-none bg-zinc-800 active:bg-zinc-600 hover:shadow-lg focus:outline-none"
                                   type="button"
-                                  onClick={requestLogin}
+                                  onClick={() => {requestLogin(); moveDashboard();}}
                                   disabled={!isEmail}
                                 >
                                   로그인

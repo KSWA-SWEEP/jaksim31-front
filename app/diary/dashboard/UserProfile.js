@@ -4,19 +4,15 @@ import userData from "../../../public/data/user.json";
 import Loading from "../list/grid/loading";
 import Error from "../list/grid/error";
 import { useUserInfoQuery } from "../../hooks/queries/useUserInfoQuery";
-
+import { getCookie } from "cookies-next";
 
 // app/common/header/Profile에서 거의 다 가져왔지만 일부 수정하기 위해 component 따로 생성.
 export default function UserProfile(userInfo) {
 
-    // TODO 사용자 ID 상태 관리 설정이 되면 그 값으로 변경하기
-    // 사용자 ID(Object ID)
-    let userId = "63cb7ded2f289e0f2db8292b";
+    let userId = getCookie("userId");
 
     // 유저 정보 data fetching을 위한 useQuery
     const { data, isLoading, isFetching, isFetched, isError } = useUserInfoQuery(userId, userInfo);
-    // console.log("isFetching: " + isFetching + ", isLoading: " + isLoading);
-    const user = userData;
 
     if( isLoading || isFetching ) return <Loading className="flex justify-center"/>
     if ( isError ) return <Error className="flex justify-center"/>

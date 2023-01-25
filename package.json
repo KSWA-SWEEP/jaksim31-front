@@ -17,6 +17,7 @@
     "chart.js": "^2.9.4",
     "ckeditor5-custom-build": "file:ckeditor5",
     "classnames": "^2.3.2",
+    "cookies-next": "^2.1.1",
     "daisyui": "^2.46.1",
     "dotenv": "^16.0.3",
     "dotenv-webpack": "^8.0.1",

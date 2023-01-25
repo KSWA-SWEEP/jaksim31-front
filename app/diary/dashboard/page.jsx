@@ -5,16 +5,14 @@ import CardBarChart from "./EmotionCompare";
 import DiaryCards from "./DiaryCards";
 import DoughnutChart from "./DoughnutChart";
 import { getUserInfo } from "../../api/getUserInfo";
+import { getCookie} from "cookies-next";
 
 export default async function diaryPage() {
 
-    // TODO 사용자 ID 상태 관리 설정이 되면 그 값으로 변경하기
-    // 사용자 ID(Object ID)
-    let userId = "63cb7ded2f289e0f2db8292b";
-    // 유저 정보 초기화를 위한 데이터
+    // userId로 유저 정보 호출하여 프로필 데이터 초기화 값 가져오기
+    const userId = getCookie("userId");
     const userInfo = await getUserInfo(userId);
-    console.log(userInfo)
-
+    
     return (
         <>
             <div className="w-full">
