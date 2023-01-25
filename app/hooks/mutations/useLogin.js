@@ -1,5 +1,4 @@
-import { setCookie, getCookie } from "cookies-next";
-import { Router, useRouter } from "next/router";
+import { setCookie } from "cookies-next";
 import { useMutation } from "react-query";
 import { getUserInfoLoginId } from "../../api/getUserInfoLoginId";
 import { login } from "../../api/login";
@@ -17,10 +16,8 @@ export const useLogin = (queryClient) =>
                     ["TOKEN"], 
                     {"grantType" : data.grantType, "accessToken" : data.accessToken, "refreshToken" : data.refreshToken, "expTime" : data.expTime}
                 );
-
-                // loginId 쿠키 저장
-                setCookie("loginId", data.loginId, {path: "/", maxAge: 60 * 60 * 24, sameSite: true});
                 
+                // TODO: 유저 정보 조회 관련 API 수정되면, userId 기반 API 호출 예정
                 // loginId 기반 유저 정보 호출해서, userId 쿠키 저장
                 getUserInfoLoginId(data.loginId)
                     .then(resp => resp.json())
