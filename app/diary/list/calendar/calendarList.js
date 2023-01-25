@@ -72,7 +72,7 @@ export default function CalendarList(props) {
   const Calendar = dynamic(() => import('react-calendar'), { ssr: false, })
 
   // react-query
-  const { data, isLoading, isPlaceholderData, isPreviousData, isRefetching, isFetching, isFetched, isError } = useDiaryListQuery(props.diaryList)
+  const { data, isLoading, isPlaceholderData, isPreviousData, isRefetching, isFetching, isFetched, isError } = useDiaryListQuery(props.diaryList, "", "")
 
   // react Query로 받은 값 diarys에 넣어주기
   let diarys = data.content;

@@ -128,7 +128,7 @@ export default function DiaryGridList(props) {
                       일기을 삭제하시겠습니까?
                       </p>
                       <p className="mt-1 text-base text-red-500">
-                      🚨 삭제한 일기은 다시 복구할 수 없습니다.
+                      🚨 삭제한 일기는 다시 복구할 수 없습니다.
                       </p>
                   </div>
 
@@ -136,7 +136,7 @@ export default function DiaryGridList(props) {
                       <button
                           type="button"
                           className="justify-center px-2 py-1.5 mx-2 text-base font-semibold duration-200 border border-transparent rounded-md text-zinc-700 bg-zinc-200 hover:bg-zinc-300 focus:outline-none "
-                          onClick={closeDeleteModal}
+                          onClick={() => closeDeleteModal()}
                           >
                           닫기
                       </button>
