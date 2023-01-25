@@ -19,13 +19,13 @@ export const useLogin = (queryClient) =>
                 );
 
                 // loginId 쿠키 저장
-                setCookie("loginId", data.loginId);
+                setCookie("loginId", data.loginId, {path: "/", maxAge: 60 * 60 * 24, sameSite: true});
                 
                 // loginId 기반 유저 정보 호출해서, userId 쿠키 저장
                 getUserInfoLoginId(data.loginId)
                     .then(resp => resp.json())
                     .then(respData => {
-                    setCookie("userId", respData.userId);
+                    setCookie("userId", respData.userId, {path: "/", maxAge: 60 * 60 * 24, sameSite: true});
                     });
                 
                 // TODO: emotion count 값 가져오기

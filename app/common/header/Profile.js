@@ -14,6 +14,7 @@ import { useUserInfoUpdate } from '../../hooks/mutations/useUserInfoUpdate';
 import { updatePassword } from '../../api/updatePassword';
 import { checkPassword } from '../../api/checkPassword';
 import { getCookie } from 'cookies-next';
+import { useLogout } from '../../hooks/mutations/useLogout';
 
 const Profile = () => {
 
@@ -56,7 +57,10 @@ const Profile = () => {
     const { data, isLoading, isFetching, isFetched, isError } = useUserInfoQuery(userId);
 
     // 유저 정보 수정을 위한 useMutation
-    const { status, mutate } = useUserInfoUpdate(userId, queryClient);
+    const { mutate: mutateuserInfo } = useUserInfoUpdate(userId, queryClient);
+
+    // 로그아웃을 위한 useMutation
+    const { mutate: mutateLogout } = useLogout(queryClient);
 
     if( isLoading || isFetching ) return <Loading className="flex justify-center"/>
     if ( isError ) return <Error className="flex justify-center"/>
@@ -122,15 +126,8 @@ const Profile = () => {
       console.log("로그아웃 버튼 눌림");
 
       try {
-        const responseLogout = await fetch('/v1/members/{userId}/logout', {
-            method: 'POST',
-            headers: {
-                'Content-type': 'application/json',
-            }
-        });
 
-        {/* TODO: 로그아웃 API 확정되면 isLogin, accessToken 등 로그인 관련 정보 삭제*/}
-
+        mutateLogout();
         alert("로그아웃 되었습니다 😊");
         
         // landing page로 이동
@@ -154,7 +151,7 @@ const Profile = () => {
       data.profileImage = userProfileImage.current;
       
       try{
-          mutate({data});
+        mutateuserInfo({data});
           alert("개인정보가 저장되었습니다 😊");
       } catch (e) {
           console.log(e);

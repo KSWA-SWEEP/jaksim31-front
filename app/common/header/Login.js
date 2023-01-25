@@ -13,7 +13,7 @@ import { checkIsMember } from "../../api/checkIsMember";
 import { signUp } from "../../api/signUp";
 import { useQueryClient } from "react-query";
 import { useLogin } from "../../hooks/mutations/useLogin";
-import { getCookie } from "cookies-next";
+import { hasCookie } from "cookies-next";
 
 const Login = () => {
     let [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
@@ -251,10 +251,10 @@ const Login = () => {
       });
     }
 
-    // TODO: BE에서 redirect 하는 게 나을 듯
-    const moveDashboard = () => {
+    // TODO: 현재 로그인 버튼 두 번 클릭해야 이동하는 문제..(BE에서 리다이렉트?)
+    async function moveDashboard() {
       // 로그인에 성공할 경우 대시보드로 이동
-      if(getCookie("loginId") != undefined) {
+      if(hasCookie("loginId")) {
         router.push("/diary/dashboard");
       }
     }
@@ -358,6 +358,7 @@ const Login = () => {
                                 <button
                                   className="w-full px-6 py-3 mb-1 mr-1 text-sm font-bold text-white uppercase transition-all duration-150 ease-linear rounded shadow outline-none bg-zinc-800 active:bg-zinc-600 hover:shadow-lg focus:outline-none"
                                   type="button"
+                                  // onClick={() => {requestLogin().then(hasCookie("userId") ? router.push("/diary/dashboard") : "")}}
                                   onClick={() => {requestLogin(); moveDashboard();}}
                                   disabled={!isEmail}
                                 >
