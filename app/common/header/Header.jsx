@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { Bars3Icon } from '@heroicons/react/24/outline';
 import Login from './Login';
 import Profile from './Profile';
+import { hasCookie } from 'cookies-next';
 
 function Header({ isOpen, setIsOpen }) {
 
@@ -28,8 +29,7 @@ function Header({ isOpen, setIsOpen }) {
           <Bars3Icon className={"w-6 h-6 hover:scale-105 " + (pathname.includes('home') ? "text-zinc-400" : "text-zinc-600") } aria-hidden="true" onClick={() => setIsOpen(true)}/>
 
           {
-            // TODO 지금은 home경로 포함일때로 해두었는데, isLogin에 따라 변하는 것으로 바꿔주기
-            pathname.includes('home') 
+            !hasCookie("userId")
             ?
             <>
               {/* 로그인 이전 - 시작하기 버튼 */}
