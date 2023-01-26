@@ -5,23 +5,14 @@ import CardBarChart from "./EmotionCompare";
 import DiaryCards from "./DiaryCards";
 import DoughnutChart from "./DoughnutChart";
 import { getUserInfo } from "../../api/getUserInfo";
-
- async function getUserInfoData() {
-    // 유저 정보 조회 API 호출 함수
-    // 테스트용 userId 넣어둠
-    const res = await getUserInfo("63c790475ff1ed187caf39da");
-
-    // if (!res.status) {
-    //   throw new Error('Failed to fetch data');
-    // }
- 
-    return res.json();
-}
+import { getCookie} from "cookies-next";
 
 export default async function diaryPage() {
-    // 유저 정보 초기화를 위한 데이터
-    const userInfo = await getUserInfoData();
 
+    // userId로 유저 정보 호출하여 프로필 데이터 초기화 값 가져오기
+    const userId = getCookie("userId");
+    const userInfo = await getUserInfo(userId);
+    
     return (
         <>
             <div className="w-full">
