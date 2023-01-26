@@ -12,7 +12,7 @@ import moment from 'moment';
 function Editor({ editorLoaded, name, value, date, diaryId }) {
     // TODO 사용자 ID 상태 관리 설정이 되면 그 값으로 변경하기
     // 사용자 ID(Object ID)
-    let userId = "63c78cb847558c27220ad503";
+    let userId = process.env.NEXT_PUBLIC_USER_ID;
 
     let [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
     const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
@@ -88,12 +88,7 @@ function Editor({ editorLoaded, name, value, date, diaryId }) {
             },
             body: JSON.stringify(data)
         })
-        .then((response) => {
-            response.json()
-        })
-        .then((responseData) => {
-            return responseData;
-        });
+        .then((response) => response.json())
         
         if (res == undefined){
             setEnglishKeywords(["no keyword"]);
@@ -131,7 +126,7 @@ function Editor({ editorLoaded, name, value, date, diaryId }) {
                 console.log("Find image with keyword "+englishEmotion)
                 res = await fetch(`https://api.unsplash.com/photos/random?query=${englishEmotion}&client_id=${Access_Key}`);
                 
-                // 영어로도 없으면 한국어 keyword 검색
+                // 영어로도 없으면 koreanEmotion 검색
                 if(res.status != 200) {
                     console.log("Find image with keyword "+koreanEmotion)
                     res = await fetch(`https://api.unsplash.com/photos/random?query=${koreanEmotion}&client_id=${Access_Key}`);
@@ -312,7 +307,7 @@ function Editor({ editorLoaded, name, value, date, diaryId }) {
                                     )
                                 }
                         disabled={((text == undefined)||(text == ""))}
-                        onClick={() => { analyzeDiary(); setThumbnailDirectory(""); console.log(koreanKeywords); openSaveModal(); setSaveMessage("썸네일을 선택해주세요😲"); setIsSaved(false); }}>
+                        onClick={() => { analyzeDiary(); setThumbnailDirectory(""); openSaveModal(); setSaveMessage("썸네일을 선택해주세요😲"); setIsSaved(false); }}>
                     저장하기
                 </button>
                 <button className="inline-flex justify-center px-3 py-2 ml-2 text-sm font-medium duration-200 border border-transparent rounded-md text-zinc-700 bg-zinc-200 mt-7 hover:bg-zinc-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500 focus-visible:ring-offset-2" onClick={() => router.push('/diary/list/calendar')}>취소하기</button>
@@ -365,16 +360,25 @@ function Editor({ editorLoaded, name, value, date, diaryId }) {
                             englishKeywords
                             ?
                             <div>
-                                {/* englishKeywords */}
                                 <div className='px-3 my-2 sm:mt-5 '>
-                                    <p className='pb-2 pl-2'>💡 키워드</p>
-                                    <div className="flex flex-wrap my-2">
-                                        {koreanKeywords.map((keyword) => (
-                                            <div key={keyword} className="px-2 py-1 mb-3 mr-2 font-medium sm:px-3 sm:text-base w-fit text-zinc-500 bg-zinc-200 rounded-3xl dark:bg-zinc-200 dark:text-zinc-800 ">
-                                                #{keyword}
+                                    {/* keywords */}
+                                    <div className='grid grid-cols-3 mb-2'>
+                                        <div className='col-span-3 sm:col-span-2'>
+                                            <p className='pb-2 pl-2'>💡 키워드</p>
+                                            <div className="flex flex-wrap my-2">
+                                                {koreanKeywords.map((keyword) => (
+                                                    <div key={keyword} className="px-2 py-1 mb-3 mr-2 font-medium sm:px-3 sm:text-sm w-fit text-zinc-500 bg-zinc-200 rounded-3xl dark:bg-zinc-200 dark:text-zinc-800 ">
+                                                        #{keyword}
+                                                    </div>
+                                                ))}
                                             </div>
-                                        ))}
-                                        
+                                        </div>
+                                        <div className='col-span-3 sm:col-span-1'>
+                                            <p className='pb-2 pl-2'>👀 감정</p>
+                                            <div className="flex ml-4 text-lg font-bold">
+                                                {koreanEmotion}
+                                            </div>
+                                        </div>
                                     </div>
 
                                     {/* thumbnail */}
