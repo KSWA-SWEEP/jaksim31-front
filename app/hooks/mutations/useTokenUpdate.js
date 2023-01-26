@@ -1,9 +1,9 @@
 import { useMutation } from "react-query";
 import { updateToken } from "../../api/updateToken";
 
-export const useTokenUpdate = (userId, queryClient) =>
+export const useTokenUpdate = (queryClient) =>
     useMutation(
-        ({data}) => updateToken(data, userId),
+        ({data}) => updateToken(data),
         {
             onSuccess: (data) => {
                 queryClient.setQueryData(

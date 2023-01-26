@@ -18,8 +18,6 @@ import { useLogout } from '../../hooks/mutations/useLogout';
 
 const Profile = () => {
 
-    const userId = getCookie("userId");
-
     let [isProfileModalOpen, setIsProfileModalOpen] = useState(false)
     let [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false)  
 
@@ -54,10 +52,10 @@ const Profile = () => {
     const queryClient = useQueryClient();
     
     // 유저 정보 data fetching을 위한 useQuery
-    const { data, isLoading, isFetching, isFetched, isError } = useUserInfoQuery(userId);
+    const { data, isLoading, isFetching, isFetched, isError } = useUserInfoQuery();
 
     // 유저 정보 수정을 위한 useMutation
-    const { mutate: mutateuserInfo } = useUserInfoUpdate(userId, queryClient);
+    const { mutate: mutateuserInfo } = useUserInfoUpdate(queryClient);
 
     // 로그아웃을 위한 useMutation
     const { mutate: mutateLogout } = useLogout(queryClient);

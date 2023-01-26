@@ -1,11 +1,11 @@
 import { useQuery } from "react-query";
 import { getUserInfo } from "../../api/getUserInfo";
 
-export const useUserInfoQuery = (userId, userInfo) =>
+export const useUserInfoQuery = (userInfo) =>
     useQuery(
         ['USER_INFO'], 
         async () => {
-            const response = await getUserInfo(userId);
+            const response = await getUserInfo();
             return response.json();
         },
         { 

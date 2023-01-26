@@ -9,9 +9,8 @@ import { getCookie} from "cookies-next";
 
 export default async function diaryPage() {
 
-    // userId로 유저 정보 호출하여 프로필 데이터 초기화 값 가져오기
-    const userId = getCookie("userId");
-    const userInfo = await getUserInfo(userId);
+    // 유저 정보 호출하여 프로필 데이터 초기화 값 가져오기
+    const userInfo = await getUserInfo();
     
     return (
         <>
