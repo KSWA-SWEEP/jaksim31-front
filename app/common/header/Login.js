@@ -1,5 +1,5 @@
 
-import { Fragment, useState, useRef } from "react";
+import { Fragment, useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import Image from 'next/image';
 import { Dialog, Transition } from '@headlessui/react';
@@ -63,7 +63,10 @@ const Login = () => {
     const queryClient = useQueryClient();
 
     // 로그인을 위한 useMutation
-    const { status, mutate: mutateLogin } = useLogin(queryClient);
+    const { mutate: mutateLogin, isSuccess: isSuccessLogin, data: dataLogin } = useLogin(queryClient);
+
+    useEffect(()=> {
+    }, [dataLogin])
 
     const onNameChange = (e) => {
       userName.current = e.target.value;
@@ -153,6 +156,12 @@ const Login = () => {
       data.password = userPassword.current;
       
       mutateLogin({data});
+    }
+
+    // 로그인 성공 시 대시보드로 이동
+    if(isSuccessLogin) {
+      if(isLoginModalOpen) isLoginModalOpen = false;
+      router.push("/diary/dashboard");
     }
     
     async function requestIsMember(){
