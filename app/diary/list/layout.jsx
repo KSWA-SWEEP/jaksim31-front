@@ -2,7 +2,6 @@ import '../../globals.css'
 
 import ViewTypeTab from './ViewTypeTab';
 import ListBox from './ListBox';
-import SearchBox from './grid/SearchBox';
 
 export default function listLayout ({ children }) {
 

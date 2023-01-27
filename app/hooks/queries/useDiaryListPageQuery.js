@@ -1,14 +1,11 @@
 import { useQuery } from "react-query";
 import { getDiaryList } from "../../api/getDiaryList";
 
-export const useDiaryListPageQuery = (page, size) =>
+export const useDiaryListPageQuery = (options) =>
     useQuery(
-        ['DIARY_LIST', page], 
+        ['DIARY_LIST', (options.page).toString()], 
         async () => {
-            const response = await getDiaryList(process.env.NEXT_PUBLIC_USER_ID, page, size);
+            const response = await getDiaryList(options);
             return response.json()
-        },
-        {
-            staleTime: 5 * 60 * 1000,
         }
     );
