@@ -1,5 +1,13 @@
 module.exports = {
   reactStrictMode: false,
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        destination: process.env.NEXT_PUBLIC_API_URL+'/:path*',
+      },
+    ];
+  },
   env: {
     BASE_URL: process.env.BASE_URL,
   },
