@@ -67,7 +67,7 @@ const emotions = [
   },
 ]
 
-export default function CalendarList(props) {
+export default function CalendarList() {
   const [clickState, setClickState] = useState([]);
   const [isEmotionClicked, setIsEmotionClicked] = useState(false);
   const [value, onChange] = useState(new Date());
@@ -79,7 +79,7 @@ export default function CalendarList(props) {
   let options = new Object();
   options.startDate = moment(startDate).format("YYYY-MM-DD");
   options.endDate = moment(endDate).format("YYYY-MM-DD");
-  const { data, isLoading, isFetching, isError } = useDiaryListQuery(props.diaryList, options)
+  const { data, isLoading, isFetching, isError } = useDiaryListQuery(options)
 
   // react Query로 받은 값 diarys에 넣어주기
   let diarys = (data != undefined ? data.content : []);

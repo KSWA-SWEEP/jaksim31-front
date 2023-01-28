@@ -12,8 +12,6 @@ import Pagination from "react-js-pagination";
 import './Pagination.css'
 import { useQueryClient } from "react-query";
 import { useDiaryDelete } from "../../../hooks/mutations/useDiaryDelete";
-import { useRouter } from "next/navigation";
-import { useUserInfoQuery } from "../../../hooks/queries/useUserInfoQuery";
 import { useDiaryListPageQuery } from "../../../hooks/queries/useDiaryListPageQuery";
 import DateRangePicker from "../DateRangePicker";
 
@@ -27,7 +25,7 @@ function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
   
-export default function DiaryGridList(props) {
+export default function DiaryGridList() {
     const [page, setPage] = useState(1);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
@@ -53,15 +51,13 @@ export default function DiaryGridList(props) {
         window.scrollTo({top: 0});
     }, [page])
 
-    const { data: userData } = useUserInfoQuery(props.userInfo);
-
     // react-query
     const queryClient = useQueryClient();
 
     // diary data 삭제를 위한 useMutation
     const { status, mutate } = useDiaryDelete(diaryToDelete.current, queryClient)
     
-    const { data : diaryListData, remove, isLoading, isError } = useDiaryListPageQuery(optionData)
+    const { data : diaryListData, isLoading, isError } = useDiaryListPageQuery(optionData)
     
     if ( isLoading ) return <Loading className="flex justify-center"/>
  

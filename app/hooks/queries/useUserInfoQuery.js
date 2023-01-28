@@ -9,7 +9,6 @@ export const useUserInfoQuery = (userInfo) =>
             return response.json();
         },
         { 
-            initialData: userInfo,
             cacheTime: 5 * 60 * 1000,
             staleTime: 5 * 60 * 1000,
         }

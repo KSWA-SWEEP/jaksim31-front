@@ -7,10 +7,11 @@ import { useUserInfoQuery } from "../../hooks/queries/useUserInfoQuery";
 import { getCookie } from "cookies-next";
 
 // app/common/header/Profile에서 거의 다 가져왔지만 일부 수정하기 위해 component 따로 생성.
-export default function UserProfile(userInfo) {
+// export default function UserProfile(userInfo) {
+export default function UserProfile() {
 
     // 유저 정보 data fetching을 위한 useQuery
-    const { data, isLoading, isFetching, isFetched, isError } = useUserInfoQuery(userInfo);
+    const { data, isLoading, isFetching, isFetched, isError } = useUserInfoQuery();
 
     if( isLoading || isFetching ) return <Loading className="flex justify-center"/>
     if ( isError ) return <Error className="flex justify-center"/>
