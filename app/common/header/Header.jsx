@@ -5,11 +5,17 @@ import { usePathname } from 'next/navigation';
 import { Bars3Icon } from '@heroicons/react/24/outline';
 import Login from './Login';
 import Profile from './Profile';
-import { hasCookie } from 'cookies-next';
+import { getCookie } from 'cookies-next';
 
 function Header({ isOpen, setIsOpen }) {
 
   const [top, setTop] = useState(true);
+  const [isLogin, setIsLogin] = useState(false);
+ 
+  useEffect(() => {
+    setIsLogin((getCookie('isLogin') != undefined) ? getCookie('isLogin') : false)
+  }, [])
+
   // detect whether user has scrolled the page down by 10px 
   useEffect(() => {
     const scrollHandler = () => {
@@ -29,7 +35,7 @@ function Header({ isOpen, setIsOpen }) {
           <Bars3Icon className={"w-6 h-6 hover:scale-105 " + (pathname.includes('home') ? "text-zinc-400" : "text-zinc-600") } aria-hidden="true" onClick={() => setIsOpen(true)}/>
 
           {
-            !hasCookie("userId")
+            !isLogin
             ?
             <>
               {/* 로그인 이전 - 시작하기 버튼 */}
