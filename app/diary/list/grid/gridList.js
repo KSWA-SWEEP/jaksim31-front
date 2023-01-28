@@ -91,6 +91,8 @@ export default function DiaryGridList(props) {
 
     // 검색
     const search = () => {
+        setPage(1);
+
         setOptionData((prevState) => {
             return { ...prevState, 
                 searchWord: searchWord,
@@ -103,19 +105,23 @@ export default function DiaryGridList(props) {
             }
         });
         
-        setPage(1);
-        remove();
+        // ['DIARY_LIST', 'PAGE'] 키를 가지는 모든 query cache 값을 삭제 => 검색 조건 설정시 이전 검색 값에 대한 데이터 없앰
+        queryClient.removeQueries(['DIARY_LIST', 'PAGES']);
+        
     };
 
     // 옵션 초기화
     const resetOptions = () => {
-        setOptionData({"page": (page-1).toString(), "size": 6});
+        setPage(1);
+        
+        setOptionData({"page": 0, "size": 6});
         setSearchWord("");
         setEmotion("");
         setSort("");
+
+        // ['DIARY_LIST', 'PAGE'] 키를 가지는 모든 query cache 값을 삭제 => 검색 조건 초기화 이전 검색 값에 대한 데이터 없앰
+        queryClient.removeQueries(['DIARY_LIST', 'PAGES']);
         
-        setPage(1);
-        remove();
     }
     
     const handlePageChange = (page) => {

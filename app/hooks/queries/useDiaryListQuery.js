@@ -9,6 +9,6 @@ export const useDiaryListQuery = (diaryList, options) =>
             return response.json()
         },
         {
-            initialData: diaryList
+            staleTime: 5 * 60 * 1000,
         }
     );

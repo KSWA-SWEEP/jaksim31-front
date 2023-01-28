@@ -13,7 +13,7 @@ import scaredIcon from '../../../../public/images/emotion/scared-small.png'
 import surprisedIcon from '../../../../public/images/emotion/surprised-small.png'
 import unsureIcon from '../../../../public/images/emotion/unsure-small.png'
 import Image from 'next/image';
-import { PlusCircleIcon, CalendarDaysIcon } from '@heroicons/react/24/outline';
+import { PlusCircleIcon, CalendarDaysIcon, ArrowPathIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import './Calendar.css'
 import Loading from './loading';
@@ -69,6 +69,7 @@ const emotions = [
 
 export default function CalendarList(props) {
   const [clickState, setClickState] = useState([]);
+  const [isEmotionClicked, setIsEmotionClicked] = useState(false);
   const [value, onChange] = useState(new Date());
   const [startDate, setStartDate] = useState(new Date(value.getFullYear(), value.getMonth(), 1));
   const [endDate, setEndDate] = useState(new Date(value.getFullYear(), value.getMonth() + 1, 0));
@@ -81,10 +82,10 @@ export default function CalendarList(props) {
   const { data, isLoading, isFetching, isError } = useDiaryListQuery(props.diaryList, options)
 
   // react Query로 받은 값 diarys에 넣어주기
-  let diarys = data.content;
+  let diarys = (data != undefined ? data.content : []);
 
   // 필터링 전 전체 일기 저장을 위한 변수
-  let allDiaries = data.content;
+  let allDiaries = (data != undefined ? data.content : []);
 
   // useEffect 사용해서 선택한 감정만 filtering 해서 보여주기
   // 목록에서 감정 필터링 하는 경우 목록 데이터의 변화가 일어날 가능성이 적기 때문에 새로 data fetching 없이 cache된 react-query의 data 사용
@@ -92,14 +93,20 @@ export default function CalendarList(props) {
     let filteredDiaries = allDiaries;
     if(clickState.length > 0)
     {
+      setIsEmotionClicked(true)
       filteredDiaries = filteredDiaries.filter(diary => clickState.includes(diary.emotion))
+    }
+    else {
+      setIsEmotionClicked(false)
     }
     diarys = filteredDiaries;
   }, [clickState])
 
   useEffect(() => {
+    setClickState([]);
     setDateRange(value);
   }, [value])
+
   // loading
   if ( isLoading || isFetching ) return <Loading className="flex justify-center"/>
 
@@ -121,6 +128,11 @@ export default function CalendarList(props) {
       e.target.classList.remove("opacity-100", "drop-shadow-lg")
     }
   }
+
+  const resetEmotions = (e) => {
+    setClickState([]);
+  }
+
   function setDateRange(date) {
     setStartDate(new Date(date.getFullYear(), date.getMonth(), 1));
     setEndDate(new Date(date.getFullYear(), date.getMonth() + 1, 0));
@@ -130,28 +142,24 @@ export default function CalendarList(props) {
   return (
     <>
       <div className='w-[75vw] lg:w-[65vw] xl:w-[55vw]'>
-        <div className='flex mt-10 mb-10 sm:mx-6 md:mx-10 lg:mt-4 lg:mx-12 place-content-between'>
         <div className='flex mt-10 mb-8 sm:mx-6 md:mx-10 lg:mt-4 lg:mx-12 place-content-between'>
           {/* 감정 아이콘 버튼 */}
           {/* TODO - 감정 아이콘 클릭시 해당 감정 일기 가져오는 함수 만들기 */}
           {emotions.map((emotion) => (
-              <Image src={emotion.src} alt={emotion.alt} placeholder='empty' className='duration-200 opacity-60 hover:scale-105 hover:opacity-100'/>
-            <div key={emotion.name} className="relative w-6 h-6 sm:w-10 sm:h-10 lg:w-12 lg:h-12 tooltip" onClick={(e) => setEmotionState(e, emotion.name)} data-tip={emotion.name}>
-              <Image src={emotion.src} alt={emotion.alt} placeholder='empty' className='duration-200 opacity-60 hover:scale-105 hover:opacity-100'/>
+            <div key={emotion.name} className="relative w-6 h-6 sm:w-10 sm:h-10 lg:w-12 lg:h-12 tooltip" onClick={(e) => {setEmotionState(e, emotion.name);}} data-tip={emotion.name}>
+              <Image src={emotion.src} alt={emotion.alt} placeholder='empty' className={'duration-200 opacity-60 hover:scale-105 hover:opacity-100' + (((clickState.length == 0)&&(isEmotionClicked)) ? ' opacity-100 drop-shadow-lg' : ' opacity-60')}/>
             </div>
           ))}
         </div>
       </div> 
-      <div className={'flex justify-end sm:mx-6 md:mx-10 lg:mx-12 '} onClick={(e) => {onChange(new Date());}}>
+      <div className={'flex justify-end sm:mx-6 md:mx-10 lg:mx-12 '} onClick={(e) => {resetEmotions(e); onChange(new Date());}}>
         <div className='flex items-center px-2 py-1 text-xs text-white duration-200 bg-zinc-300 rounded-xl w-fit hover:bg-red-400'><CalendarDaysIcon className='w-3 h-3 mr-1 text-white'/>오늘로 이동하기</div>
       </div>
       {/* Calendar */}
-      <div className='flex justify-center mb-5 md:mb-12 sm:mt-5 md:mt-10'>
       <div className='flex justify-center mb-5 md:mb-12 sm:mt-2'>
         
         <Calendar
           className="w-[75vw] lg:w-[65vw] xl:w-[50vw]"
-          value={new Date()}
           value={value}
           onChange={onChange}
           formatDay={(locale, date) => moment(date).format("DD")}
