@@ -1,5 +1,5 @@
 export async function addDiary(data) {
-    const res = await fetch(process.env.NEXT_PUBLIC_API_URL+"/v0/diaries", {
+    const res = await fetch(process.env.NEXT_PUBLIC_BASE_URL+"/api/v0/diaries", {
         method:"POST",
         headers: {
             'Content-Type': 'application/json'

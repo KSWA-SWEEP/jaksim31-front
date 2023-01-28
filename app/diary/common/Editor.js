@@ -2,7 +2,7 @@ import React, { useState, Fragment, useEffect } from 'react';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '../../../ckeditor5';
 import { Dialog, Transition } from '@headlessui/react';
-import { ArrowPathIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { ArrowPathIcon, XMarkIcon, QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
 import { useRouter, usePathname } from 'next/navigation';
 import Spinner from '../../../public/svgs/spinner.svg'
 import { useQueryClient } from 'react-query';
@@ -15,7 +15,7 @@ function Editor({ editorLoaded, name, value, date, diaryId }) {
     let userId = process.env.NEXT_PUBLIC_USER_ID;
 
     let [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
-    const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
+    const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
 
     let [englishKeywords, setEnglishKeywords] = useState([]);
     let [koreanKeywords, setKoreankeywords] = useState([]);
@@ -81,7 +81,7 @@ function Editor({ editorLoaded, name, value, date, diaryId }) {
 
         data.sentences = [text.replace(/<[^>]*>/g, '')];
 
-        const res = await fetch(process.env.NEXT_PUBLIC_API_URL+"/v0/diaries/analyze", {
+        const res = await fetch(process.env.NEXT_PUBLIC_BASE_URL+"/api/v0/diaries/analyze", {
             method:"POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -91,21 +91,22 @@ function Editor({ editorLoaded, name, value, date, diaryId }) {
         .then((response) => response.json())
         
         if (res == undefined){
-            setEnglishKeywords(["no keyword"]);
-            setKoreankeywords(["키워드 없음"]);
+            setEnglishKeywords(["EXECPTION_NO_KEYWORD"]);
+            setKoreankeywords(["EXECPTION_NO_KEYWORD"]);
             setEnglishEmotion("no emotion");
             setKoreanEmotion("감정없음");
         } else  {
-            setEnglishKeywords(res.englishKeywords);
-            setKoreankeywords(res.koreanKeywords);
-            setEnglishEmotion(res.englishEmotion);
-            setKoreanEmotion(res.koreanEmotion);
+            // Error handling (길이가 짧거나 다른 이유로 키워드 및 감정 추출이 제대로 이루어지지 않을 경우)
+            setEnglishKeywords((res.hasOwnProperty('englishKeywords')) ? res.englishKeywords : ["EXECPTION_NO_KEYWORD"]);
+            setKoreankeywords((res.hasOwnProperty('koreanKeywords')) ? res.koreanKeywords : ["EXECPTION_NO_KEYWORD"]);
+            setEnglishEmotion((res.hasOwnProperty('englishEmotion')) ? res.englishEmotion : "no emotion");
+            setKoreanEmotion((res.hasOwnProperty('koreanEmotion')) ? res.koreanEmotion : "감정없음");
         }
     }
 
     const getThumbnail = async () => {
         // englishKeywords 에 하나 이상의 keyword 있을 경우에 thumbnail 가져오기
-        if(englishKeywords != undefined)
+        if(((englishKeywords != undefined)||(englishKeywords != ""))&&(englishKeywords.length > 0))
         {
             // keyword + 감정 목록 중 1개의 단어를 랜덤으로 골라 썸네일 생성
             let randNum = Math.floor(Math.random() * (englishKeywords.length + 1));
@@ -231,8 +232,12 @@ function Editor({ editorLoaded, name, value, date, diaryId }) {
         // keywords
         data.keywords = koreanKeywords;
 
-        // thumbnail에 이미지 url 넣기
-        data.thumbnail = thumbnailDirectory;
+        // thumbnail에 이미지 url (object storage) 넣기
+        // data.thumbnail = thumbnailDirectory;
+        // 230128 현재 object storage 사용 불가 => 일단 unsplash 이미지 url 넣기
+        data.thumbnail = regularThumbnailLink;
+
+
         // 사용 X - thumbnail에 file object(blob) 넣기
         // let thumbnailFile = urlToObject(regularThumbnailLink);
         // data.thumbnail = thumbnailFile;
@@ -266,9 +271,8 @@ function Editor({ editorLoaded, name, value, date, diaryId }) {
         // 이미지 저장 후 message 변경
         setSaveMessage("썸네일이 생성되었습니다. \"저장하기\" 버튼을 눌러 일기 작성을 마무리하세요🤗");
         setIsSaved(true);
-        // setThumbnailDirectory(res);
-        // 우선 임시로 랜덤 경로 넣어둠
-        setThumbnailDirectory("https://source.unsplash.com/random/?"+englishEmotion);
+        
+        setThumbnailDirectory(regularThumbnailLink);
     }
 
     return (
@@ -307,7 +311,7 @@ function Editor({ editorLoaded, name, value, date, diaryId }) {
                                     )
                                 }
                         disabled={((text == undefined)||(text == ""))}
-                        onClick={() => { analyzeDiary(); setThumbnailDirectory(""); openSaveModal(); setSaveMessage("썸네일을 선택해주세요😲"); setIsSaved(false); }}>
+                        onClick={() => { setRegularThumbnailLink(""); analyzeDiary(); setThumbnailDirectory(""); openSaveModal(); setSaveMessage("썸네일을 선택해주세요😲"); setIsSaved(false); }}>
                     저장하기
                 </button>
                 <button className="inline-flex justify-center px-3 py-2 ml-2 text-sm font-medium duration-200 border border-transparent rounded-md text-zinc-700 bg-zinc-200 mt-7 hover:bg-zinc-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500 focus-visible:ring-offset-2" onClick={() => router.push('/diary/list/calendar')}>취소하기</button>
@@ -357,7 +361,7 @@ function Editor({ editorLoaded, name, value, date, diaryId }) {
 
                         {/* 감정 분석이 제대로 이루어져 englishKeywords 값이 들어있는 상태에서만 키워드 및 썸네일 표시 */}
                         {
-                            englishKeywords
+                            (englishKeywords != [])
                             ?
                             <div>
                                 <div className='px-3 my-2 sm:mt-5 '>
@@ -367,6 +371,19 @@ function Editor({ editorLoaded, name, value, date, diaryId }) {
                                             <p className='pb-2 pl-2'>💡 키워드</p>
                                             <div className="flex flex-wrap my-2">
                                                 {koreanKeywords.map((keyword) => (
+                                                    (keyword == "EXECPTION_NO_KEYWORD")
+                                                    ?
+                                                    <div className='relative flex items-center mb-3'>
+                                                        {/* 분석된 키워드가 없을 경우 */}
+                                                        <div className="ml-2 font-medium sm:text-sm w-fit text-zinc-500 dark:bg-zinc-200 dark:text-zinc-800 ">
+                                                            분석된 키워드가 없습니다
+                                                        </div>
+                                                        {/* 키워드 관련 info tooltip */}
+                                                        <div className='tooltip tooltip-bottom' data-tip="일기가 너무 짧으면 키워드 분석이 어려울 수 있습니다😥">
+                                                            <QuestionMarkCircleIcon className='w-4 h-4 ml-1 duration-200 text-zinc-500 hover:text-zinc-700'/>
+                                                        </div>
+                                                    </div>
+                                                    :
                                                     <div key={keyword} className="px-2 py-1 mb-3 mr-2 font-medium sm:px-3 sm:text-sm w-fit text-zinc-500 bg-zinc-200 rounded-3xl dark:bg-zinc-200 dark:text-zinc-800 ">
                                                         #{keyword}
                                                     </div>
@@ -447,7 +464,10 @@ function Editor({ editorLoaded, name, value, date, diaryId }) {
                                 <div className='px-5 py-3 mx-2 my-3 overflow-y-scroll text-sm border border-red-100 max-h-36 min-h-16 rounded-xl' dangerouslySetInnerHTML={{__html: text}}></div>
                             </div>
                             :
-                            <></>
+                            <div className='relative flex items-center justify-center'>
+                                <Spinner className="w-12 sm:w-24 text-zinc-600"/>
+                                <div className='text-sm text-white sm:text-lg'>일기를 분석중입니다</div>
+                            </div>
                         }
 
                         <div className='flex justify-center w-full mt-6 mb-2'>
