@@ -8,11 +8,11 @@ import Spinner from '../../../public/svgs/spinner.svg'
 import { useQueryClient } from 'react-query';
 import { useDiarySave } from '../../hooks/mutations/useDiarySave';
 import moment from 'moment';
+import { getCookie } from "cookies-next";
 
 function Editor({ editorLoaded, name, value, date, diaryId }) {
-    // TODO 사용자 ID 상태 관리 설정이 되면 그 값으로 변경하기
-    // 사용자 ID(Object ID)
-    let userId = process.env.NEXT_PUBLIC_USER_ID;
+
+    let userId = getCookie("userId");
 
     let [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
     const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
