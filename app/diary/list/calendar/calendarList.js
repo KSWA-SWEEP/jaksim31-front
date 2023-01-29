@@ -188,7 +188,7 @@ export default function CalendarList() {
                 return (
                   <>
                     <div className="flex items-center justify-center mt-2 overflow-visible dayBox group">
-                    <Link href={'/diary/create/'+ encodeURIComponent(btoa(selectedDate))} className="relative w-6 h-6 overflow-visible duration-200 opacity-0 group sm:w-10 sm:h-10 group-hover:opacity-100 hover:opacity-80 hover:scale-105">
+                    <Link href={'diary/create/'+ encodeURIComponent(btoa(selectedDate))} className="relative w-6 h-6 overflow-visible duration-200 opacity-0 group sm:w-10 sm:h-10 group-hover:opacity-100 hover:opacity-80 hover:scale-105">
                       <PlusCircleIcon alt="add" placeholder='empty' className='text-zinc-200'/>
                       <p className='px-1 text-[4px] lg:text-[5px] text-center text-zinc-400 opacity-0 group-hover:opacity-100 h-fit w-100 rounded-xl bg-zinc-200'>일기 쓰기</p>
                     </Link>
