@@ -15,7 +15,6 @@ export const useDiaryDelete = (diaryId, queryClient) =>
                     setCookie('todayDiaryId', "");
                 }
                 queryClient.invalidateQueries(["DIARY_LIST"]);
-                queryClient.removeQueries(["DIARY", diaryId]);
             }
         }
     );
