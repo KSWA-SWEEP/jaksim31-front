@@ -10,7 +10,7 @@ export async function getDiaryList(options) {
     }
 
     const userId = getCookie("userId");
-    let res = await fetch(process.env.NEXT_PUBLIC_BASE_URL+"/api/v0/diaries/"+userId+params);
+    let res = await fetch(process.env.NEXT_PUBLIC_BASE_URL+"/api/v1/diaries/"+userId+params);
 
     return res;
 }
