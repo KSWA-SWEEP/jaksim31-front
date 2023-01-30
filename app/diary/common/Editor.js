@@ -56,7 +56,7 @@ function Editor({ editorLoaded, name, value, date, diaryId }) {
     function openSuccessModal() { setIsSuccessModalOpen(true) }
     function closeSuccessModal() { 
         setIsSuccessModalOpen(false);
-        router.push('diary/list/calendar');
+        router.replace('diary/list/calendar');
     }
     
 
@@ -314,7 +314,7 @@ function Editor({ editorLoaded, name, value, date, diaryId }) {
                         onClick={() => { setRegularThumbnailLink(""); analyzeDiary(); setThumbnailDirectory(""); openSaveModal(); setSaveMessage("썸네일을 선택해주세요😲"); setIsSaved(false); }}>
                     저장하기
                 </button>
-                <button className="inline-flex justify-center px-3 py-2 ml-2 text-sm font-medium duration-200 border border-transparent rounded-md text-zinc-700 bg-zinc-200 mt-7 hover:bg-zinc-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500 focus-visible:ring-offset-2" onClick={() => router.push('/diary/list/calendar')}>취소하기</button>
+                <button className="inline-flex justify-center px-3 py-2 ml-2 text-sm font-medium duration-200 border border-transparent rounded-md text-zinc-700 bg-zinc-200 mt-7 hover:bg-zinc-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500 focus-visible:ring-offset-2" onClick={() => router.back()}>취소하기</button>
             </div>
             
             {/* 저장하기 Modal */}
@@ -439,7 +439,7 @@ function Editor({ editorLoaded, name, value, date, diaryId }) {
 
                                 {/* 이미지에 대한 출처 표기 부분 */}
                                 {
-                                    userProfileLink != ""
+                                    regularThumbnailLink != ""
                                     ?
                                     <p className='text-xs text-center text-zinc-400'>
                                         Photo by <a href={`${userProfileLink}`} target="_blank" className='underline'> {userName}</a> on <a href="https://unsplash.com/ko?utm_source=jaksim31&utm_medium=referral" target="_blank" className='underline'> Unsplash</a>

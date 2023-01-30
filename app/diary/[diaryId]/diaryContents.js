@@ -42,7 +42,7 @@ export default function DiaryContents(props) {
     function openSuccessModal() { setIsSuccessModalOpen(true) }
     function closeSuccessModal() { 
         setIsSuccessModalOpen(false);
-        router.push('diary/list/calendar');
+        router.replace('diary/list/calendar');
     }
     
 
@@ -80,7 +80,7 @@ export default function DiaryContents(props) {
             <div className="text-xl">
               <Link href={"diary/"+props.diaryId+"/modify"} className="mr-2 font-semibold duration-200 sm:text-base btn btn-secondary hover:scale-105">수정하기</Link>
               <button onClick={openDeleteModal} className="mx-2 font-semibold duration-200 sm:text-base btn btn-accent hover:scale-105">삭제하기</button>
-              <Link href="diary/list/calendar" className="ml-2 font-semibold duration-200 border-opacity-0 outline-none sm:text-base text-zinc-50 bg-zinc-400 hover:bg-zinc-500 btn outline-0 border-spacing-0 hover:scale-105">목록으로</Link>
+              <button onClick={() => router.back()} className="ml-2 font-semibold duration-200 border-opacity-0 outline-none sm:text-base text-zinc-50 bg-zinc-400 hover:bg-zinc-500 btn outline-0 border-spacing-0 hover:scale-105">뒤로가기</button>
             </div>
           </div>
         </div>

@@ -129,7 +129,7 @@ const Profile = () => {
         alert("로그아웃 되었습니다 😊");
         
         // landing page로 이동
-        router.push('/home/landing')
+        window.location.href = "/home/landing";
       } catch(e) {
         console.log(e);
         alert("로그아웃에 실패했습니다.")
