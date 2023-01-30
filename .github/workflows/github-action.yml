@@ -47,14 +47,32 @@ jobs:
             cache-from: type=gha    # gha=Github Action Cache
             cache-to: type=gha,mode=max
 
-      # SSH Connect
-      - name: Deploy to VM
+      # SSH Connect - (Web1)
+      - name: Deploy to Web1
         uses: appleboy/ssh-action@master
         with: 
             host: ${{ secrets.REMOTE_IP }}
             username: ${{ secrets.REMOTE_SSH_ID }}
             key: ${{ secrets.REMOTE_SSH_KEY }}
             port: ${{ secrets.REMOTE_SSH_PORT }}
+            script: |
+              ls -a
+              sudo su
+              # sudo chmod 666 /var/run/docker.sock
+              sudo /usr/sbin/groupadd -f docker
+              sudo /usr/sbin/usermod -aG docker `user`
+              sudo chown root:docker /var/run/docker.sock
+              docker pull r2god7k/jaksim31-frontend:latest
+              docker run -d -p 3005:3000 --name jaksim31-frontend r2god7k/jaksim31-frontend:latest
+              
+      # SSH Connect - (Web2)
+      - name: Deploy to Web2
+        uses: appleboy/ssh-action@master
+        with: 
+            host: ${{ secrets.REMOTE_IP }}
+            username: ${{ secrets.REMOTE_SSH_ID }}
+            key: ${{ secrets.REMOTE_SSH_KEY }}
+            port: ${{ secrets.REMOTE_SSH_PORT2 }}
             script: |
               ls -a
               sudo su
