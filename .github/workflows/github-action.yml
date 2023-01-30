@@ -63,7 +63,10 @@ jobs:
               sudo /usr/sbin/usermod -aG docker `user`
               sudo chown root:docker /var/run/docker.sock
               docker pull r2god7k/jaksim31-frontend:latest
+              docker stop jaksim31-frontend
+              docker rm jaksim31-frontend
               docker run -d -p 3005:3000 --name jaksim31-frontend r2god7k/jaksim31-frontend:latest
+              sleep 10s
               
       # SSH Connect - (Web2)
       - name: Deploy to Web2
@@ -81,4 +84,7 @@ jobs:
               sudo /usr/sbin/usermod -aG docker `user`
               sudo chown root:docker /var/run/docker.sock
               docker pull r2god7k/jaksim31-frontend:latest
+              docker stop jaksim31-frontend
+              docker rm jaksim31-frontend
               docker run -d -p 3005:3000 --name jaksim31-frontend r2god7k/jaksim31-frontend:latest
+              sleep 10s
