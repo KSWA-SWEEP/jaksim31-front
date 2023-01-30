@@ -71,7 +71,7 @@ const Login = () => {
       if(isSuccessLogin) {
         if(isLoginModalOpen) isLoginModalOpen = false;
         setIsLoginModalOpen(false);
-        router.push("/diary/dashboard");
+        window.location.href = "/diary/dashboard";
       }
     }, [dataLogin])
 
@@ -312,16 +312,16 @@ const Login = () => {
                             </div>
                             <form>
                               <div className="relative w-full mb-3">
-                                <div class="grid grid-cols-7 gap-1">
-                                  <div class="col-span-2">
+                                <div className="grid grid-cols-7 gap-1">
+                                  <div className="col-span-2">
                                     <label
-                                      className="block mb-2 pt-2 text-m font-bold uppercase text-zinc-600"
+                                      className="block pt-2 mb-2 font-bold uppercase text-m text-zinc-600"
                                       htmlFor="grid-password"
                                     >
                                       이메일
                                     </label>
                                   </div>
-                                  <div class="col-span-5">
+                                  <div className="col-span-5">
                                     <input
                                       type="email"
                                       className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
@@ -334,16 +334,16 @@ const Login = () => {
                               </div>
 
                               <div className="relative w-full mb-5">
-                                <div class="grid grid-cols-7 gap-1">  
-                                  <div class="col-span-2">
+                                <div className="grid grid-cols-7 gap-1">  
+                                  <div className="col-span-2">
                                     <label
-                                      className="block mb-2 pt-2 text-m font-bold uppercase text-zinc-600"
+                                      className="block pt-2 mb-2 font-bold uppercase text-m text-zinc-600"
                                       htmlFor="grid-password"
                                     >
                                       비밀번호
                                     </label>
                                   </div>
-                                  <div class="col-span-5">
+                                  <div className="col-span-5">
                                     <input
                                       type="password"
                                       className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
@@ -366,11 +366,11 @@ const Login = () => {
                               </div>
 
                               <div className="relative w-full mt-1 mb-1">
-                                <div class="grid grid-cols-2 gap-1">
-                                  <div class="grid justify-start">
+                                <div className="grid grid-cols-2 gap-1">
+                                  <div className="grid justify-start">
                                     <strong onClick={openEmailCheckModal} className="text-sm hover:text-gray-500">이메일 조회</strong>
                                   </div>
-                                  <div class="grid justify-end">
+                                  <div className="grid justify-end">
                                     <strong onClick={() => {setIsChangePasswordModal(true); openSignupModal();}} className="text-sm hover:text-gray-500">비밀번호 재설정</strong>
                                   </div>
                                 </div>
@@ -452,16 +452,16 @@ const Login = () => {
                             </div>
                             <form>
                               <div className="relative w-full mb-3">
-                                <div class="grid grid-cols-7 gap-1">
-                                  <div class="col-span-2">
+                                <div className="grid grid-cols-7 gap-1">
+                                  <div className="col-span-2">
                                     <label
-                                      className="block mb-2 pt-2 text-m font-bold uppercase text-zinc-600"
+                                      className="block pt-2 mb-2 font-bold uppercase text-m text-zinc-600"
                                       htmlFor="grid-password"
                                     >
                                       이메일
                                     </label>
                                   </div>
-                                  <div class="col-span-5">
+                                  <div className="col-span-5">
                                     <input
                                       type="email"
                                       className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
@@ -544,16 +544,16 @@ const Login = () => {
                               :
                               // 회원가입 모달일 경우, 이름 입력란 있음
                                 <div className="relative w-full mb-3">
-                                  <div class="grid grid-cols-7 gap-1">
-                                    <div class="col-span-2">
+                                  <div className="grid grid-cols-7 gap-1">
+                                    <div className="col-span-2">
                                       <label
-                                        className="block mb-2 pt-2 text-m font-bold uppercase text-zinc-600"
+                                        className="block pt-2 mb-2 font-bold uppercase text-m text-zinc-600"
                                         htmlFor="grid-password"
                                       >
                                         이름
                                       </label>
                                     </div>
-                                    <div class="col-span-5">
+                                    <div className="col-span-5">
                                       <input
                                         type="text"
                                         className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
@@ -566,16 +566,16 @@ const Login = () => {
                               }
 
                               <div className="relative w-full mb-3">
-                                <div class="grid grid-cols-7 gap-1">
-                                  <div class="col-span-2">
+                                <div className="grid grid-cols-7 gap-1">
+                                  <div className="col-span-2">
                                     <label
-                                      className="block mb-2 pt-2 text-m font-bold uppercase text-zinc-600"
+                                      className="block pt-2 mb-2 font-bold uppercase text-m text-zinc-600"
                                       htmlFor="grid-password"
                                     >
                                       이메일
                                     </label>
                                   </div>
-                                  <div class="col-span-5">
+                                  <div className="col-span-5">
                                     <input
                                       type="email"
                                       className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
@@ -600,16 +600,16 @@ const Login = () => {
                               </div>
 
                               <div className="relative w-full mb-3">
-                                <div class="grid grid-cols-7 gap-1">
-                                  <div class="col-span-2">
+                                <div className="grid grid-cols-7 gap-1">
+                                  <div className="col-span-2">
                                     <label
-                                      className="block mb-2 pt-2 text-m font-bold uppercase text-zinc-600"
+                                      className="block pt-2 mb-2 font-bold uppercase text-m text-zinc-600"
                                       htmlFor="grid-verify"
                                     >
                                       인증번호
                                     </label>
                                   </div>
-                                  <div class="col-span-5">
+                                  <div className="col-span-5">
                                     <input
                                       type="text"
                                       className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
@@ -623,16 +623,16 @@ const Login = () => {
                               </div>
 
                               <div className="relative w-full mb-5">
-                                <div class="grid grid-cols-7 gap-1">
-                                  <div class="col-span-2">
+                                <div className="grid grid-cols-7 gap-1">
+                                  <div className="col-span-2">
                                     <label
-                                      className="block mb-2 pt-2 text-m font-bold uppercase text-zinc-600"
+                                      className="block pt-2 mb-2 font-bold uppercase text-m text-zinc-600"
                                       htmlFor="grid-password"
                                     >
                                       비밀번호
                                     </label>
                                   </div>
-                                  <div class="col-span-5">
+                                  <div className="col-span-5">
                                     <input
                                       type="password"
                                       className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
@@ -645,16 +645,16 @@ const Login = () => {
                               </div>
                               
                               <div className="relative w-full mb-5">
-                                <div class="grid grid-cols-7 gap-1">
-                                  <div class="col-span-2">
+                                <div className="grid grid-cols-7 gap-1">
+                                  <div className="col-span-2">
                                     <label
-                                      className="block mb-2 pt-2 text-m font-bold uppercase text-zinc-600"
+                                      className="block pt-2 mb-2 font-bold uppercase text-m text-zinc-600"
                                       htmlFor="grid-password"
                                     >
                                       비밀번호 확인
                                     </label>
                                   </div>
-                                  <div class="col-span-5">
+                                  <div className="col-span-5">
                                     <input
                                       type="password"
                                       className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
