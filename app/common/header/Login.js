@@ -70,6 +70,7 @@ const Login = () => {
       // 로그인 성공 시 대시보드로 이동
       if(isSuccessLogin) {
         if(isLoginModalOpen) isLoginModalOpen = false;
+        setIsLoginModalOpen(false);
         router.push("/diary/dashboard");
       }
     }, [dataLogin])
