@@ -1,5 +1,5 @@
 export async function signUp(data) {
-    const res = await fetch(process.env.NEXT_PUBLIC_API_URL+"/v0/members/register", {
+    const res = await fetch(process.env.NEXT_PUBLIC_BASE_URL+"/api/v0/members/register", {
         method: 'POST',
         headers: {
             'Content-type': 'application/json',

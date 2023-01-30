@@ -4,14 +4,14 @@ import { Dialog, Transition } from "@headlessui/react";
 import moment from "moment";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useQueryClient } from "react-query";
 import { useDiaryDelete } from "../../hooks/mutations/useDiaryDelete";
 import { useDiaryQuery } from "../../hooks/queries/useDiaryQuery";
 import Error from "./error";
 import Loading from "./loading";
 
-export default function DiaryGridList(props) {
+export default function DiaryContents(props) {
 
     const router = useRouter();
 
@@ -21,19 +21,14 @@ export default function DiaryGridList(props) {
     // react-query
     const queryClient = useQueryClient();
 
-    // diary data를 가져오기 위한 useQuery
-    // 로그인시 가져온 userId (db의 objectId) 를 쿠키 or Local Storage로부터 가져와서 넣어주기
-    // 지금은 test 용 하나의 userId 하드코딩으로 넣어줌..
-    const { data, isLoading, isFetching, isFetched, isError } = useDiaryQuery(props.diaryId, props.diary)
-
-    if ( isLoading ) return <Loading className="flex justify-center w-full"/>
- 
-    if ( isError ) return <Error className="flex justify-center w-full"/>
-
-    const diaryData = data;
+    const { data, isLoading, isFetching, isFetched, isError } = useDiaryQuery(props.diaryId)
 
     // diary data 삭제를 위한 useMutation
     const { status, mutate } = useDiaryDelete(props.diaryId, queryClient)
+
+    if ( isLoading || data == undefined ) return <Loading className="flex justify-center w-full"/>
+ 
+    if ( isError ) return <Error className="flex justify-center w-full"/>
 
     function deleteDiary() {
         mutate()
@@ -57,9 +52,9 @@ export default function DiaryGridList(props) {
           
           {/* 날짜 및 키워드 */}
           <div className="col-span-3 sm:col-span-2">
-            <div className="text-2xl font-extrabold">{moment(diaryData.diaryDate).format("YYYY. MM. DD.")}</div>
+            <div className="text-2xl font-extrabold">{moment(data.diaryDate).format("YYYY. MM. DD.")}</div>
             <div className="flex flex-wrap mt-3">
-                {diaryData.keywords.map((keyword) => (
+                {data.keywords.map((keyword) => (
                     <div key={keyword} className="px-3 mb-2 py-1 mr-2.5 text-sm font-medium text-zinc-500 bg-zinc-200 rounded-xl dark:bg-zinc-200 dark:text-zinc-800 ">
                         #{keyword}
                     </div>
@@ -70,14 +65,14 @@ export default function DiaryGridList(props) {
           {/* 감정 */}
           <div className="flex items-center col-span-3 sm:justify-end sm:col-span-1">
             <div className="text-base">
-                {diaryData.emotion}
+                {data.emotion}
             </div>
           </div>
 
           {/* 일기 내용 */}
           <div className="col-span-3 my-5">
             {/* HTML 타입으로 텍스트 표시 - 글자 크기, 글자 색 등 */}
-            <div className='text-lg' dangerouslySetInnerHTML={{__html: diaryData.content}}></div>
+            <div className='text-lg' dangerouslySetInnerHTML={{__html: data.content}}></div>
           </div>
 
           {/* 목록, 수정, 삭제 */}

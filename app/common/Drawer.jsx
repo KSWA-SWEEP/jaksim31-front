@@ -1,5 +1,7 @@
 import Link from "next/link";
 import React from "react";
+import { getCookie } from "cookies-next";
+import { useRouter } from 'next/navigation';
 
 // 오늘 일기 쓰기를 위한 date 설정
 let formatTwoDigits = (digit) => ("0" + digit).slice(-2);
@@ -34,6 +36,23 @@ const menuBeforeLogin = [
 ]
 
 export default function Drawer({ isOpen, setIsOpen }) {
+
+  const router = useRouter();
+
+  function todayDiaryPage(link) {
+
+    // 쿠키로부터 오늘 일기값 가져오기
+    let todayDiary = getCookie("todayDiaryId");    
+
+    // 오늘 일기가 있을 경우
+    if((todayDiary == "")||(todayDiary == undefined)) {
+      router.push(link);
+    } 
+    else {
+      router.push('diary/'+todayDiary+'/modify');  
+    }
+  }
+  
   return (
     <main
       className={
@@ -56,7 +75,13 @@ export default function Drawer({ isOpen, setIsOpen }) {
                 <li className="m-3 mt-0 mb-5 text-2xl font-bold text-red-500 sm:text-3xl" onClick={() => { setIsOpen(false); }}><Link href="/home/landing"><div className="w-full">작심삼일</div></Link></li>
                 {menuAfterLogin.map((menu) => (
                     <li key={menu.name} className="my-1 text-lg hover:rounded-2xl hover:bg-red-100 text-zinc-700" onClick={() => { setIsOpen(false); }}>
-                      <Link href={menu.href}><div className="w-full py-3 pl-4">{menu.name}</div></Link>
+                      {
+                        (menu.name.includes("오늘의 일기 쓰기"))
+                        ?
+                        <div className="w-full py-3 pl-4" onClick={() => todayDiaryPage(menu.href)}>{menu.name}</div>
+                        :
+                        <Link href={menu.href}><div className="w-full py-3 pl-4">{menu.name}</div></Link>
+                      }
                     </li>
                 ))}
               

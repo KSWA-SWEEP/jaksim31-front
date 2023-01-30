@@ -1,15 +1,14 @@
 import { useQuery } from "react-query";
 import { getDiaryList } from "../../api/getDiaryList";
 
-export const useDiaryListQuery = (diaryList, page, size) =>
+export const useDiaryListQuery = (options) =>
     useQuery(
-        ['DIARY_LIST'], 
+        ['DIARY_LIST',(((options != undefined)&&(options.startDate != undefined))? (options.startDate.substr(0, 7)) : (""))], 
         async () => {
-            const response = await getDiaryList(process.env.NEXT_PUBLIC_USER_ID, page, size);
+            const response = await getDiaryList(options);
             return response.json()
         },
         {
-            initialData: diaryList,
             staleTime: 5 * 60 * 1000,
         }
     );
