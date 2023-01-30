@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './globals.css'
 import Drawer from './common/Drawer';
 import Header from './common/header/Header';
@@ -11,6 +11,9 @@ export default function RootLayout({ children }) {
   const [isOpen, setIsOpen] = useState(false);
   
   let pathname = usePathname();
+
+  // 모든 페이지 이동시 scroll top
+  useEffect(() => window.scroll(0, 0), [pathname]);
 
   return (
     <html lang="en" data-theme="garden">

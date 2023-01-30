@@ -69,6 +69,7 @@ const emotions = [
 
 export default function CalendarList() {
   const [clickState, setClickState] = useState([]);
+  const [filteredDiaries, setFilteredDiaries] = useState([]);
   const [isEmotionClicked, setIsEmotionClicked] = useState(false);
   const [value, onChange] = useState(new Date());
   const [startDate, setStartDate] = useState(new Date(value.getFullYear(), value.getMonth(), 1));
@@ -90,17 +91,19 @@ export default function CalendarList() {
   // useEffect 사용해서 선택한 감정만 filtering 해서 보여주기
   // 목록에서 감정 필터링 하는 경우 목록 데이터의 변화가 일어날 가능성이 적기 때문에 새로 data fetching 없이 cache된 react-query의 data 사용
   useEffect(() => {
-    let filteredDiaries = allDiaries;
     if(clickState.length > 0)
     {
       setIsEmotionClicked(true)
-      filteredDiaries = filteredDiaries.filter(diary => clickState.includes(diary.emotion))
+      setFilteredDiaries(allDiaries.filter(diary => clickState.includes(diary.emotion)))
     }
     else {
       setIsEmotionClicked(false)
     }
-    diarys = filteredDiaries;
   }, [clickState])
+
+  useEffect(() => {
+    diarys = filteredDiaries;
+  }, [filteredDiaries])
 
   useEffect(() => {
     setClickState([]);
@@ -144,16 +147,16 @@ export default function CalendarList() {
       <div className='w-[75vw] lg:w-[65vw] xl:w-[55vw]'>
         <div className='flex mt-10 mb-8 sm:mx-6 md:mx-10 lg:mt-4 lg:mx-12 place-content-between'>
           {/* 감정 아이콘 버튼 */}
-          {/* TODO - 감정 아이콘 클릭시 해당 감정 일기 가져오는 함수 만들기 */}
           {emotions.map((emotion) => (
             <div key={emotion.name} className="relative w-6 h-6 sm:w-10 sm:h-10 lg:w-12 lg:h-12 tooltip" onClick={(e) => {setEmotionState(e, emotion.name);}} data-tip={emotion.name}>
               <Image src={emotion.src} alt={emotion.alt} placeholder='empty' className={'duration-200 opacity-60 hover:scale-105 hover:opacity-100' + (((clickState.length == 0)&&(isEmotionClicked)) ? ' opacity-100 drop-shadow-lg' : ' opacity-60')}/>
             </div>
           ))}
         </div>
-      </div> 
-      <div className={'flex justify-end sm:mx-6 md:mx-10 lg:mx-12 '} onClick={(e) => {resetEmotions(e); onChange(new Date());}}>
-        <div className='flex items-center px-2 py-1 text-xs text-white duration-200 bg-zinc-300 rounded-xl w-fit hover:bg-red-400'><CalendarDaysIcon className='w-3 h-3 mr-1 text-white'/>오늘로 이동하기</div>
+      </div>         
+      <div className='flex justify-center'>
+        <div className='flex items-center px-2 py-1 mx-2 text-xs text-white duration-200 hover:scale-105 bg-zinc-400 rounded-xl w-fit hover:bg-zinc-500' onClick={(e) => {resetEmotions(e);}}><ArrowPathIcon className='w-3 h-3 mr-1 text-white'/>감정 선택 초기화</div>
+        <div className='flex items-center px-2 py-1 mx-2 text-xs text-white duration-200 bg-red-300 hover:scale-105 rounded-xl w-fit hover:bg-red-400' onClick={(e) => {resetEmotions(e); onChange(new Date());}}><CalendarDaysIcon className='w-3 h-3 mr-1 text-white'/>오늘로 이동하기</div>
       </div>
       {/* Calendar */}
       <div className='flex justify-center mb-5 md:mb-12 sm:mt-2'>

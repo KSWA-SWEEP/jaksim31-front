@@ -2,16 +2,20 @@
 
 import { ChevronLeftIcon } from "@heroicons/react/24/outline"
 import Link from "next/link";
+import { useRouter } from 'next/navigation';
 
 export default function BackButton() {
-    return (
-      <div className="flex w-full m-3 justify-items-start">
-          <div>
-            <Link href="diary/list/calendar">
-                <ChevronLeftIcon className="block w-6 h-6 text-zinc-600"/>
-            </Link>
-          </div>
-      </div>
-    )
-  }
+
+  const router = useRouter();
+
+  return (
+    <div className="flex w-full m-3 justify-items-start">
+        <div>
+          <button onClick={() => router.back()}>
+              <ChevronLeftIcon className="block w-6 h-6 text-zinc-600"/>
+          </button>
+        </div>
+    </div>
+  )
+}
   

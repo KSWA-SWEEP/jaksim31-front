@@ -129,7 +129,7 @@ const Profile = () => {
         alert("로그아웃 되었습니다 😊");
         
         // landing page로 이동
-        router.push('/home/landing')
+        window.location.href = "/home/landing";
       } catch(e) {
         console.log(e);
         alert("로그아웃에 실패했습니다.")
@@ -158,7 +158,8 @@ const Profile = () => {
         // 변수 초기화
         userName.current = "";
         userProfileImage.current = "";
-        closePasswordModal();
+        // closePasswordModal();
+        setIsNameEdit(false);
       }
     };
 
@@ -173,8 +174,8 @@ const Profile = () => {
       // 비밀번호 검증 API & 비밀번호 변경 API 모두 호출
       // TODO: 에러 코드에 따른 예외 처리
       try {
-          checkPassword(checkData, loginId);
-          updatePassword(updateData, loginId);
+          checkPassword(checkData, data.loginId);
+          updatePassword(updateData, data.loginId);
           alert("비밀번호가 변경되었습니다 😊");
       } catch(e) {
         console.log(e);
@@ -187,7 +188,9 @@ const Profile = () => {
         setIsOldPassword(false);
         setIsNewPassword(false);
         setIsNewPasswordConfirm(false);
-        closePasswordModal();
+        // closePasswordModal();
+        setIsPasswordModalOpen(false);
+        setIsProfileModalOpen(true);
       }
     };
 
