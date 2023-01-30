@@ -3,7 +3,18 @@ import { login } from "../../api/login";
 
 export const useLogin = (queryClient) => 
     useMutation(
-        ({data}) => login(data),
+        async ({data}) => {
+            
+            const response = await login(data)
+            .then(resp => resp.status != 200 ? resp.json() : resp)
+            .then(respData => {
+                if(respData.errorCode) {
+                    throw respData.errorMessage;
+                }
+            })
+
+            return response;
+        },
         {   
             onError: async (response) => {
                 alert(response)

@@ -5,8 +5,20 @@ export const useUserInfoQuery = (userInfo) =>
     useQuery(
         ['USER_INFO'], 
         async () => {
-            const response = await getUserInfo();
-            return response.json();
+
+            let returnData = new Object();
+
+            const response = await getUserInfo()
+            .then(resp => resp.json())
+            .then(respData => {
+                if(respData.errorCode) {
+                    throw respData.errorCode;
+                }
+
+                returnData = respData;
+            })
+
+            return returnData;
         },
         { 
             cacheTime: 5 * 60 * 1000,
