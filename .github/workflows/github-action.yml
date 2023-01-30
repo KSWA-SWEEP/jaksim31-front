@@ -1,0 +1,66 @@
+name: Jaksim31-Frontend CI/CD
+on:
+  push:
+    branches:
+      - GithubAction
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.3.1
+        with:
+          persist-credentials: false
+
+      - name: Install and Build
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16
+      - run: npm install
+      - run: npm install sharp
+      - run: npm ci
+      - run: npm run build
+      
+      # Docker Buildx Setting
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      # Docker Login
+      - name: Docker Login
+        uses: docker/login-action@v2.1.0
+        with:
+          # Username used to log against the Docker registry
+          username: ${{ secrets.DOCKER_ID }}
+          # Password or personal access token used to log against the Docker registry
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # Docker Build & Push    
+      - name: Docker Build and push
+        uses: docker/build-push-action@v2
+        with:
+            context: .
+            file: ./Dockerfile
+            platforms: linux/amd64
+            push: true
+            tags: r2god7k/jaksim31-frontend:latest
+            cache-from: type=gha    # gha=Github Action Cache
+            cache-to: type=gha,mode=max
+
+      # SSH Connect
+      - name: Deploy to VM
+        uses: appleboy/ssh-action@master
+        with: 
+            host: ${{ secrets.REMOTE_IP }}
+            username: ${{ secrets.REMOTE_SSH_ID }}
+            key: ${{ secrets.REMOTE_SSH_KEY }}
+            port: ${{ secrets.REMOTE_SSH_PORT }}
+            script: |
+              ls -a
+              sudo su
+              # sudo chmod 666 /var/run/docker.sock
+              sudo /usr/sbin/groupadd -f docker
+              sudo /usr/sbin/usermod -aG docker `user`
+              sudo chown root:docker /var/run/docker.sock
+              docker pull r2god7k/jaksim31-frontend:latest
+              docker run -d -p 3005:3000 --name jaksim31-frontend r2god7k/jaksim31-frontend:latest
