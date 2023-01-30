@@ -3,7 +3,7 @@ import { Fragment, useState, useRef } from "react";
 import { motion } from "framer-motion";
 import Image from 'next/image';
 import { Dialog, Transition } from '@headlessui/react';
-import KakaoLoginBtn from '../../../public/images/KakaoLogin.png'
+import KakaoLoginBtn from '../../../public/images/kakaoLogin.png'
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { useRouter } from 'next/navigation';
 import { init, send } from 'emailjs-com';
