@@ -13,6 +13,14 @@ jobs:
         with:
           persist-credentials: false
 
+      # NPM caching
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          cache: 'npm'
+          
+      # NPM install & Build
       - name: Install and Build
         uses: actions/setup-node@v1
         with:
@@ -75,7 +83,7 @@ jobs:
             host: ${{ secrets.REMOTE_IP }}
             username: ${{ secrets.REMOTE_SSH_ID }}
             key: ${{ secrets.REMOTE_SSH_KEY }}
-            port: ${{ secrets.REMOTE_SSH_PORT2 }}
+            port: ${{ secrets.REMOTE_SSH_PORT_2 }}
             script: |
               ls -a
               sudo su
