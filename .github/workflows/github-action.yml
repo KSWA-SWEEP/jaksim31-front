@@ -2,7 +2,7 @@ name: Jaksim31-Frontend CI/CD
 on:
   push:
     branches:
-      - feature/Github-Action
+      - main
 
 jobs:
   build-and-deploy:
