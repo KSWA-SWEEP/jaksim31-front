@@ -1,10 +1,11 @@
 'use client';
 
 import { Dialog, Transition } from "@headlessui/react";
+import { QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
 import moment from "moment";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useState } from "react";
 import { useQueryClient } from "react-query";
 import { useDiaryDelete } from "../../hooks/mutations/useDiaryDelete";
 import { useDiaryQuery } from "../../hooks/queries/useDiaryQuery";
@@ -42,9 +43,8 @@ export default function DiaryContents(props) {
     function openSuccessModal() { setIsSuccessModalOpen(true) }
     function closeSuccessModal() { 
         setIsSuccessModalOpen(false);
-        router.replace('diary/list/calendar');
+        router.replace('/diary/list/grid');
     }
-    
 
     return (
       <>
@@ -55,9 +55,26 @@ export default function DiaryContents(props) {
             <div className="text-2xl font-extrabold">{moment(data.diaryDate).format("YYYY. MM. DD.")}</div>
             <div className="flex flex-wrap mt-3">
                 {data.keywords.map((keyword) => (
-                    <div key={keyword} className="px-3 mb-2 py-1 mr-2.5 text-sm font-medium text-zinc-500 bg-zinc-200 rounded-xl dark:bg-zinc-200 dark:text-zinc-800 ">
-                        #{keyword}
-                    </div>
+                    <>
+                    {
+                        (keyword == "EXECPTION_NO_KEYWORD")
+                        ?
+                        <div className='relative flex items-center mb-3'>
+                            {/* 분석된 키워드가 없을 경우 */}
+                            <div className="font-medium sm:text-sm w-fit text-zinc-500 dark:bg-zinc-200 dark:text-zinc-800 ">
+                                분석된 키워드가 없습니다
+                            </div>
+                            {/* 키워드 관련 info tooltip */}
+                            <div className='tooltip tooltip-bottom' data-tip="일기가 너무 짧으면 키워드 분석이 어려울 수 있습니다😥">
+                                <QuestionMarkCircleIcon className='w-4 h-4 ml-1 duration-200 text-zinc-500 hover:text-zinc-700'/>
+                            </div>
+                        </div>
+                        :
+                        <div key={keyword} className="px-3 mb-2 py-1 mr-2.5 text-sm font-medium text-zinc-500 bg-zinc-200 rounded-xl dark:bg-zinc-200 dark:text-zinc-800 ">
+                            #{keyword}
+                        </div>
+                    }
+                    </>
                 ))}
             </div>
           </div>

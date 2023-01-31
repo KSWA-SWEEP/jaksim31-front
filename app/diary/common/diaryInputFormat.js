@@ -31,6 +31,7 @@ export default function DiaryInputFormat(props) {
               editorLoaded={editorLoaded}
               value={data.content.toString()}
               date={data.diaryDate}
+              thumbnail={data.thumbnail}
               diaryId={props.diaryId}
             />
           :

@@ -30,7 +30,8 @@ export const useDiarySave = (queryClient, saveType, diaryId) =>
                 {
                     setCookie('todayDiaryId', data.diaryId);
                 }
-                queryClient.invalidateQueries(["DIARY_LIST"]);
+                queryClient.resetQueries(["DIARY_LIST"]);
+                queryClient.resetQueries(["USER_INFO"]);
             }
         }
     );

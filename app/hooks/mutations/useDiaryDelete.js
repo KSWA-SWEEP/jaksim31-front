@@ -14,7 +14,8 @@ export const useDiaryDelete = (diaryId, queryClient) =>
                 {
                     setCookie('todayDiaryId', "");
                 }
-                queryClient.invalidateQueries(["DIARY_LIST"]);
+                queryClient.resetQueries(["DIARY_LIST"]);
+                queryClient.resetQueries(["USER_INFO"]);
             }
         }
     );

@@ -281,8 +281,9 @@ export default function DiaryGridList() {
                                                         {diary.emotion}
                                                     </div>
                                                     <div className="relative object-cover object-center aspect-[4/3] w-full overflow-hidden">
+                                                        {/* cache 때문에 이미지가 변경되지 않는 현상 - src에 시간 붙여서 따로 캐시되도록 처리 */}
                                                         <Image
-                                                            src={diary.thumbnail}
+                                                            src={diary.thumbnail+'?'+moment(new Date()).format("YYYYMMDDhhmmsstt")}
                                                             alt={diary.emotion}
                                                             placeholder="empty"
                                                             fill

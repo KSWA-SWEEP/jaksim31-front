@@ -8,7 +8,11 @@ export const useUserInfoUpdate = (queryClient) =>
         },
         {
             onSuccess: async (response) => {
+                alert("개인정보가 수정되었습니다 😊");
                 queryClient.invalidateQueries(["USER_INFO"]);
+            },
+            onError: async (response) => {
+                alert(response);
             }
         }
     );

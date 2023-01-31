@@ -15,6 +15,7 @@ import { updatePassword } from '../../api/updatePassword';
 import { checkPassword } from '../../api/checkPassword';
 import { getCookie } from 'cookies-next';
 import { useLogout } from '../../hooks/mutations/useLogout';
+import { uploadImg } from '../../api/uploadImg';
 
 const Profile = () => {
 
@@ -37,6 +38,7 @@ const Profile = () => {
     const userNewPasswordCheck = useRef("");
     const userProfileImage = useRef("");
     const [userProfileImageURL, setUserProfileImageURL] = useState("");   // 프로필 이미지 미리보기를 위한 임시 주소
+    const [userProfileImageExtension, setuserProfileImageExtension] = useState("");   // 프로필 이미지 미리보기를 위한 임시 주소
     const [isNameEdit, setIsNameEdit] = useState(false);
 
     // 오류 메시지 변수
@@ -52,7 +54,7 @@ const Profile = () => {
     const queryClient = useQueryClient();
     
     // 유저 정보 data fetching을 위한 useQuery
-    const { data, isLoading, isFetching, isFetched, isError } = useUserInfoQuery();
+    const { data : userInfoData, isLoading, isFetching, isFetched, isError } = useUserInfoQuery();
 
     // 유저 정보 수정을 위한 useMutation
     const { mutate: mutateuserInfo } = useUserInfoUpdate(queryClient);
@@ -62,6 +64,8 @@ const Profile = () => {
 
     if( isLoading || isFetching ) return <Loading className="flex justify-center"/>
     if ( isError ) return <Error className="flex justify-center"/>
+
+    userProfileImage.current = userInfoData.profileImage;
 
     const onNameChange = (e) => {
       userName.current = e.target.value;
@@ -101,15 +105,17 @@ const Profile = () => {
         }
     };
     
-    const onProfileImageChange = (e) => {
+    const onProfileImageChange = async (e) => {
 
         const file = e.target.files[0];
         userProfileImage.current = file;
         const reader = new FileReader();
 
         reader.readAsDataURL(file);
-        reader.onloadend = () => {
-          setUserProfileImageURL(reader.result);
+        reader.onloadend = async () => {
+          userProfileImage.current = reader.result;
+          setUserProfileImageURL(reader.result);          
+          setuserProfileImageExtension(e.target.files[0].type);
         };
     };
 
@@ -136,13 +142,26 @@ const Profile = () => {
       }
     }
 
-    function requestChangeProfile(){
+    // 이미지 url => File blob 변환 함수
+    const urlToBlob= async(imgUrl)=> {
+        const response = await fetch(imgUrl);
+        const blob = await response.blob();
+        return blob;
+    }
+    
+    async function requestChangeProfile(){
 
-      /*
-      * TODO: 프로필 이미지 object storage에 올리기
-      * 이미지 URL 임의로 넣어둠
-      */
-      userProfileImage.current = "https://source.unsplash.com/random/?cheese";
+      let profileImageBlob = await urlToBlob(userProfileImageURL);
+      
+      const fileUpload = await uploadImg(profileImageBlob, "profile", userProfileImageExtension);
+        
+      // 저장 실패 시
+      if (fileUpload.status != 201) {
+        alert("프로필 이미지 변경에 실패하였습니다.\n잠시 후 다시 시도해주세요😭");
+      } 
+      else {
+        userProfileImage.current = process.env.NEXT_PUBLIC_KAKAO_FILE_VIEW_URL+"/"+userInfoData.userId+"/profile_r_640x0_100_0_0."+userProfileImageExtension.replace('image/', '');
+      }
 
       let data = new Object();
       data.username = userName.current;
@@ -150,9 +169,7 @@ const Profile = () => {
       
       try{
         mutateuserInfo({data});
-          alert("개인정보가 저장되었습니다 😊");
       } catch (e) {
-          console.log(e);
           alert("개인정보 수정에 실패했습니다. 다시 시도해 주세요.");
       } finally {
         // 변수 초기화
@@ -174,8 +191,8 @@ const Profile = () => {
       // 비밀번호 검증 API & 비밀번호 변경 API 모두 호출
       // TODO: 에러 코드에 따른 예외 처리
       try {
-          checkPassword(checkData, data.loginId);
-          updatePassword(updateData, data.loginId);
+          checkPassword(checkData, userInfoData.loginId);
+          updatePassword(updateData, userInfoData.loginId);
           alert("비밀번호가 변경되었습니다 😊");
       } catch(e) {
         console.log(e);
@@ -199,7 +216,7 @@ const Profile = () => {
         <div className="dropdown dropdown-end">
               <label tabIndex={0} className="btn btn-ghost hover:bg-red-300 btn-circle avatar">
                 <div className="w-10 rounded-full">
-                  <img src="https://placeimg.com/80/80/people" />
+                  <img src={userInfoData.profileImage} />
                 </div>
               </label>
               <ul tabIndex={0} className="w-32 p-2 mt-3 bg-white shadow menu menu-compact dropdown-content rounded-box">
@@ -257,7 +274,7 @@ const Profile = () => {
                             {/* 프로필 사진 */}
                             <div className="justify-center m-5 avatar">
                               <div className="relative top-0 flex items-start w-32 rounded-full group">
-                                <img src={userProfileImageURL ? userProfileImageURL : data.profileImage} />
+                                <img src={userProfileImageURL ? userProfileImageURL : userInfoData.profileImage} />
                                 <div className='absolute top-0 flex items-center justify-center w-full h-full bg-black opacity-0 hover:opacity-50'>
                                   {/* 파일 선택 창 hidden 설정 */}
                                   <input
@@ -284,11 +301,11 @@ const Profile = () => {
                               {/* 이름 */}
                               {isNameEdit ? 
                                 <div className="justify-center w-30 form-control">
-                                  <input type="text" placeholder="이름을 입력하세요" defaultValue={data.username} className="w-full h-10 input input-bordered" onChange={onNameChange} />
+                                  <input type="text" placeholder="이름을 입력하세요" defaultValue={userInfoData.username} className="w-full h-10 input input-bordered" onChange={onNameChange} />
                                 </div>
                                 :
                                 <div className='text-3xl font-extrabold text-zinc-700'>
-                                  {data.username}
+                                  {userInfoData.username}
                                 </div>
                               }
                               <PencilSquareIcon
@@ -298,7 +315,7 @@ const Profile = () => {
                             </div>
                             {/* 사용자 ID (이메일) */}
                             <p className="text-sm text-zinc-500">
-                              {data.loginId}
+                              {userInfoData.loginId}
                             </p>
 
                             <div className='flex items-center justify-center'> 
@@ -338,7 +355,7 @@ const Profile = () => {
                                     총 작성한 일기
                                   </div>
                                   <div className='text-3xl font-bold'>
-                                    {data.diaryTotal}
+                                    {userInfoData.diaryTotal}
                                   </div>
                                 </div>
 

@@ -3,6 +3,14 @@ module.exports = {
   async rewrites() {
     return [
       {
+        source: '/kic-api-auth',
+        destination: process.env.NEXT_PUBLIC_KAKAO_API_AUTH_URL,
+      },
+      {
+        source: '/kic-upload/:path*',
+        destination: process.env.NEXT_PUBLIC_KAKAO_FILE_UPLOAD_URL+'/:path*',
+      },
+      {
         source: '/api/:path*',
         destination: process.env.NEXT_PUBLIC_API_URL+'/:path*',
       },
