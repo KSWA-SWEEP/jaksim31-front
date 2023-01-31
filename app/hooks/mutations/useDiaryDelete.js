@@ -5,7 +5,20 @@ import { deleteDiary } from "../../api/deleteDiary";
 export const useDiaryDelete = (diaryId, queryClient) =>
     useMutation(
         async () => {
-            const response = await deleteDiary(diaryId);
+
+            let returnData = new Object();
+            
+            const response = await deleteDiary(diaryId)
+            .then(resp => resp.json())
+            .then(respData => {
+                if(respData.errorCode) {
+                    throw respData.errorCode;
+                }
+
+                returnData = respData;
+            })
+
+            return returnData;
         },
         {
             onSuccess: async (response) => {

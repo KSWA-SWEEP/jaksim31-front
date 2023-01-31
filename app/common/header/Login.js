@@ -69,11 +69,10 @@ const Login = () => {
     useEffect(()=> {
       // 로그인 성공 시 대시보드로 이동
       if(isSuccessLogin) {
-        if(isLoginModalOpen) isLoginModalOpen = false;
-        setIsLoginModalOpen(false);
+        if(isLoginModalOpen) setIsLoginModalOpen(false);
         window.location.href = "/diary/dashboard";
       }
-    }, [dataLogin])
+    }, [dataLogin, isSuccessLogin])
 
     const onNameChange = (e) => {
       userName.current = e.target.value;

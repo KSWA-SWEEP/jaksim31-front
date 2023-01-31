@@ -8,7 +8,6 @@ export const useLogout = (queryClient) =>
         {   
             onSuccess: () => {
                 queryClient.removeQuries(["USER_INFO"]);
-                queryClient.removeQuries(["TOKEN"]);
             }
         }
     );

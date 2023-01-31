@@ -4,7 +4,20 @@ import { updateUserInfo } from "../../api/updateUserInfo";
 export const useUserInfoUpdate = (queryClient) =>
     useMutation(
         async ({data}) => {
-            const response = await updateUserInfo(data);
+
+            let returnData = new Object();
+            
+            const response = await updateUserInfo(data)
+            .then(resp => resp.json())
+            .then(respData => {
+                if(respData.errorCode) {
+                    throw respData.errorCode;
+                }
+
+                returnData = respData;
+            })
+
+            return returnData;
         },
         {
             onSuccess: async (response) => {

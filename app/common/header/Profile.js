@@ -188,15 +188,29 @@ const Profile = () => {
       checkData.password = userOldPassword.current;
       updateData.newPassword = userNewPassword.current;
       
-      // 비밀번호 검증 API & 비밀번호 변경 API 모두 호출
-      // TODO: 에러 코드에 따른 예외 처리
       try {
-          checkPassword(checkData, userInfoData.loginId);
-          updatePassword(updateData, userInfoData.loginId);
-          alert("비밀번호가 변경되었습니다 😊");
-      } catch(e) {
-        console.log(e);
-        alert("비밀번호 변경에 실패했습니다. 다시 시도해 주세요.")
+        // 비밀번호 검증 API 호출
+        const checkResponse = await checkPassword(checkData, data.loginId)
+        .then(resp => resp.status != 200 ? resp.json() : resp)
+        .then(respData => {
+          if(respData.errorCode) {
+            throw respData.errorMessage
+          }
+        })
+
+        // 비밀번호 변경 API 호출
+        const updateResponse = await updatePassword(updateData, data.loginId)
+        .then(resp => resp.status != 200 ? resp.json() : resp)
+        .then(respData => {
+          if(respData.errorCode) {
+            throw respData.errorMessage
+         }
+        })
+         
+        alert("비밀번호가 변경되었습니다 😊");
+      } catch(error) {
+        console.log(error);
+        alert(error)
       } finally {
         // 변수 초기화
         userOldPassword.current = "";
