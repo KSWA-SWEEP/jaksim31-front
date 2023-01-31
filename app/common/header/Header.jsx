@@ -6,6 +6,7 @@ import { Bars3Icon } from '@heroicons/react/24/outline';
 import Login from './Login';
 import Profile from './Profile';
 import { getCookie } from 'cookies-next';
+import { useQueryClient } from 'react-query';
 
 function Header({ isOpen, setIsOpen }) {
 
@@ -26,6 +27,13 @@ function Header({ isOpen, setIsOpen }) {
   }, [top]);  
 
   let pathname = usePathname();
+
+  // react-query
+  const queryClient = useQueryClient();
+  // 비로그인 시 userInfo 쿼리 캐시 삭제
+  if(!getCookie("isLogin")) {
+    queryClient.removeQueries(["USER_INFO"]);
+  }
 
   return (
     <div className={`fixed z-40 w-full md:bg-opacity-70 transition duration-300 ease-in-out ${!top && 'bg-white backdrop-blur-sm shadow-lg'}`}>
