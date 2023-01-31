@@ -8,33 +8,60 @@ import moment from 'moment';
 export default function BarChartCard() {
   
   const emotionNames = ["🥰 좋음", "😕 싫음", "😯 놀람", "😬 두려움", "😶 감정없음", "😑 지루함", "🤢 창피함", "😭 슬픔", "🤔 불확실"];
-  // 차트에 표시될 이번 달 감정 개수 배열
-  const [emotionCount, setEmotionCount] = useState([0, 0, 0, 0, 0, 0, 0, 0, 0]);
+  // 차트에 표시될 감정 개수 배열
+  const [emotionCountThis, setEmotionCountThis] = useState([0, 0, 0, 0, 0, 0, 0, 0, 0]);
+  const [emotionCountLast, setEmotionCountLast] = useState([0, 0, 0, 0, 0, 0, 0, 0, 0]);
 
   // API 요청 데이터
   const value = new Date();
   const [startDate, setStartDate] = useState(new Date(value.getFullYear(), value.getMonth(), 1));
   const [endDate, setEndDate] = useState(new Date(value.getFullYear(), value.getMonth() + 1, 0));
 
+  // 이번 달 감정 통계 요청 데이터
   let requestData = new Object();
   requestData.startDate = moment(startDate).format("YYYY-MM-DD");
   requestData.endDate = moment(endDate).format("YYYY-MM-DD");
 
-  // 감정 통계 정보 data fetching을 위한 useQuery
-  const { data: dataEmotion, isSuccess } = useEmotionCountQuery(requestData);
-
+  // 이번 달 감정 통계 정보 data fetching을 위한 useQuery
+  const { data: dataEmotionThis, isSuccessThis } = useEmotionCountQuery(requestData, "THIS_MONTH");
+  
+  // 지난 달 감정 통계 요청 데이터
+  startDate.setMonth(startDate.getMonth() - 1);
+  endDate.setMonth(endDate.getMonth() - 1);
+  requestData = new Object();
+  requestData.startDate = moment(startDate).format("YYYY-MM-DD");
+  requestData.endDate = moment(endDate).format("YYYY-MM-DD");
+  
+  // 지난 달 감정 통계 정보 data fetching을 위한 useQuery
+  const { data: dataEmotionLast, isSuccessLast } = useEmotionCountQuery(requestData, "LAST_MONTH");
+  
+  // 이번 달 emotionCount data-fetching
   useEffect(() => {
   
-    if(dataEmotion != undefined) {
+    if(dataEmotionThis != undefined) {
 
       // 응답 데이터에 대해 emotionNames와 매칭되는 emotionCount 값 설정
-      dataEmotion.emotionStatics.map((pair) => {      
+      dataEmotionThis.emotionStatics.map((pair) => {      
         let idx = emotionNames.indexOf(pair.emotion)
-        emotionCount[idx] = pair.countEmotion;
-        setEmotionCount([...emotionCount]);
+        emotionCountThis[idx] = pair.countEmotion;
+        setEmotionCountThis([...emotionCountThis]);
       });
     }
-  }, [isSuccess, dataEmotion]);
+  }, [isSuccessThis, dataEmotionThis]);
+
+  // 지난 달 emotionCount data-fetching
+  useEffect(() => {
+  
+    if(dataEmotionLast != undefined) {
+
+      // 응답 데이터에 대해 emotionNames와 매칭되는 emotionCount 값 설정
+      dataEmotionLast.emotionStatics.map((pair) => {      
+        let idx = emotionNames.indexOf(pair.emotion)
+        emotionCountLast[idx] = pair.countEmotion;
+        setEmotionCountLast([...emotionCountLast]);
+      });
+    }
+  }, [isSuccessLast, dataEmotionLast]);
 
   useEffect(() => {
     let config = {
@@ -62,7 +89,7 @@ export default function BarChartCard() {
             label: "이번 달",
             backgroundColor: "#4c51bf",
             borderColor: "#4c51bf",
-            data: [emotionCount[0], emotionCount[1], emotionCount[2], emotionCount[3], emotionCount[4], emotionCount[5], emotionCount[6], emotionCount[7], emotionCount[8]],
+            data: [emotionCountThis[0], emotionCountThis[1], emotionCountThis[2], emotionCountThis[3], emotionCountThis[4], emotionCountThis[5], emotionCountThis[6], emotionCountThis[7], emotionCountThis[8]],
             fill: false
           },
           {
@@ -70,7 +97,7 @@ export default function BarChartCard() {
             fill: false,
             backgroundColor: "#ed64a6",
             borderColor: "#ed64a6",
-            data: [7, 10, 3, 1, 3, 1, 5, 9, 9],
+            data: [emotionCountLast[0], emotionCountLast[1], emotionCountLast[2], emotionCountLast[3], emotionCountLast[4], emotionCountLast[5], emotionCountLast[6], emotionCountLast[7], emotionCountLast[8]],
           },
         ],
       },
@@ -141,7 +168,7 @@ export default function BarChartCard() {
     };
     let ctx = document.getElementById("bar-chart").getContext("2d");
     window.myBar = new Chart(ctx, config);
-  }, [emotionCount]);
+  }, [emotionCountThis, emotionCountLast]);
   return (
     <>
       <div className="relative flex flex-col w-full min-w-0 mb-6 break-words shadow-lg rounded-xl bg-zinc-100">

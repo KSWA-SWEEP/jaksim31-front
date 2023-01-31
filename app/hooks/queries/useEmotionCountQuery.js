@@ -1,9 +1,9 @@
 import { useQuery } from "react-query";
 import { getEmotionCount } from "../../api/getEmotionCount";
 
-export const useEmotionCountQuery = (options) =>
+export const useEmotionCountQuery = (options, key) =>
     useQuery(
-        ['EMOTION_COUNT'], 
+        ['EMOTION_COUNT', key], 
         async () => {
 
             let returnData = new Object();
@@ -21,7 +21,7 @@ export const useEmotionCountQuery = (options) =>
             return returnData;
         },
         { 
-            cacheTime: 5 * 60 * 1000,
-            staleTime: 5 * 60 * 1000,
+            cacheTime: 10 * 60 * 1000,
+            staleTime: 10 * 60 * 1000,
         }
     );
