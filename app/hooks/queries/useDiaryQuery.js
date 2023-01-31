@@ -5,13 +5,20 @@ export const useDiaryQuery = (diaryId) =>
     useQuery(
         ['DIARY', diaryId], 
         async () => {
-            const response = await getDiary(diaryId);
 
-            // if (!response.status != 200) {
-            //     throw new Error('Failed to fetch data');
-            // }
+            let returnData = new Object();
+            
+            const response = await getDiary(diaryId)
+            .then(resp => resp.json())
+            .then(respData => {
+                if(respData.errorCode) {
+                    throw respData.errorCode;
+                }
 
-            return response.json()
+                returnData = respData;
+            })
+
+            return returnData;
         },
         {
             staleTime: 60 * 1000,
