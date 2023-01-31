@@ -149,7 +149,7 @@ const Profile = () => {
       data.profileImage = userProfileImage.current;
       
       try{
-        mutateuserInfo({data});
+          mutateuserInfo({data});
           alert("개인정보가 저장되었습니다 😊");
       } catch (e) {
           console.log(e);
