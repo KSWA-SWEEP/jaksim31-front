@@ -2,7 +2,6 @@
 import userEmotion from "../../../public/data/emotions.json"
 import React, { useEffect } from "react";
 import Chart from "chart.js";
-import ProgressCard from "./ProgressCard";
 
 export default function DonutChartCard() {
   const emotions = userEmotion;
@@ -80,10 +79,6 @@ export default function DonutChartCard() {
         </div>
       </div>
       <br></br>
-      {/* 월별 일기 작성률 모아보기 */}
-      <div className="col-span-6 px-4 my-4 lg:col-span-3">
-        <ProgressCard/>
-      </div>
     </>
   );
 }
