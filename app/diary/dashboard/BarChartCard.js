@@ -4,7 +4,7 @@ import userEmotion from "../../../public/data/emotions.json"
 import React, { useEffect } from "react";
 import Chart from "chart.js";
 
-export default function CardBarChart() {
+export default function BarChartCard() {
   const emotions = userEmotion;
   useEffect(() => {
     let config = {

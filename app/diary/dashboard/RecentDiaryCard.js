@@ -1,7 +1,7 @@
 import userData from "../../../public/data/user.json";
 import Link from "next/link";
 // app/common/header/Profile에서 거의 다 가져왔지만 일부 수정하기 위해 component 따로 생성.
-export default function UserProfile() {
+export default function RecentDiaryCard() {
     const user = userData;
     // 제일 최근 일기의 ID만 추출해서 /diary/ 뒤에 붙여줌.
     const firstDiary = "/diary/"+user.recent_diaries[0].diary_id;

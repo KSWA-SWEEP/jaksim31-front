@@ -1,11 +1,8 @@
 import React from "react";
-import userData from "../../../public/data/user.json";
-import CardBarChart from "./EmotionCompare";
-import DiaryCards from "./DiaryCards";
-import DoughnutChart from "./DoughnutChart";
+import BarChartCard from "./BarChartCard";
+import RecentDiaryCard from "./RecentDiaryCard";
+import DonutChartCard from "./DonutChartCard";
 import { getUserInfo } from "../../api/getUserInfo";
-import { getCookie} from "cookies-next";
-import { cookies } from 'next/headers';
 import ProfileCard from "./ProfileCard";
 
 // async function getUserInfoData() {
@@ -41,19 +38,18 @@ export default async function diaryPage() {
                     </div>
                     {/* 이번 달 / 저번 달 감정빈도 비교 바 차트*/}
                     <div className="col-span-6 px-4 my-4 mb-10 lg:col-span-4 ">
-                        <CardBarChart/>
+                        <BarChartCard/>
                     </div>
 
                     {/* 이번 달 감정 빈도 도넛 차트*/}
                     <div className="col-span-6 px-4 my-4 lg:col-span-3">
-                        <DoughnutChart/>
+                        <DonutChartCard/>
                     </div>
 
                     {/*최근 일기*/}
                     <div className="col-span-6 px-4 my-4 lg:col-span-3">
-                        <DiaryCards/>
+                        <RecentDiaryCard/>
                     </div>
-
                 </div>
             </div>
         </>

@@ -2,7 +2,7 @@ import React from "react";
 
 // components
 
-export default function CardSocialTraffic() {
+export default function ProgressCard() {
   
   return (
     <>
