@@ -1,17 +1,11 @@
 'use client';
 
-import userData from "../../../public/data/user.json";
 import Loading from "../list/grid/loading";
 import Error from "../list/grid/error";
 import { useUserInfoQuery } from "../../hooks/queries/useUserInfoQuery";
-import moment from 'moment';
 
-// app/common/header/Profile에서 거의 다 가져왔지만 일부 수정하기 위해 component 따로 생성.
 // export default function UserProfile(userInfo) {
-export default function UserProfile() {
-
-    // TODO: userInfo 응답으로 recentDiary 데이터 받으면 data-fetching 하기
-    const user = userData;
+export default function ProfileCard() {
 
     // 유저 정보 data fetching을 위한 useQuery
     const { data, isLoading, isFetching, isFetched, isError } = useUserInfoQuery();
@@ -45,40 +39,18 @@ export default function UserProfile() {
                     <div className='w-full'>
                         <div className="grid grid-cols-3">
                             {/* 총 작성한 일기 수 */}
-                            <div className='col-span-3 mb-1 sm:col-span-1'>
+                            <div className='col-span-3 mb-1'>
                                 <div className="mb-1 text-lg text-zinc-600">
-                                    작성한<br></br>일기장들
+                                    오늘까지 기록한 나의 일기
                                 </div>
                                 <div className='text-3xl font-bold'>
-                                    {data.diaryTotal}
+                                    {data.diaryTotal}개
                                 </div>
-                            </div>
-
-                            {/* 최근 일기 */}
-                            <div className='col-span-3 sm:col-span-2'>
-                              <div className="mb-1 text-lg text-zinc-600">
-                                최근 일기
-                              </div>
-                              <div className='mb-2 text-xl font-semibold'>
-                                {moment(user.recent_diaries[0].date).format("YYYY. MM. DD.")}
-                              </div>
-                              <div className='flex place-content-center'>
-                                <div className='w-1/3 pl-5 text-zinc-500'>
-                                  {user.recent_diaries[0].emotion}
-                                </div>
-                                <div className='relative flex'>
-                                  {user.recent_diaries[0].keywords.map((keyword) => (
-                                      <div key={keyword} className="px-2 py-1 mb-1 mr-2 text-xs font-medium w-fit text-zinc-500 bg-zinc-200 rounded-xl dark:bg-zinc-200 dark:text-zinc-800 ">
-                                          #{keyword}
-                                      </div>
-                                  ))}
-                                </div>
-                              </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </>
-        );
+    );
 }
