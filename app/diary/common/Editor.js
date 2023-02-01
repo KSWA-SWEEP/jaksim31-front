@@ -9,13 +9,17 @@ import { useQueryClient } from 'react-query';
 import { useDiarySave } from '../../hooks/mutations/useDiarySave';
 import moment from 'moment';
 import { getCookie } from "cookies-next";
+import { uploadImg } from '../../api/uploadImg';
+import Image from 'next/image';
 
-function Editor({ editorLoaded, name, value, date, diaryId }) {
-
+function Editor({ editorLoaded, name, value, date, diaryId, thumbnail }) {
+    
     let userId = getCookie("userId");
 
     let [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
     const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+
+    const [isThumbnailLoading, setIsThumbnailLoading] = useState(false);
 
     let [englishKeywords, setEnglishKeywords] = useState([]);
     let [koreanKeywords, setKoreankeywords] = useState([]);
@@ -30,33 +34,47 @@ function Editor({ editorLoaded, name, value, date, diaryId }) {
 
     // unsplash API
     // thumbnail 저장 변수들
-    let [regularThumbnailLink, setRegularThumbnailLink] = useState("");
+    let [regularThumbnailLink, setRegularThumbnailLink] = useState((thumbnail != undefined) ? thumbnail : "");
     let [smallThumbnailLink, setSmallThumbnailLink] = useState("");
-    let [thumbnailId, setThumbnailId] = useState("imgId");
-    let [thumbnailDirectory, setThumbnailDirectory] = useState(""); // thumbnail 이미지 저장 경로(Object Storage)
+    let [thumbnailDirectory, setThumbnailDirectory] = useState((thumbnail != undefined) ? thumbnail : "");
+
     // 이미지 출처 저장 변수들
     let [userProfileLink, setUserProfileLink] = useState("userProfile");
     let [userName, setUserName] = useState("");
+
     // unsplash API access key
     const Access_Key = process.env.NEXT_PUBLIC_UNSPLASH_ACCESSKEY;
     // thumbnail 저장 안내 메세지
-    const [saveMessage, setSaveMessage] = useState('썸네일을 선택해주세요😲');
-    const [isSaved, setIsSaved] = useState(false);
+    const [saveMessage, setSaveMessage] = useState(((thumbnail != undefined) ? '저장되었던 썸네일을 가져왔어요!😎' : '썸네일을 선택해주세요😲'));
+    const [isSaved, setIsSaved] = useState(((thumbnail != undefined) ? true : false));
   
     // async로 인해 setEnglishKeywords가 getThumbnail보다 늦게 실행되는 현상 있음 => useEffect 사용하여 englishKeywords 변경되면 getThumbnail 실행
     useEffect(() => {
-        getThumbnail();
+        // 일기 수정의 경우 모달 열자 마자 자동적으로 썸네일 가져오지 않도록 함
+        if(thumbnailDirectory == "") {
+            getThumbnail();
+        }
     }, [englishKeywords])
+
+
 
     const router = useRouter();
 
     function closeSaveModal() { setIsSaveModalOpen(false) }
-    function openSaveModal() { setIsSaveModalOpen(true) }
+    function openSaveModal() {
+        console.log(thumbnail);
+        // 일기 수정의 경우 기존의 thumbnail이 초기값으로 설정되어 변경하지 않고도 저장할 수 있도록 함
+        setIsSaved((thumbnail != undefined) ? true : false)
+        setSaveMessage((thumbnail != undefined) ? '저장되었던 썸네일을 가져왔어요!😎' : '썸네일을 선택해주세요😲');
+        setRegularThumbnailLink((thumbnail != undefined) ? thumbnail : "");
+        setThumbnailDirectory((thumbnail != undefined) ? thumbnail : "");
+        setIsSaveModalOpen(true);
+    }
 
     function openSuccessModal() { setIsSuccessModalOpen(true) }
     function closeSuccessModal() { 
         setIsSuccessModalOpen(false);
-        router.replace('diary/list/calendar');
+        router.replace('diary/list/grid');
     }
     
 
@@ -91,12 +109,14 @@ function Editor({ editorLoaded, name, value, date, diaryId }) {
         .then((response) => response.json())
         
         if (res == undefined){
+            // Error handling - 분석 내용이 비어있을 경우 감정없음, EXECPTION_NO_KEYWORD으로 설정 
             setEnglishKeywords(["EXECPTION_NO_KEYWORD"]);
             setKoreankeywords(["EXECPTION_NO_KEYWORD"]);
             setEnglishEmotion("no emotion");
             setKoreanEmotion("감정없음");
         } else  {
-            // Error handling (길이가 짧거나 다른 이유로 키워드 및 감정 추출이 제대로 이루어지지 않을 경우)
+            // 분석 내용으로부터 키워드, 감정 설정
+            // Error handling - 길이가 짧거나 다른 이유로 키워드 및 감정 추출이 제대로 이루어지지 않을 경우 감정없음, EXECPTION_NO_KEYWORD으로 설정 
             setEnglishKeywords((res.hasOwnProperty('englishKeywords')) ? res.englishKeywords : ["EXECPTION_NO_KEYWORD"]);
             setKoreankeywords((res.hasOwnProperty('koreanKeywords')) ? res.koreanKeywords : ["EXECPTION_NO_KEYWORD"]);
             setEnglishEmotion((res.hasOwnProperty('englishEmotion')) ? res.englishEmotion : "no emotion");
@@ -105,6 +125,12 @@ function Editor({ editorLoaded, name, value, date, diaryId }) {
     }
 
     const getThumbnail = async () => {
+        
+        setThumbnailDirectory("");
+        setIsSaved(false);
+        setSaveMessage('썸네일을 선택해주세요😲');
+        setRegularThumbnailLink("");
+
         // englishKeywords 에 하나 이상의 keyword 있을 경우에 thumbnail 가져오기
         if(((englishKeywords != undefined)||(englishKeywords != ""))&&(englishKeywords.length > 0))
         {
@@ -113,28 +139,23 @@ function Editor({ editorLoaded, name, value, date, diaryId }) {
             let randKeywordList=[]
             randKeywordList.push(...englishKeywords)
             randKeywordList.push(englishEmotion)
-            console.log(randKeywordList)
 
             // space를 _로 대체 (검색시 url에 사용하기 위함)
             randKeywordList = randKeywordList.map(word => word.replace(' ', '_'));
 
             // thumbnail 가져오는 부분
-            console.log("Find image with keyword "+randKeywordList[randNum])
             let res = await fetch(`https://api.unsplash.com/photos/random?query=${randKeywordList[randNum]}&client_id=${Access_Key}`);
 
             // 키워드 랜덤으로 돌렸을 때 오류나면 englishEmotion으로 검색하도록
             if(res.status != 200) {
-                console.log("Find image with keyword "+englishEmotion)
                 res = await fetch(`https://api.unsplash.com/photos/random?query=${englishEmotion}&client_id=${Access_Key}`);
                 
                 // 영어로도 없으면 koreanEmotion 검색
                 if(res.status != 200) {
-                    console.log("Find image with keyword "+koreanEmotion)
                     res = await fetch(`https://api.unsplash.com/photos/random?query=${koreanEmotion}&client_id=${Access_Key}`);
                      
                     // 다 안되면 diary라는 단어 넣어서 이미지 얻기
                     if(res.status != 200) {
-                        console.log("Find image with keyword diary")
                         res = await fetch(`https://api.unsplash.com/photos/random?query=diary&client_id=${Access_Key}`);                       
                     }
                 }
@@ -145,7 +166,6 @@ function Editor({ editorLoaded, name, value, date, diaryId }) {
             setSmallThumbnailLink(jsonData.urls.small);
             setUserProfileLink(jsonData.user.links.html+"?utm_source=jaksim31&utm_medium=referral");
             setUserName(jsonData.user.username);
-            setThumbnailId(jsonData.id);
 
         }
         // 키워드 추출이 안되었을 경우 
@@ -158,7 +178,6 @@ function Editor({ editorLoaded, name, value, date, diaryId }) {
             setSmallThumbnailLink(jsonData.urls.small);
             setUserProfileLink(jsonData.user.links.html+"?utm_source=jaksim31&utm_medium=referral");
             setUserName(jsonData.user.username);
-            setThumbnailId(jsonData.id);
         }
     };
 
@@ -213,13 +232,12 @@ function Editor({ editorLoaded, name, value, date, diaryId }) {
 
         // 저장할 일기 데이터를 담을 Object
         let data = new Object();
-
-        // 로그인시 가져온 userId (db의 objectId) 를 쿠키 or Local Storage로부터 가져와서 넣어주기
-        // 지금은 test 용 하나의 userId 하드코딩으로 넣어줌..
+        
+        // userId
         data.userId = userId;
 
-        date = date.replace(/(\d{4})(\d{2})(\d{2})/g, '$1-$2-$3');
-        data.date = date;
+        // 일기 날짜
+        data.date = date.replace(/(\d{4})(\d{2})(\d{2})/g, '$1-$2-$3');
 
         // 일기 내용
         data.content = text;
@@ -233,14 +251,7 @@ function Editor({ editorLoaded, name, value, date, diaryId }) {
         data.keywords = koreanKeywords;
 
         // thumbnail에 이미지 url (object storage) 넣기
-        // data.thumbnail = thumbnailDirectory;
-        // 230128 현재 object storage 사용 불가 => 일단 unsplash 이미지 url 넣기
-        data.thumbnail = regularThumbnailLink;
-
-
-        // 사용 X - thumbnail에 file object(blob) 넣기
-        // let thumbnailFile = urlToObject(regularThumbnailLink);
-        // data.thumbnail = thumbnailFile;
+        data.thumbnail = thumbnailDirectory;
         
         // 일기 생성/수정에 따른 mutation 실행
         mutate({data})
@@ -249,30 +260,39 @@ function Editor({ editorLoaded, name, value, date, diaryId }) {
         
     };
 
-    // // 사용 X - 이미지 url => File Object 변환 함수
-    // const urlToObject= async(imgUrl)=> {
-    //     const response = await fetch(imgUrl);
-    //     // here image is url/location of image
-    //     const blob = await response.blob();
-    //     const file = new File([blob], thumbnailId, {type: blob.type});
-    //     console.log(file)
-    //     return file;
-    // }
+    // 이미지 url => File blob 변환 함수
+    const urlToBlob= async(imgUrl)=> {
+        const response = await fetch(imgUrl);
+        const blob = await response.blob();
+        return blob;
+    }
 
-    function saveThumbnail() {
-        const data = new Object();
-        data.userId = userId;
-        data.thumbnail = regularThumbnailLink;
-
-        // TODO 
-        // thumbnail 저장 API 호출 추가 (그냥 FE에서 바로 오브젝트 스토리지로 저장하기..!)
-        const res = "thumbnail Directory"; // thumbnail API 응답으로 이미지가 저장 된 Object Storage directory 경로가 return 됨.
-
-        // 이미지 저장 후 message 변경
-        setSaveMessage("썸네일이 생성되었습니다. \"저장하기\" 버튼을 눌러 일기 작성을 마무리하세요🤗");
-        setIsSaved(true);
+    // kic object storage에 썸네일 이미지 업로드
+    async function saveThumbnail() {
         
-        setThumbnailDirectory(regularThumbnailLink);
+        // regularThumbnailLink을 blob으로 변환
+        let file = await urlToBlob(regularThumbnailLink)        
+
+        // 이미지 업로드 API 호출
+        const fileUpload = await uploadImg(file, date.replace(/(\d{4})(\d{2})(\d{2})/g, '$1-$2-$3'))
+
+        // 저장 실패 시
+        if (fileUpload.status != 201) {
+            setIsThumbnailLoading(false);
+            alert("썸네일 저장에 실패하였습니다.\n잠시 후 다시 시도해주세요😭");
+            closeSaveModal();
+        } 
+        // 저장 성공 시
+        else {
+            setIsThumbnailLoading(false);
+            
+            // 이미지 저장 후 message 변경
+            setSaveMessage("썸네일이 생성되었습니다. \"저장하기\" 버튼을 눌러 일기 작성을 마무리하세요🤗");
+            setIsSaved(true);
+
+            // Thumbnail Directory 설정
+            setThumbnailDirectory(process.env.NEXT_PUBLIC_KAKAO_FILE_VIEW_URL+"/"+userId+"/"+date.replace(/(\d{4})(\d{2})(\d{2})/g, '$1-$2-$3')+"_r_640x0_100_0_0.jpeg");
+        }
     }
 
     return (
@@ -311,7 +331,7 @@ function Editor({ editorLoaded, name, value, date, diaryId }) {
                                     )
                                 }
                         disabled={((text == undefined)||(text == ""))}
-                        onClick={() => { setRegularThumbnailLink(""); analyzeDiary(); setThumbnailDirectory(""); openSaveModal(); setSaveMessage("썸네일을 선택해주세요😲"); setIsSaved(false); }}>
+                        onClick={() => { analyzeDiary(); openSaveModal(); }}>
                     저장하기
                 </button>
                 <button className="inline-flex justify-center px-3 py-2 ml-2 text-sm font-medium duration-200 border border-transparent rounded-md text-zinc-700 bg-zinc-200 mt-7 hover:bg-zinc-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500 focus-visible:ring-offset-2" onClick={() => router.back()}>취소하기</button>
@@ -410,14 +430,17 @@ function Editor({ editorLoaded, name, value, date, diaryId }) {
                                                         regularThumbnailLink != ""
                                                         ?
                                                         <div className="relative top-0 flex items-start w-full h-full group">
-                                                            <img className='object-cover w-full h-full' src={regularThumbnailLink} />
+                                                            <Image className='object-cover w-full h-full' fill={true} placeholder={blur} src={regularThumbnailLink} />
                                                             {/*thumbnail 저장 시 onClick 비활성화 및 Hover effect 제거*/}
-                                                            {thumbnailDirectory==""?
+                                                            {
+                                                                (!isSaved || (isSaved && ((thumbnail != undefined) || (thumbnail != ""))))
+                                                                ?
                                                                 <div onClick={getThumbnail} className='absolute top-0 flex items-center justify-center w-full h-full bg-black opacity-0 hover:opacity-50'>
                                                                     <div className='relative flex items-center'>
                                                                         <ArrowPathIcon className='hidden text-white w-7 h-7 group-hover:block'/> <p className='ml-3 text-white'>다른 이미지 가져오기</p>
                                                                     </div>
-                                                                </div> :
+                                                                </div> 
+                                                                :
                                                                 <div className='absolute top-0 flex items-center justify-center w-full h-full bg-black opacity-0'>
                                                                     <div className='relative flex items-center'>
                                                                         <ArrowPathIcon className='hidden text-white w-7 h-7 group-hover:block'/>
@@ -452,9 +475,23 @@ function Editor({ editorLoaded, name, value, date, diaryId }) {
                                     {
                                         regularThumbnailLink != ""
                                             ?
-                                            <button className={"inline-flex justify-center px-3 py-2 mr-2 text-sm font-medium rounded-xl " + (thumbnailDirectory==""?"btn-secondary rounded-md":"text-sky-700 bg-sky-200 border border-transparent rounded-md")}
-                                                    onClick={() => saveThumbnail()}>
-                                                {thumbnailDirectory==""?"이 사진으로 결정✅":"썸네일 생성 완료👍"}
+                                            <button className={"inline-flex justify-center px-3 py-2 mr-2 text-sm font-medium rounded-xl " + ( thumbnailDirectory == "" ? "btn-secondary rounded-md":("border border-transparent rounded-md "+(isThumbnailLoading ? "text-zinc-600 bg-zinc-400" : "text-sky-700 bg-sky-200")))}
+                                                    onClick={() => { if( !isSaved ){ setIsThumbnailLoading(true); saveThumbnail() } }}>
+                                                {
+                                                    isSaved
+                                                    ?
+                                                    <>
+                                                        {
+                                                            isThumbnailLoading
+                                                            ?
+                                                            <div className='relative flex items-center justify-center cursor-progress'><Spinner className="w-5 h-5"/>저장중입니다</div>
+                                                            :
+                                                            <div className='cursor-not-allowed'>썸네일 생성 완료👍</div>
+                                                        }
+                                                    </>
+                                                    :
+                                                    <>이 사진으로 결정✅</>
+                                                }
                                             </button>
                                             :
                                             <></>
@@ -480,7 +517,6 @@ function Editor({ editorLoaded, name, value, date, diaryId }) {
                                 onClick={() => saveDiary()}>
                                 저장하기
                             </button>
-                            {/*<button className="inline-flex justify-center px-3 py-2 ml-2 text-sm font-medium duration-200 border border-transparent rounded-md text-zinc-700 bg-zinc-200 hover:bg-zinc-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500 focus-visible:ring-offset-2" onClick={() => {setThumbnailDirectory(""); closeSaveModal();}}>돌아가기</button>*/}
                         </div>
                     </Dialog.Panel>
                     </Transition.Child>

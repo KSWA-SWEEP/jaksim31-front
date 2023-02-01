@@ -186,8 +186,8 @@ const Login = () => {
       data.loginId = userEmail.current;
       data.password = userPassword.current;
       data.username = userName.current;
-      // TODO: default 프로필 이미지 object storage에 올리기
-      data.profileImage = "https://source.unsplash.com/random/?user";
+      // object storage에 있는 default 프로필 이미지로 기본 프로필 이미지 설정
+      data.profileImage = process.env.NEXT_PUBLIC_DEFAULT_PROFILE;
 
       try{
           signUp(data);
