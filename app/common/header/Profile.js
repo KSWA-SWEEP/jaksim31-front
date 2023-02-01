@@ -5,7 +5,6 @@ import { Dialog, Transition } from '@headlessui/react';
 import userData from '../../../public/data/user.json'
 import { Fragment, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import moment from 'moment';
 import { useUserInfoQuery } from '../../hooks/queries/useUserInfoQuery';
 import Loading from './loading';
 import Error from '../../diary/list/grid/error';
@@ -13,7 +12,6 @@ import { useQueryClient } from 'react-query';
 import { useUserInfoUpdate } from '../../hooks/mutations/useUserInfoUpdate';
 import { updatePassword } from '../../api/updatePassword';
 import { checkPassword } from '../../api/checkPassword';
-import { getCookie } from 'cookies-next';
 import { useLogout } from '../../hooks/mutations/useLogout';
 import { uploadImg } from '../../api/uploadImg';
 
@@ -378,7 +376,7 @@ const Profile = () => {
                               <div className="grid grid-cols-3">
                                 
                                 {/* 총 작성한 일기 */}
-                                <div className='col-span-3 mb-1 sm:col-span-1'>
+                                <div className='col-span-3 mb-1 sm:col-span-1 ml-10'>
                                   <div className="mb-1 text-lg text-zinc-600">
                                     총 작성한 일기
                                   </div>
@@ -392,25 +390,26 @@ const Profile = () => {
                                   <div className="mb-1 text-lg text-zinc-600">
                                     최근 일기
                                   </div>
-                                  <div className='mb-2 text-xl font-semibold'>
-                                    {moment(user.recent_diaries[0].date).format("YYYY. MM. DD.")}
+                                  <div className='flex place-content-center'>
+                                    <div className='mb-2 text-xl font-semibold'>
+                                      {userInfoData.recentDiaries.diaryDate}
+                                    </div>
                                   </div>
                                   <div className='flex place-content-center'>
-                                    <div className='w-1/3 pl-5 text-zinc-500'>
-                                      {user.recent_diaries[0].emotion}
+                                    <div className='w-1/3 text-zinc-500 text-m'>
+                                        {userInfoData.recentDiaries.emotion}
                                     </div>
                                     <div className='relative flex'>
-                                      {user.recent_diaries[0].keywords.map((keyword) => (
-                                          <div key={keyword} className="px-2 py-1 mb-1 mr-2 text-xs font-medium w-fit text-zinc-500 bg-zinc-200 rounded-xl dark:bg-zinc-200 dark:text-zinc-800 ">
-                                              #{keyword}
-                                          </div>
-                                      ))}
+                                        {userInfoData.recentDiaries.keywords.map((keyword) => (
+                                            <div key={keyword} className="px-2 py-1 mb-1 mr-2 text-xs font-medium w-fit text-zinc-500 bg-zinc-200 rounded-xl dark:bg-zinc-200 dark:text-zinc-800 ">
+                                                #{keyword}
+                                            </div>
+                                        ))}
                                     </div>
                                   </div>
                                 </div>
                               </div>
                             </div>
-                            
                           </div>
                         </Dialog.Panel>
                       </Transition.Child>

@@ -1,10 +1,20 @@
-import userData from "../../../public/data/user.json";
+'use client';
+
 import Link from "next/link";
-// app/common/header/Profile에서 거의 다 가져왔지만 일부 수정하기 위해 component 따로 생성.
+import { useUserInfoQuery } from "../../hooks/queries/useUserInfoQuery";
+import Loading from "../list/grid/loading";
+import Error from "../list/grid/error";
+
 export default function RecentDiaryCard() {
-    const user = userData;
-    // 제일 최근 일기의 ID만 추출해서 /diary/ 뒤에 붙여줌.
-    const firstDiary = "/diary/"+user.recent_diaries[0].diary_id;
+
+    // 유저 정보 data fetching을 위한 useQuery
+    const { data, isLoading, isFetching, isFetched, isError } = useUserInfoQuery();
+
+    if( isLoading || isFetching ) return <Loading className="flex justify-center"/>
+    if ( isError ) return <Error className="flex justify-center"/>
+
+    console.log(data.recentDiaries.diaryDate)
+
     return (
         <>
             <div
@@ -32,20 +42,20 @@ export default function RecentDiaryCard() {
                     <br></br>
                     {/* 날짜 */}
                     <div className='text-xl font-extrabold text-zinc-700'>
-                        {user.recent_diaries[0].diaryDate}
+                        {data.recentDiaries.diaryDate}
                     </div>
                     {/* 썸네일 사진 */}
                     <div className="justify-center m-5 avatar">
                         <Link 
                         className="w-50 rounded-xl"
                         type="button"
-                        href={firstDiary}>
-                            <img src={user.recent_diaries[0].thumbnail}/>
+                        href={data.recentDiaries.thumbnail}>
+                            <img src={data.recentDiaries.thumbnail}/>
                         </Link>
                     </div>
                     {/* Keywords */}
                     <div className='flex flex-row justify-items-center align-middle'>
-                                        {user.recent_diaries[0].keywords.map((keyword) => (
+                                        {data.recentDiaries.keywords.map((keyword) => (
                                             <div key={keyword}
                                                  className="px-3 py-1 mb-1 mr-2 text-l align-middle font-medium w-fit text-zinc-500 bg-zinc-200 rounded-xl dark:bg-zinc-200 dark:text-zinc-800 ">
                                                 #{keyword}
