@@ -36,7 +36,7 @@ export default function RecentDiaryCard() {
                         </div>
                     </div>
                 </div>
-                {data.recentDiaries == null ? 
+                {data.recentDiary.diaryId == null ? 
                     <h4 className="pt-5 pl-8">
                         작성한 일기가 없습니다.
                     </h4>
@@ -45,20 +45,20 @@ export default function RecentDiaryCard() {
                     <br></br>
                     {/* 날짜 */}
                     <div className='text-xl font-extrabold text-zinc-700'>
-                        {data.recentDiaries.diaryDate}
+                        {data.recentDiary.diaryDate}
                     </div>
                     {/* 썸네일 사진 */}
                     <div className="justify-center m-5 avatar">
                         <Link 
                         className="w-50 rounded-xl"
                         type="button"
-                        href={data.recentDiaries.thumbnail}>
-                            <img src={data.recentDiaries.thumbnail}/>
+                        href={data.recentDiary.thumbnail}>
+                            <img src={data.recentDiary.thumbnail}/>
                         </Link>
                     </div>
                     {/* Keywords */}
                     <div className='flex flex-row justify-items-center align-middle'>
-                                        {data.recentDiaries.keywords.map((keyword) => (
+                                        {data.recentDiary.keywords.map((keyword) => (
                                             <div key={keyword}
                                                 className="px-3 py-1 mb-1 mr-2 text-l align-middle font-medium w-fit text-zinc-500 bg-zinc-200 rounded-xl dark:bg-zinc-200 dark:text-zinc-800 ">
                                                 #{keyword}

@@ -391,7 +391,7 @@ const Profile = () => {
                                     최근 일기
                                   </div>
 
-                                  {userInfoData.recentDiaries == null ?
+                                  {userInfoData.recentDiary.diaryId == null ?
                                     <h4>
                                       작성한 일기가 없습니다.
                                     </h4>
@@ -399,15 +399,15 @@ const Profile = () => {
                                     <div>
                                       <div className='flex place-content-center'>
                                         <div className='mb-2 text-xl font-semibold'>
-                                          {userInfoData.recentDiaries.diaryDate}
+                                          {userInfoData.recentDiary.diaryDate}
                                         </div>
                                       </div>
                                       <div className='flex place-content-center'>
                                         <div className='w-1/3 text-zinc-500 text-m'>
-                                            {userInfoData.recentDiaries.emotion}
+                                            {userInfoData.recentDiary.emotion}
                                         </div>
                                         <div className='relative flex'>
-                                            {userInfoData.recentDiaries.keywords.map((keyword) => (
+                                            {userInfoData.recentDiary.keywords.map((keyword) => (
                                                 <div key={keyword} className="px-2 py-1 mb-1 mr-2 text-xs font-medium w-fit text-zinc-500 bg-zinc-200 rounded-xl dark:bg-zinc-200 dark:text-zinc-800 ">
                                                     #{keyword}
                                                 </div>
