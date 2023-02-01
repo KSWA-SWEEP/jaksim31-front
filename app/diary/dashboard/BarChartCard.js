@@ -1,24 +1,83 @@
 'use client';
 
-import userEmotion from "../../../public/data/emotions.json"
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Chart from "chart.js";
+import { useEmotionCountQuery } from "../../hooks/queries/useEmotionCountQuery";
+import moment from 'moment';
 
-export default function CardBarChart() {
-  const emotions = userEmotion;
+export default function BarChartCard() {
+  
+  const emotionNames = ["🥰 좋음", "😕 싫음", "😯 놀람", "😬 두려움", "😶 감정없음", "😑 지루함", "🤢 창피함", "😭 슬픔", "🤔 불확실"];
+  // 차트에 표시될 감정 개수 배열
+  const [emotionCountThis, setEmotionCountThis] = useState([0, 0, 0, 0, 0, 0, 0, 0, 0]);
+  const [emotionCountLast, setEmotionCountLast] = useState([0, 0, 0, 0, 0, 0, 0, 0, 0]);
+
+  // API 요청 데이터
+  const value = new Date();
+  const [startDate, setStartDate] = useState(new Date(value.getFullYear(), value.getMonth(), 1));
+  const [endDate, setEndDate] = useState(new Date(value.getFullYear(), value.getMonth() + 1, 0));
+
+  // 이번 달 감정 통계 요청 데이터
+  let requestData = new Object();
+  requestData.startDate = moment(startDate).format("YYYY-MM-DD");
+  requestData.endDate = moment(endDate).format("YYYY-MM-DD");
+
+  // 이번 달 감정 통계 정보 data fetching을 위한 useQuery
+  const { data: dataEmotionThis, isSuccessThis } = useEmotionCountQuery(requestData, "THIS_MONTH");
+  
+  // 지난 달 감정 통계 요청 데이터
+  startDate.setMonth(startDate.getMonth() - 1);
+  endDate.setMonth(endDate.getMonth() - 1);
+  requestData = new Object();
+  requestData.startDate = moment(startDate).format("YYYY-MM-DD");
+  requestData.endDate = moment(endDate).format("YYYY-MM-DD");
+  
+  // 지난 달 감정 통계 정보 data fetching을 위한 useQuery
+  const { data: dataEmotionLast, isSuccessLast } = useEmotionCountQuery(requestData, "LAST_MONTH");
+  
+  // 이번 달 emotionCount data-fetching
+  useEffect(() => {
+  
+    if(dataEmotionThis != undefined) {
+
+      // 응답 데이터에 대해 emotionNames와 매칭되는 emotionCount 값 설정
+      dataEmotionThis.emotionStatics.map((pair) => {      
+        let idx = emotionNames.indexOf(pair.emotion)
+        emotionCountThis[idx] = pair.countEmotion;
+        setEmotionCountThis([...emotionCountThis]);
+      });
+    }
+  }, [isSuccessThis, dataEmotionThis]);
+
+  // 지난 달 emotionCount data-fetching
+  useEffect(() => {
+  
+    if(dataEmotionLast != undefined) {
+
+      // 응답 데이터에 대해 emotionNames와 매칭되는 emotionCount 값 설정
+      dataEmotionLast.emotionStatics.map((pair) => {      
+        let idx = emotionNames.indexOf(pair.emotion)
+        emotionCountLast[idx] = pair.countEmotion;
+        setEmotionCountLast([...emotionCountLast]);
+      });
+    }
+  }, [isSuccessLast, dataEmotionLast]);
+
   useEffect(() => {
     let config = {
       type: "bar",
       data: {
         /* X축 범주 */
         labels: [
-          "😊",
+          "좋음",
           "싫음",
           "놀람",
           "두려움",
           "감정 없음",
           "지루함",
-          "부끄러움",
+          "창피함",
+          "슬픔",
+          "불확실"
         ],
         title: {
           font: {
@@ -30,7 +89,7 @@ export default function CardBarChart() {
             label: "이번 달",
             backgroundColor: "#4c51bf",
             borderColor: "#4c51bf",
-            data: [emotions.monthEmotions.좋음, emotions.monthEmotions.싫음, emotions.monthEmotions.놀람, emotions.monthEmotions.두려움, emotions.monthEmotions.감정없음, emotions.monthEmotions.지루함, emotions.monthEmotions.부끄러움],
+            data: [emotionCountThis[0], emotionCountThis[1], emotionCountThis[2], emotionCountThis[3], emotionCountThis[4], emotionCountThis[5], emotionCountThis[6], emotionCountThis[7], emotionCountThis[8]],
             fill: false
           },
           {
@@ -38,7 +97,7 @@ export default function CardBarChart() {
             fill: false,
             backgroundColor: "#ed64a6",
             borderColor: "#ed64a6",
-            data: [7, 10, 3, 1, 3, 1, 5],
+            data: [emotionCountLast[0], emotionCountLast[1], emotionCountLast[2], emotionCountLast[3], emotionCountLast[4], emotionCountLast[5], emotionCountLast[6], emotionCountLast[7], emotionCountLast[8]],
           },
         ],
       },
@@ -109,7 +168,7 @@ export default function CardBarChart() {
     };
     let ctx = document.getElementById("bar-chart").getContext("2d");
     window.myBar = new Chart(ctx, config);
-  }, []);
+  }, [emotionCountThis, emotionCountLast]);
   return (
     <>
       <div className="relative flex flex-col w-full min-w-0 mb-6 break-words shadow-lg rounded-xl bg-zinc-100">

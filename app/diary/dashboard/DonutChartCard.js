@@ -1,10 +1,9 @@
 'use client';
 import userEmotion from "../../../public/data/emotions.json"
-import CardSocialTraffic from "./MonthlyProgress"
 import React, { useEffect } from "react";
 import Chart from "chart.js";
 
-export default function DoughnutChart() {
+export default function DonutChartCard() {
   const emotions = userEmotion;
   useEffect(() => {
     let config = {
@@ -80,10 +79,6 @@ export default function DoughnutChart() {
         </div>
       </div>
       <br></br>
-      {/* 월별 일기 작성률 모아보기 */}
-      <div className="col-span-6 px-4 my-4 lg:col-span-3">
-        <CardSocialTraffic/>
-      </div>
     </>
   );
 }
