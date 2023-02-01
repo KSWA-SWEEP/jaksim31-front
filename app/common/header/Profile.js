@@ -37,8 +37,11 @@ const Profile = () => {
     const userNewPassword = useRef("");
     const userNewPasswordCheck = useRef("");
     const userProfileImage = useRef("");
-    const [userProfileImageURL, setUserProfileImageURL] = useState("");   // 프로필 이미지 미리보기를 위한 임시 주소
-    const [userProfileImageExtension, setuserProfileImageExtension] = useState("");   // 프로필 이미지 미리보기를 위한 임시 주소
+
+    // 프로필 이미지 미리보기 URL
+    const [userProfileImageURL, setUserProfileImageURL] = useState("");
+    // 프로필 이미지 첨부시 확장자 저장을 위한 변수
+    const [userProfileImageExtension, setuserProfileImageExtension] = useState("");
     const [isNameEdit, setIsNameEdit] = useState(false);
 
     // 오류 메시지 변수
@@ -108,15 +111,26 @@ const Profile = () => {
     const onProfileImageChange = async (e) => {
 
         const file = e.target.files[0];
-        userProfileImage.current = file;
         const reader = new FileReader();
 
-        reader.readAsDataURL(file);
-        reader.onloadend = async () => {
-          userProfileImage.current = reader.result;
-          setUserProfileImageURL(reader.result);          
-          setuserProfileImageExtension(e.target.files[0].type);
-        };
+        // 파일 형식이 정해진 이미지 타입이 아닐 경우
+        // kic Object Storage에서 resize 가능한 타입만 입력 받음
+        if(!(file.type == 'image/png' || file.type == 'image/jpeg' || file.type == 'image/gif')){
+          alert('이미지 형식의 파일만 제출할 수 있습니다!🤔')
+        } 
+        else {
+          if(file != undefined) {
+            userProfileImage.current = file;
+            reader.readAsDataURL(file);
+            
+            reader.onloadend = async () => {
+              userProfileImage.current = reader.result;
+              setUserProfileImageURL(reader.result);          
+              setuserProfileImageExtension(e.target.files[0].type);
+            };
+          }
+        }        
+
     };
 
     // 이름 편집 아이콘 클릭 시 실행되는 함수
@@ -297,7 +311,7 @@ const Profile = () => {
                                     onChange={onProfileImageChange} 
                                     id="profileImage" 
                                     ref={userProfileImage}
-                                    accept="image/*"
+                                    accept="image/jpeg, image/gif, image/png"
                                   />
 
                                   {/* 파일 선택 창 대신 아이콘 사용 */}

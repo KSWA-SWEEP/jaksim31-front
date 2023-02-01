@@ -7,17 +7,9 @@ export const useUserInfoUpdate = (queryClient) =>
 
             let returnData = new Object();
             
-            const response = await updateUserInfo(data)
-            .then(resp => resp.json())
-            .then(respData => {
-                if(respData.errorCode) {
-                    throw respData.errorCode;
-                }
-
-                returnData = respData;
-            })
-
-            return returnData;
+            const response = await updateUserInfo(data);
+            
+            return response;
         },
         {
             onSuccess: async (response) => {
