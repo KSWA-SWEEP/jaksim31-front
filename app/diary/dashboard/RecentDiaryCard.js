@@ -13,8 +13,6 @@ export default function RecentDiaryCard() {
     if( isLoading || isFetching ) return <Loading className="flex justify-center"/>
     if ( isError ) return <Error className="flex justify-center"/>
 
-    console.log(data.recentDiaries.diaryDate)
-
     return (
         <>
             <div
@@ -38,7 +36,12 @@ export default function RecentDiaryCard() {
                         </div>
                     </div>
                 </div>
-                <div className='flex flex-col text-center justify-items-center'>
+                {data.recentDiaries == null ? 
+                    <h4 className="pt-5 pl-8">
+                        작성한 일기가 없습니다.
+                    </h4>
+                    :
+                    <div className='flex flex-col text-center justify-items-center'>
                     <br></br>
                     {/* 날짜 */}
                     <div className='text-xl font-extrabold text-zinc-700'>
@@ -57,7 +60,7 @@ export default function RecentDiaryCard() {
                     <div className='flex flex-row justify-items-center align-middle'>
                                         {data.recentDiaries.keywords.map((keyword) => (
                                             <div key={keyword}
-                                                 className="px-3 py-1 mb-1 mr-2 text-l align-middle font-medium w-fit text-zinc-500 bg-zinc-200 rounded-xl dark:bg-zinc-200 dark:text-zinc-800 ">
+                                                className="px-3 py-1 mb-1 mr-2 text-l align-middle font-medium w-fit text-zinc-500 bg-zinc-200 rounded-xl dark:bg-zinc-200 dark:text-zinc-800 ">
                                                 #{keyword}
                                             </div>
                                         ))}
@@ -66,7 +69,8 @@ export default function RecentDiaryCard() {
                         <div className="grid grid-cols-3">
                         </div>
                     </div>
-                </div>
+                    </div>
+                }
             </div>
         </>
         );

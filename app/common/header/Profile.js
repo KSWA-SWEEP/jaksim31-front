@@ -390,23 +390,33 @@ const Profile = () => {
                                   <div className="mb-1 text-lg text-zinc-600">
                                     최근 일기
                                   </div>
-                                  <div className='flex place-content-center'>
-                                    <div className='mb-2 text-xl font-semibold'>
-                                      {userInfoData.recentDiaries.diaryDate}
+
+                                  {userInfoData.recentDiaries == null ?
+                                    <h4>
+                                      작성한 일기가 없습니다.
+                                    </h4>
+                                    :
+                                    <div>
+                                      <div className='flex place-content-center'>
+                                        <div className='mb-2 text-xl font-semibold'>
+                                          {userInfoData.recentDiaries.diaryDate}
+                                        </div>
+                                      </div>
+                                      <div className='flex place-content-center'>
+                                        <div className='w-1/3 text-zinc-500 text-m'>
+                                            {userInfoData.recentDiaries.emotion}
+                                        </div>
+                                        <div className='relative flex'>
+                                            {userInfoData.recentDiaries.keywords.map((keyword) => (
+                                                <div key={keyword} className="px-2 py-1 mb-1 mr-2 text-xs font-medium w-fit text-zinc-500 bg-zinc-200 rounded-xl dark:bg-zinc-200 dark:text-zinc-800 ">
+                                                    #{keyword}
+                                                </div>
+                                            ))}
+                                        </div>
+                                      </div>
                                     </div>
-                                  </div>
-                                  <div className='flex place-content-center'>
-                                    <div className='w-1/3 text-zinc-500 text-m'>
-                                        {userInfoData.recentDiaries.emotion}
-                                    </div>
-                                    <div className='relative flex'>
-                                        {userInfoData.recentDiaries.keywords.map((keyword) => (
-                                            <div key={keyword} className="px-2 py-1 mb-1 mr-2 text-xs font-medium w-fit text-zinc-500 bg-zinc-200 rounded-xl dark:bg-zinc-200 dark:text-zinc-800 ">
-                                                #{keyword}
-                                            </div>
-                                        ))}
-                                    </div>
-                                  </div>
+                                  }
+                                  
                                 </div>
                               </div>
                             </div>
