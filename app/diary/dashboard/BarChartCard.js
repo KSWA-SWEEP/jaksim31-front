@@ -14,23 +14,23 @@ export default function BarChartCard() {
 
   // API 요청 데이터
   const value = new Date();
-  const [startDate, setStartDate] = useState(new Date(value.getFullYear(), value.getMonth(), 1));
-  const [endDate, setEndDate] = useState(new Date(value.getFullYear(), value.getMonth() + 1, 0));
+  const [startDateThis, setStartDateThis] = useState(new Date(value.getFullYear(), value.getMonth(), 1));
+  const [endDateThis, setEndDateThis] = useState(new Date(value.getFullYear(), value.getMonth() + 1, 0));
+  const [startDateLast, setStartDateLast] = useState(new Date(startDateThis.getFullYear(), startDateThis.getMonth() - 1, 1));
+  const [endDateLast, setEndDateLast] = useState(new Date(startDateThis.getFullYear(), startDateThis.getMonth(), 0));
 
   // 이번 달 감정 통계 요청 데이터
   let requestData = new Object();
-  requestData.startDate = moment(startDate).format("YYYY-MM-DD");
-  requestData.endDate = moment(endDate).format("YYYY-MM-DD");
+  requestData.startDate = moment(startDateThis).format("YYYY-MM-DD");
+  requestData.endDate = moment(endDateThis).format("YYYY-MM-DD");
 
   // 이번 달 감정 통계 정보 data fetching을 위한 useQuery
   const { data: dataEmotionThis, isSuccessThis } = useEmotionCountQuery(requestData, "THIS_MONTH");
   
   // 지난 달 감정 통계 요청 데이터
-  startDate.setMonth(startDate.getMonth() - 1);
-  endDate.setMonth(endDate.getMonth() - 1);
   requestData = new Object();
-  requestData.startDate = moment(startDate).format("YYYY-MM-DD");
-  requestData.endDate = moment(endDate).format("YYYY-MM-DD");
+  requestData.startDate = moment(startDateLast).format("YYYY-MM-DD");
+  requestData.endDate = moment(endDateLast).format("YYYY-MM-DD");
   
   // 지난 달 감정 통계 정보 data fetching을 위한 useQuery
   const { data: dataEmotionLast, isSuccessLast } = useEmotionCountQuery(requestData, "LAST_MONTH");
@@ -93,7 +93,7 @@ export default function BarChartCard() {
             fill: false
           },
           {
-            label: "저번 달",
+            label: "지난 달",
             fill: false,
             backgroundColor: "#ed64a6",
             borderColor: "#ed64a6",
@@ -176,7 +176,7 @@ export default function BarChartCard() {
           <div className="flex flex-wrap items-center">
             <div className="relative flex-1 flex-grow w-full max-w-full">
               <h2 className="text-xl font-semibold text-zinc-700">
-                저번 달과 감정 빈도를 비교해봐요!😊
+                지난 달과 감정 빈도를 비교해봐요!😊
               </h2>
             </div>
           </div>
