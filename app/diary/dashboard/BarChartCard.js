@@ -109,12 +109,8 @@ export default function BarChartCard() {
           text: "감정 비교",
         },
         tooltips: {
-          mode: "index",
+          mode: "point",
           intersect: false,
-        },
-        hover: {
-          mode: "nearest",
-          intersect: true,
         },
         legend: {
           labels: {
@@ -167,6 +163,9 @@ export default function BarChartCard() {
       },
     };
     let ctx = document.getElementById("bar-chart").getContext("2d");
+    if(window.myBar) {
+      window.myBar.destroy();
+    }
     window.myBar = new Chart(ctx, config);
   }, [emotionCountThis, emotionCountLast]);
   return (
