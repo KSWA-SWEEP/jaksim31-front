@@ -1,7 +1,7 @@
 import React from "react";
 import Tutorial from "../../common/Tutorial";
 
-export default function diaryTutorial() {
+export default function tutorial() {
   return (
     <>
       <div className="flex justify-center w-full pt-20">
