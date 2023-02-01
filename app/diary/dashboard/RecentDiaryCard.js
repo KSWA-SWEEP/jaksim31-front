@@ -61,7 +61,7 @@ export default function RecentDiaryCard() {
                                         {data.recentDiary.keywords.map((keyword) => (
                                             <div key={keyword}
                                                 className="px-3 py-1 mb-1 mr-2 text-l align-middle font-medium w-fit text-zinc-500 bg-zinc-200 rounded-xl dark:bg-zinc-200 dark:text-zinc-800 ">
-                                                #{keyword}
+                                                {keyword == "EXECPTION_NO_KEYWORD" ? <>#키워드 없음</> : <>#{keyword}</>}
                                             </div>
                                         ))}
                                     </div>

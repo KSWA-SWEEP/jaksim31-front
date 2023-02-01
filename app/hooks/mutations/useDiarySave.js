@@ -32,6 +32,7 @@ export const useDiarySave = (queryClient, saveType, diaryId) =>
                 }
                 queryClient.resetQueries(["DIARY_LIST"]);
                 queryClient.resetQueries(["USER_INFO"]);
+                queryClient.resetQueries(["EMOTION_COUNT"]);
             }
         }
     );

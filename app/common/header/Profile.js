@@ -14,6 +14,7 @@ import { updatePassword } from '../../api/updatePassword';
 import { checkPassword } from '../../api/checkPassword';
 import { useLogout } from '../../hooks/mutations/useLogout';
 import { uploadImg } from '../../api/uploadImg';
+import { getCookie } from 'cookies-next';
 
 const Profile = () => {
 
@@ -313,12 +314,12 @@ const Profile = () => {
                                   />
 
                                   {/* 파일 선택 창 대신 아이콘 사용 */}
-                                  {user.is_social ? 
-                                    <PencilSquareIcon className='hidden text-white w-7 h-7 group-hover:block'/>
+                                  {getCookie("isSocial") ? 
+                                    <></>
                                     :
                                     <label className="signup-profileImg-label" htmlFor="profileImage">
                                       <PencilSquareIcon className='hidden text-white w-7 h-7 group-hover:block'/>
-                                     </label>
+                                    </label>
                                   }
                                 </div>
                               </div>
@@ -340,10 +341,13 @@ const Profile = () => {
                               />
                             </div>
                             {/* 사용자 ID (이메일) */}
-                            <p className="text-sm text-zinc-500">
-                              {userInfoData.loginId}
-                            </p>
-
+                            {getCookie("isSocial") ? 
+                              <></>
+                            :
+                              <p className="text-sm text-zinc-500">
+                                {userInfoData.loginId}
+                              </p>
+                            }
                             <div className='flex items-center justify-center'> 
                               <button
                                   type="button"
@@ -354,7 +358,7 @@ const Profile = () => {
                                 저장하기
                               </button>
                               {/*소셜 로그인 사용자일 경우 비밀번호 변경 불가능*/}
-                              {user.is_social ? 
+                              {getCookie("isSocial") ? 
                                 <></>
                                 :
                                 <div className='justify-center '>
@@ -409,7 +413,7 @@ const Profile = () => {
                                         <div className='relative flex'>
                                             {userInfoData.recentDiary.keywords.map((keyword) => (
                                                 <div key={keyword} className="px-2 py-1 mb-1 mr-2 text-xs font-medium w-fit text-zinc-500 bg-zinc-200 rounded-xl dark:bg-zinc-200 dark:text-zinc-800 ">
-                                                    #{keyword}
+                                                    {keyword == "EXECPTION_NO_KEYWORD" ? <>#키워드 없음</> : <>#{keyword}</>}
                                                 </div>
                                             ))}
                                         </div>
