@@ -7,7 +7,6 @@ import { Fragment, useEffect, useRef, useState } from "react"
 import Image from "next/image";
 import moment from "moment";
 import Loading from "./loading";
-import Error from "./error";
 import Pagination from "react-js-pagination";
 import './Pagination.css'
 import { useQueryClient } from "react-query";
@@ -55,13 +54,28 @@ export default function DiaryGridList() {
     const queryClient = useQueryClient();
 
     // diary data 삭제를 위한 useMutation
-    const { status, mutate } = useDiaryDelete(diaryToDelete.current, queryClient)
-    
-    const { data : diaryListData, isLoading, isError } = useDiaryListPageQuery(optionData)
+    const { status, mutate, error : mutateError } = useDiaryDelete(diaryToDelete.current, queryClient)
+
+    useEffect(() => {
+        if(status == "success"){
+            openSuccessModal()
+        }
+    }, [status])
+
+    const { data : diaryListData, error, isLoading, isError } = useDiaryListPageQuery(optionData)
     
     if ( isLoading ) return <Loading className="flex justify-center"/>
  
-    if ( isError ) return <Error className="flex justify-center"/>
+    if ( isError ) return (
+        <div className="flex justify-center">
+            <div className="my-16 text-2xl text-center">
+                😥<br/>{error}
+                <div className="mt-6">
+                    <Link href="/diary/list/grid" replace={true} className="font-semibold duration-200 border-opacity-0 outline-none sm:text-base text-zinc-50 bg-zinc-400 hover:bg-zinc-500 btn outline-0 border-spacing-0 hover:scale-105">새로고침</Link>
+                </div>
+            </div>
+        </div>
+    )
     
     let diarys = diaryListData.content;
 
@@ -129,15 +143,17 @@ export default function DiaryGridList() {
     
     function deleteDiary() {
         mutate()
-        closeDeleteModal()
-        openSuccessModal()
     }
     
     function openDeleteModal(diaryId) { diaryToDelete.current = diaryId; setIsDeleteModalOpen(true) }
     function closeDeleteModal() { setIsDeleteModalOpen(false) }
   
     function openSuccessModal() { setIsSuccessModalOpen(true) }
-    function closeSuccessModal() { setIsSuccessModalOpen(false) }
+    function closeSuccessModal() { 
+        setIsSuccessModalOpen(false);                                        
+        queryClient.invalidateQueries(["DIARY_LIST"]);
+        queryClient.invalidateQueries(["USER_INFO"]);
+    }
 
     return (
         <div>
@@ -287,6 +303,7 @@ export default function DiaryGridList() {
                                                             alt={diary.emotion}
                                                             placeholder="empty"
                                                             fill
+                                                            sizes='mas-width: 20vw, max-height: 10vh'
                                                             className="object-cover duration-200 hover:opacity-20 hover:scale-105"
                                                         />
                                                     </div>
@@ -351,7 +368,7 @@ export default function DiaryGridList() {
                                                                 #{keyword}
                                                             </div>
                                                             :
-                                                            <div className="px-3 text-sm text-zinc-400 ">
+                                                            <div key={keyword} className="px-3 text-sm text-zinc-400 ">
                                                                 ※ 추출된 키워드가 없습니다
                                                             </div>
 
@@ -435,7 +452,10 @@ export default function DiaryGridList() {
                                     <button
                                         type="button"
                                         className="justify-center px-2 py-1.5 mx-2 text-base font-semibold text-red-900 duration-200 bg-red-100 border border-transparent rounded-md hover:bg-red-200 focus:outline-none "
-                                        onClick={() => deleteDiary()}
+                                        onClick={() => {
+                                            deleteDiary(); 
+                                            closeDeleteModal();
+                                        }}
                                         >
                                         일기 삭제하기
                                     </button>

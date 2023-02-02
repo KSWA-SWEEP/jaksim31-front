@@ -12,7 +12,7 @@ export const useDiaryListQuery = (options) =>
             .then(resp => resp.json())
             .then(respData => {
                 if(respData.errorCode) {
-                    throw respData.errorCode;
+                    throw respData;
                 }
 
                 returnData = respData;
@@ -21,6 +21,7 @@ export const useDiaryListQuery = (options) =>
             return returnData;
         },
         {
+            retry: false,
             staleTime: 5 * 60 * 1000,
         }
     );

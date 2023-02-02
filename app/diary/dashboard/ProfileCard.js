@@ -1,17 +1,22 @@
 'use client';
 
 import Loading from "../list/grid/loading";
-import Error from "../list/grid/error";
 import { useUserInfoQuery } from "../../hooks/queries/useUserInfoQuery";
 
 // export default function UserProfile(userInfo) {
 export default function ProfileCard() {
 
     // 유저 정보 data fetching을 위한 useQuery
-    const { data, isLoading, isFetching, isFetched, isError } = useUserInfoQuery();
+    const { data, error, isLoading, isFetching, isFetched, isError } = useUserInfoQuery();
 
     if( isLoading || isFetching ) return <Loading className="flex justify-center"/>
-    if ( isError ) return <Error className="flex justify-center"/>
+    if ( isError ) return (
+        <div className="flex justify-center">
+            <div className="my-16 text-2xl text-center">
+                😥<br/>{error.errorMessage}
+            </div>
+        </div>
+    )
 
     return (
         <>

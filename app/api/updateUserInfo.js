@@ -10,11 +10,6 @@ export async function updateUserInfo(data) {
             'Content-type': 'application/json',
         },
         body: JSON.stringify(data)
-    })
-    .then(respData => {
-        if(respData.status != 200) {
-            throw respData.errorMessage;
-        }
     });
 
     return res;

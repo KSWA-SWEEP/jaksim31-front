@@ -6,6 +6,7 @@ export const useLogout = (queryClient) =>
     useMutation(
         logout,
         {   
+            retry: false,
             onSuccess: () => {
                 queryClient.removeQuries(["USER_INFO"]);
             }

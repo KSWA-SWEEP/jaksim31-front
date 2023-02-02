@@ -2,14 +2,25 @@
 
 import { QueryCache, QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools"
+import { logout } from "./api/logout";
+
+const controller = new AbortController();
 
 const queryClient = new QueryClient({
     queryCache: new QueryCache({
-        onError: (error) => {
-            if(error == 'NOT_FOUND_USER' || error == 'NOT_FOUND_AUTHENTICATION' || error == 'SESSION_EXPIRED' || error == 'NO_PERMISSION' || error == 'EMPTY_TOKEN') {
+        onError: async (error) => {
+            console.log(error)
+            if (error.errorCode == 'NO_AUTHORIZATION' || error.errorCode == 'NOT_FOUND_USER') {
+                await logout();
+                alert(error.errorMessage+"😥\n계속하려면 다시 로그인 해주세요.");
+                queryClient.removeQueries();
+                window.location.href = "/home/landing";
+            } else if(error.errorCode == 'NOT_FOUND_AUTHENTICATION' || error.errorCode == 'SESSION_EXPIRED' || error.errorCode == 'NO_PERMISSION' || error.errorCode == 'EMPTY_TOKEN') {
                 try {
-                    alert("세션이 만료되었거나 유효하지 않은 요청입니다.\n계속하려면 다시 로그인 해주세요.")
                     window.location.href = "/home/landing";
+                    alert(error.errorMessage+"😥\n계속하려면 다시 로그인 해주세요.");
+                    queryClient.removeQueries();
+                    controller.abort();
                 } catch(e) {
                     console.log(e);
                 }

@@ -5,11 +5,10 @@ import { QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
 import moment from "moment";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useQueryClient } from "react-query";
 import { useDiaryDelete } from "../../hooks/mutations/useDiaryDelete";
 import { useDiaryQuery } from "../../hooks/queries/useDiaryQuery";
-import Error from "./error";
 import Loading from "./loading";
 
 export default function DiaryContents(props) {
@@ -22,19 +21,33 @@ export default function DiaryContents(props) {
     // react-query
     const queryClient = useQueryClient();
 
-    const { data, isLoading, isFetching, isFetched, isError } = useDiaryQuery(props.diaryId)
+    const { data, error, isLoading, isFetching, isFetched, isError } = useDiaryQuery(props.diaryId)
 
     // diary data 삭제를 위한 useMutation
     const { status, mutate } = useDiaryDelete(props.diaryId, queryClient)
 
-    if ( isLoading || data == undefined ) return <Loading className="flex justify-center w-full"/>
+    useEffect(() => {
+        if(status == "success"){
+            openSuccessModal()
+        }
+    }, [status])
+    
+    if ( isLoading ) return <Loading className="flex justify-center"/>
  
-    if ( isError ) return <Error className="flex justify-center w-full"/>
+    // data fetching 과정에서 error 발생시 에러 메세지 및 목록으로 이동 버튼 출력 
+    if ( isError ) return (
+        <div className="flex justify-center">
+            <div className="my-16 text-2xl text-center">
+                😥<br/>{error.errorMessage}
+                <div className="mt-6">
+                    <Link href="diary/list/grid" replace={true} className="font-semibold duration-200 border-opacity-0 outline-none sm:text-base text-zinc-50 bg-zinc-400 hover:bg-zinc-500 btn outline-0 border-spacing-0 hover:scale-105">목록으로 이동</Link>
+                </div>
+            </div>
+        </div>
+    )
 
     function deleteDiary() {
         mutate()
-        closeDeleteModal()
-        openSuccessModal()
     }
     
     function openDeleteModal() { setIsDeleteModalOpen(true) }
@@ -42,12 +55,14 @@ export default function DiaryContents(props) {
   
     function openSuccessModal() { setIsSuccessModalOpen(true) }
     function closeSuccessModal() { 
-        setIsSuccessModalOpen(false);
-        router.replace('/diary/list/grid');
+        setIsSuccessModalOpen(false);                                        
+        queryClient.invalidateQueries(["DIARY_LIST"]);
+        queryClient.invalidateQueries(["USER_INFO"]);
+        router.replace('/diary/list/calendar');
     }
-
+    
     return (
-      <>
+      <div className="px-10 py-12 lg:px-28">
           <div className="grid grid-cols-3">
           
           {/* 날짜 및 키워드 */}
@@ -156,7 +171,10 @@ export default function DiaryContents(props) {
                       <button
                           type="button"
                           className="justify-center px-2 py-1.5 mx-2 text-base font-semibold text-red-900 duration-200 bg-red-100 border border-transparent rounded-md hover:bg-red-200 focus:outline-none "
-                          onClick={() => deleteDiary()}
+                          onClick={() => {
+                              deleteDiary(); 
+                              closeDeleteModal();
+                          }}
                           >
                           일기 삭제하기
                       </button>
@@ -222,7 +240,7 @@ export default function DiaryContents(props) {
             </div>
             </Dialog>
         </Transition>
-      </>
+      </div>
     )
 }
   
