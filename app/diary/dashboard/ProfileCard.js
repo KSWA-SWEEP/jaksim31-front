@@ -31,11 +31,11 @@ export default function ProfileCard() {
                         {data.username}
                     </div>
                     {/* 사용자 ID (이메일) */}
-                    <p className="text-sm text-zinc-500">
+                    <p className="text-l text-zinc-500">
                         {data.loginId}
                     </p>
                     {/* divider */}
-                    <div className="my-6 border-b-2"></div>
+                    <div className="my-3 border-b-2"></div>
                     <div className='w-full'>
                         <div className="grid grid-cols-3">
                             {/* 총 작성한 일기 수 */}

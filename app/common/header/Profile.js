@@ -5,7 +5,6 @@ import { Dialog, Transition } from '@headlessui/react';
 import userData from '../../../public/data/user.json'
 import { Fragment, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import moment from 'moment';
 import { useUserInfoQuery } from '../../hooks/queries/useUserInfoQuery';
 import Loading from './loading';
 import Error from '../../diary/list/grid/error';
@@ -13,9 +12,9 @@ import { useQueryClient } from 'react-query';
 import { useUserInfoUpdate } from '../../hooks/mutations/useUserInfoUpdate';
 import { updatePassword } from '../../api/updatePassword';
 import { checkPassword } from '../../api/checkPassword';
-import { getCookie } from 'cookies-next';
 import { useLogout } from '../../hooks/mutations/useLogout';
 import { uploadImg } from '../../api/uploadImg';
+import { getCookie } from 'cookies-next';
 
 const Profile = () => {
 
@@ -204,7 +203,7 @@ const Profile = () => {
       
       try {
         // 비밀번호 검증 API 호출
-        const checkResponse = await checkPassword(checkData, data.loginId)
+        const checkResponse = await checkPassword(checkData, userInfoData.loginId)
         .then(resp => resp.status != 200 ? resp.json() : resp)
         .then(respData => {
           if(respData.errorCode) {
@@ -213,7 +212,7 @@ const Profile = () => {
         })
 
         // 비밀번호 변경 API 호출
-        const updateResponse = await updatePassword(updateData, data.loginId)
+        const updateResponse = await updatePassword(updateData, userInfoData.loginId)
         .then(resp => resp.status != 200 ? resp.json() : resp)
         .then(respData => {
           if(respData.errorCode) {
@@ -315,12 +314,12 @@ const Profile = () => {
                                   />
 
                                   {/* 파일 선택 창 대신 아이콘 사용 */}
-                                  {user.is_social ? 
-                                    <PencilSquareIcon className='hidden text-white w-7 h-7 group-hover:block'/>
+                                  {getCookie("isSocial") ? 
+                                    <></>
                                     :
                                     <label className="signup-profileImg-label" htmlFor="profileImage">
                                       <PencilSquareIcon className='hidden text-white w-7 h-7 group-hover:block'/>
-                                     </label>
+                                    </label>
                                   }
                                 </div>
                               </div>
@@ -342,10 +341,13 @@ const Profile = () => {
                               />
                             </div>
                             {/* 사용자 ID (이메일) */}
-                            <p className="text-sm text-zinc-500">
-                              {userInfoData.loginId}
-                            </p>
-
+                            {getCookie("isSocial") ? 
+                              <></>
+                            :
+                              <p className="text-sm text-zinc-500">
+                                {userInfoData.loginId}
+                              </p>
+                            }
                             <div className='flex items-center justify-center'> 
                               <button
                                   type="button"
@@ -356,7 +358,7 @@ const Profile = () => {
                                 저장하기
                               </button>
                               {/*소셜 로그인 사용자일 경우 비밀번호 변경 불가능*/}
-                              {user.is_social ? 
+                              {getCookie("isSocial") ? 
                                 <></>
                                 :
                                 <div className='justify-center '>
@@ -378,7 +380,7 @@ const Profile = () => {
                               <div className="grid grid-cols-3">
                                 
                                 {/* 총 작성한 일기 */}
-                                <div className='col-span-3 mb-1 sm:col-span-1'>
+                                <div className='col-span-3 mb-1 sm:col-span-1 ml-10'>
                                   <div className="mb-1 text-lg text-zinc-600">
                                     총 작성한 일기
                                   </div>
@@ -392,25 +394,36 @@ const Profile = () => {
                                   <div className="mb-1 text-lg text-zinc-600">
                                     최근 일기
                                   </div>
-                                  <div className='mb-2 text-xl font-semibold'>
-                                    {moment(user.recent_diaries[0].date).format("YYYY. MM. DD.")}
-                                  </div>
-                                  <div className='flex place-content-center'>
-                                    <div className='w-1/3 pl-5 text-zinc-500'>
-                                      {user.recent_diaries[0].emotion}
+
+                                  {userInfoData.recentDiary.diaryId == null ?
+                                    <h4>
+                                      작성한 일기가 없습니다.
+                                    </h4>
+                                    :
+                                    <div>
+                                      <div className='flex place-content-center'>
+                                        <div className='pb-1 text-xl font-semibold'>
+                                          {userInfoData.recentDiary.diaryDate}
+                                        </div>
+                                      </div>
+                                      <div className='flex place-content-center flex-wrap'>
+                                        <div className='w-1/3 pb-2 text-zinc-500 text-m'>
+                                            {userInfoData.recentDiary.emotion}
+                                        </div>
+                                        <div className='relative flex flex-wrap justify-center'>
+                                            {userInfoData.recentDiary.keywords.map((keyword) => (
+                                                <div key={keyword} className="px-2 py-1 mb-1 mr-2 text-xs font-medium w-fit text-zinc-500 bg-zinc-200 rounded-xl dark:bg-zinc-200 dark:text-zinc-800 ">
+                                                    {keyword == "EXECPTION_NO_KEYWORD" ? <>#키워드 없음</> : <>#{keyword}</>}
+                                                </div>
+                                            ))}
+                                        </div>
+                                      </div>
                                     </div>
-                                    <div className='relative flex'>
-                                      {user.recent_diaries[0].keywords.map((keyword) => (
-                                          <div key={keyword} className="px-2 py-1 mb-1 mr-2 text-xs font-medium w-fit text-zinc-500 bg-zinc-200 rounded-xl dark:bg-zinc-200 dark:text-zinc-800 ">
-                                              #{keyword}
-                                          </div>
-                                      ))}
-                                    </div>
-                                  </div>
+                                  }
+                                  
                                 </div>
                               </div>
                             </div>
-                            
                           </div>
                         </Dialog.Panel>
                       </Transition.Child>

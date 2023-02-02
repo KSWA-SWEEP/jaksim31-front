@@ -5,20 +5,16 @@ import { deleteDiary } from "../../api/deleteDiary";
 export const useDiaryDelete = (diaryId, queryClient) =>
     useMutation(
         async () => {
-
-            let returnData = new Object();
             
             const response = await deleteDiary(diaryId)
-            .then(resp => resp.json())
+            .then(resp => resp.status != 200 ? resp.json() : resp)
             .then(respData => {
                 if(respData.errorCode) {
-                    throw respData.errorCode;
+                    throw respData;
                 }
-
-                returnData = respData;
             })
-
-            return returnData;
+            
+            return response;
         },
         {
             onSuccess: async (response) => {
@@ -27,8 +23,9 @@ export const useDiaryDelete = (diaryId, queryClient) =>
                 {
                     setCookie('todayDiaryId', "");
                 }
-                queryClient.resetQueries(["DIARY_LIST"]);
-                queryClient.resetQueries(["USER_INFO"]);
+                queryClient.invalidateQueries(["DIARY_LIST"]);
+                queryClient.invalidateQueries(["USER_INFO"]);
+                queryClient.invalidateQueries(["EMOTION_COUNT"]);
             }
         }
     );
