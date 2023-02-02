@@ -11,26 +11,17 @@ export const useDiarySave = (queryClient, saveType, diaryId) =>
             let returnData = new Object();
 
             let response = await (saveType === "create" ? addDiary(data) : modifyDiary(data, diaryId))
-            .then(resp => resp.json())
+            .then(resp => resp.status != 200 ? resp.json() : resp)
             .then(respData => {
                 if(respData.errorCode) {
                     throw respData;
                 }
-                returnData = respData;
             })
 
-            return returnData;
+            return response;
 
         },
         {
-            onSuccess: async (data) => {
-                let today = moment(new Date()).format("YYYY-MM-DD");
-
-                if(data.diaryDate == today)
-                {
-                    setCookie('todayDiaryId', data.diaryId);
-                }
-            },
             onError: async (data) => {
               alert(data.errorMessage+"😥");
             },
