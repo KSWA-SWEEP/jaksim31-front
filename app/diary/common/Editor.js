@@ -93,7 +93,7 @@ function Editor({ editorLoaded, name, value, date, diaryId, thumbnail }) {
     }
     
     // diary data 저장을 위한 useMutation
-    const { error, data: savedData, mutate, status } = useDiarySave(queryClient, saveType, diaryId)
+    const { error, mutate, status } = useDiarySave(queryClient, saveType, diaryId)
 
     useEffect(() => {
         if(status == "success"){
