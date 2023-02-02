@@ -153,6 +153,7 @@ export default function DiaryGridList() {
         setIsSuccessModalOpen(false);                                        
         queryClient.invalidateQueries(["DIARY_LIST"]);
         queryClient.invalidateQueries(["USER_INFO"]);
+        queryClient.invalidateQueries(["EMOTION_COUNT"]);
     }
 
     return (

@@ -76,6 +76,7 @@ function Editor({ editorLoaded, name, value, date, diaryId, thumbnail }) {
         setIsSuccessModalOpen(false);               
         queryClient.invalidateQueries(["DIARY_LIST"]);
         queryClient.invalidateQueries(["USER_INFO"]);
+        queryClient.invalidateQueries(["EMOTION_COUNT"]);
         router.replace('diary/list/grid');
     }
     
