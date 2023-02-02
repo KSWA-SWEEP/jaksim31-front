@@ -8,6 +8,10 @@ export const useLogout = (queryClient) =>
         {   
             retry: false,
             onSuccess: () => {
+                alert("로그아웃 되었습니다 😊");
+                    
+                // landing page로 이동
+                window.location.href = "/home/landing";
                 queryClient.removeQuries(["USER_INFO"]);
             }
         }

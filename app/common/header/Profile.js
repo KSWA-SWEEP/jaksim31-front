@@ -152,18 +152,8 @@ const Profile = () => {
     async function requestLogout() {
 
       console.log("로그아웃 버튼 눌림");
-
-      try {
-
-        mutateLogout();
-        alert("로그아웃 되었습니다 😊");
-        
-        // landing page로 이동
-        window.location.href = "/home/landing";
-      } catch(e) {
-        console.log(e);
-        alert("로그아웃에 실패했습니다.")
-      }
+      
+      mutateLogout();
     }
 
     // 이미지 url => File blob 변환 함수
