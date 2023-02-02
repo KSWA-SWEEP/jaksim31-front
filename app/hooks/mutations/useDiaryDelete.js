@@ -19,6 +19,9 @@ export const useDiaryDelete = (diaryId, queryClient) =>
         {
             onError: async (response) => {
                 alert(response.errorMessage+"😥");
+                queryClient.invalidateQueries(["DIARY_LIST"]);
+                queryClient.invalidateQueries(["USER_INFO"]);
+                queryClient.invalidateQueries(["EMOTION_COUNT"]);
             }
         }
     );

@@ -183,17 +183,12 @@ const Profile = () => {
       data.username = userName.current;
       data.profileImage = (userProfileImage.current != undefined ? userProfileImage.current : "");
       
-      try{
-        mutateuserInfo({data});
-      } catch (e) {
-          alert("개인정보 수정에 실패했습니다. 다시 시도해 주세요.");
-      } finally {
-        // 변수 초기화
-        userName.current = "";
-        userProfileImage.current = "";
-        // closePasswordModal();
-        setIsNameEdit(false);
-      }
+      mutateuserInfo({data});
+      
+      userName.current = "";
+      userProfileImage.current = "";
+      // closePasswordModal();
+      setIsNameEdit(false);
     };
 
     async function requestChangePassword(){
