@@ -4,7 +4,7 @@ import { Fragment, useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import Image from 'next/image';
 import { Dialog, Transition } from '@headlessui/react';
-import KakaoLoginBtn from '../../../public/images/KakaoLogin.png'
+import KakaoLoginBtn from '../../../public/images/kakaoLogin.png'
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { useRouter } from 'next/navigation';
 import { init, send } from 'emailjs-com';
@@ -392,11 +392,10 @@ const Login = () => {
                             </div>
                             <div className="text-center">
                               <button
-                                className="items-center mb-1 mr-2 text-xs font-bold duration-150 hover:scale-105"
+                                className="items-center mb-1 mr-2 text-xs font-bold duration-150 hover:scale-105" 
+                                onClick={kakaologin}
                               >
-                                <button onClick={kakaologin}>
-                                  <Image src ={KakaoLoginBtn}></Image>
-                                </button>
+                                <Image src={KakaoLoginBtn} alt="카카오 로그인"></Image>
                               </button>
                             </div>
                           </div>

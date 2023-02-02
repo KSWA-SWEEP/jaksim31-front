@@ -23,7 +23,8 @@ export async function uploadImg(content, option, extension) {
                 'Content-Type' : contentType,
                 'Transfer-Encoding' : 'gzip',
             },
-            body: content
+            body: content,
+            credentials: 'omit', 
         }
     );
 

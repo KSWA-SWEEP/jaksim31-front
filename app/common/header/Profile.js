@@ -8,7 +8,6 @@ import { useRouter } from 'next/navigation';
 import moment from 'moment';
 import { useUserInfoQuery } from '../../hooks/queries/useUserInfoQuery';
 import Loading from './loading';
-import Error from '../../diary/list/grid/error';
 import { useQueryClient } from 'react-query';
 import { useUserInfoUpdate } from '../../hooks/mutations/useUserInfoUpdate';
 import { updatePassword } from '../../api/updatePassword';
@@ -21,12 +20,6 @@ const Profile = () => {
 
     let [isProfileModalOpen, setIsProfileModalOpen] = useState(false)
     let [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false)  
-
-    function openProfileModal() { setIsPasswordModalOpen(false); setIsProfileModalOpen(true), setPasswordMessage(""), setPasswordConfirmMessage("") }
-    function closeProfileModal() { setIsProfileModalOpen(false); setIsPasswordModalOpen(false) }
-  
-    function openPasswordModal() { setIsProfileModalOpen(false); setIsPasswordModalOpen(true) }
-    function closePasswordModal() { setIsProfileModalOpen(false); setIsPasswordModalOpen(false) }
 
     const user = userData;
     const router = useRouter();
@@ -53,6 +46,22 @@ const Profile = () => {
     const [isNewPassword, setIsNewPassword] = useState(false)
     const [isNewPasswordConfirm, setIsNewPasswordConfirm] = useState(false)
 
+    function openProfileModal() { 
+      setIsPasswordModalOpen(false); 
+      setIsProfileModalOpen(true);
+      setPasswordMessage("");
+      setPasswordConfirmMessage("")
+      userName.current = "";
+      userProfileImage.current = "";
+      setUserProfileImageURL("");  
+      setIsNameEdit(false);
+    }
+    
+    function closeProfileModal() { setIsProfileModalOpen(false); setIsPasswordModalOpen(false) }
+  
+    function openPasswordModal() { setIsProfileModalOpen(false); setIsPasswordModalOpen(true) }
+    function closePasswordModal() { setIsProfileModalOpen(false); setIsPasswordModalOpen(false) }
+
     // react-query
     const queryClient = useQueryClient();
     
@@ -66,7 +75,9 @@ const Profile = () => {
     const { mutate: mutateLogout } = useLogout(queryClient);
 
     if( isLoading || isFetching ) return <Loading className="flex justify-center"/>
-    if ( isError ) return <Error className="flex justify-center"/>
+    if ( isError ) {
+      userInfoData.profileImage = process.env.NEXT_PUBLIC_DEFAULT_PROFILE;
+    }
 
     userProfileImage.current = userInfoData.profileImage;
 
@@ -165,21 +176,23 @@ const Profile = () => {
     
     async function requestChangeProfile(){
 
-      let profileImageBlob = await urlToBlob(userProfileImageURL);
+      if(userProfileImageURL) {
+        let profileImageBlob = await urlToBlob(userProfileImageURL);
       
-      const fileUpload = await uploadImg(profileImageBlob, "profile", userProfileImageExtension);
-        
-      // 저장 실패 시
-      if (fileUpload.status != 201) {
-        alert("프로필 이미지 변경에 실패하였습니다.\n잠시 후 다시 시도해주세요😭");
-      } 
-      else {
-        userProfileImage.current = process.env.NEXT_PUBLIC_KAKAO_FILE_VIEW_URL+"/"+userInfoData.userId+"/profile_r_640x0_100_0_0."+userProfileImageExtension.replace('image/', '');
+        const fileUpload = await uploadImg(profileImageBlob, "profile", userProfileImageExtension);
+          
+        // 저장 실패 시
+        if (fileUpload.status != 201) {
+          alert("프로필 이미지 변경에 실패하였습니다.\n잠시 후 다시 시도해주세요😭");
+        } 
+        else {
+          userProfileImage.current = process.env.NEXT_PUBLIC_KAKAO_FILE_VIEW_URL+"/"+userInfoData.userId+"/profile_r_640x0_100_0_0."+userProfileImageExtension.replace('image/', '');
+        }
       }
-
+      
       let data = new Object();
       data.username = userName.current;
-      data.profileImage = userProfileImage.current;
+      data.profileImage = (userProfileImage.current != undefined ? userProfileImage.current : "");
       
       try{
         mutateuserInfo({data});
