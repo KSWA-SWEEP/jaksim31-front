@@ -402,15 +402,15 @@ const Profile = () => {
                                     :
                                     <div>
                                       <div className='flex place-content-center'>
-                                        <div className='mb-2 text-xl font-semibold'>
+                                        <div className='pb-1 text-xl font-semibold'>
                                           {userInfoData.recentDiary.diaryDate}
                                         </div>
                                       </div>
-                                      <div className='flex place-content-center'>
-                                        <div className='w-1/3 text-zinc-500 text-m'>
+                                      <div className='flex place-content-center flex-wrap'>
+                                        <div className='w-1/3 pb-2 text-zinc-500 text-m'>
                                             {userInfoData.recentDiary.emotion}
                                         </div>
-                                        <div className='relative flex'>
+                                        <div className='relative flex flex-wrap justify-center'>
                                             {userInfoData.recentDiary.keywords.map((keyword) => (
                                                 <div key={keyword} className="px-2 py-1 mb-1 mr-2 text-xs font-medium w-fit text-zinc-500 bg-zinc-200 rounded-xl dark:bg-zinc-200 dark:text-zinc-800 ">
                                                     {keyword == "EXECPTION_NO_KEYWORD" ? <>#키워드 없음</> : <>#{keyword}</>}

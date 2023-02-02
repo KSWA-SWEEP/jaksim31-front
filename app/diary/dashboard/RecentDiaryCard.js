@@ -17,7 +17,7 @@ export default function RecentDiaryCard() {
         <>
             <div
                 className="w-full max-w-md p-6 pt-4 mb-6 overflow-hidden text-left align-middle transition-all transform bg-zinc-100 shadow-xl lg:max-w-lg rounded-xl">
-                <div className="px-4 py-3 mb-0 border-0 rounded-t">
+                <div className="px-4 py-1 mb-0 border-0 rounded-t">
                     <div className="flex flex-wrap items-center">
                         <div className="relative flex-1 flex-grow w-full max-w-full px-4">
                         <h2 className="text-2xl font-bold text-zinc-700">
@@ -44,11 +44,11 @@ export default function RecentDiaryCard() {
                     <div className='flex flex-col text-center justify-items-center'>
                     <br></br>
                     {/* 날짜 */}
-                    <div className='text-xl font-extrabold text-zinc-700'>
+                    <div className='text-2xl font-extrabold text-zinc-700'>
                         {data.recentDiary.diaryDate}
                     </div>
                     {/* 썸네일 사진 */}
-                    <div className="justify-center m-5 avatar">
+                    <div className="justify-center m-3 avatar">
                         <Link 
                         className="w-50 rounded-xl"
                         type="button"
@@ -56,8 +56,12 @@ export default function RecentDiaryCard() {
                             <img src={data.recentDiary.thumbnail}/>
                         </Link>
                     </div>
+                    {/*감정*/}
+                    <div className='justify-items-center align-middle justify-center pb-2 text-zinc-500 text-xl'>
+                        {data.recentDiary.emotion}
+                    </div>
                     {/* Keywords */}
-                    <div className='flex flex-row justify-items-center align-middle'>
+                    <div className='flex flex-row justify-items-center align-middle justify-center flex-wrap'>
                                         {data.recentDiary.keywords.map((keyword) => (
                                             <div key={keyword}
                                                 className="px-3 py-1 mb-1 mr-2 text-l align-middle font-medium w-fit text-zinc-500 bg-zinc-200 rounded-xl dark:bg-zinc-200 dark:text-zinc-800 ">
