@@ -9,7 +9,7 @@ export const useLogin = (queryClient) =>
             .then(resp => resp.status != 200 ? resp.json() : resp)
             .then(respData => {
                 if(respData.errorCode) {
-                    throw respData.errorMessage;
+                    throw respData;
                 }
             })
 
@@ -17,7 +17,7 @@ export const useLogin = (queryClient) =>
         },
         {   
             onError: async (response) => {
-                alert(response)
+                alert(response.errorMessage+"😥")
             }
         }
     );

@@ -23,9 +23,9 @@ export const useDiaryDelete = (diaryId, queryClient) =>
                 {
                     setCookie('todayDiaryId', "");
                 }
-                queryClient.invalidateQueries(["DIARY_LIST"]);
-                queryClient.invalidateQueries(["USER_INFO"]);
-                queryClient.invalidateQueries(["EMOTION_COUNT"]);
+            }, 
+            onError: async (response) => {
+                alert(response.errorMessage+"😥");
             }
         }
     );

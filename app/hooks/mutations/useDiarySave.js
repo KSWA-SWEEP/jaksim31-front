@@ -8,19 +8,19 @@ export const useDiarySave = (queryClient, saveType, diaryId) =>
     useMutation(
         async ({data}) => {
 
-            let response;
+            let returnData = new Object();
 
-            // 일기 생성
-            if (saveType === "create")
-            {
-                response = await addDiary(data);
-            }  
-            // 일기 수정
-            else {
-                response = await modifyDiary(data, diaryId);
-            }
+            let response = await (saveType === "create" ? addDiary(data) : modifyDiary(data, diaryId))
+            .then(resp => resp.json())
+            .then(respData => {
+                if(respData.errorCode) {
+                    throw respData;
+                }
+                returnData = respData;
+            })
 
-            return response.json();
+            return returnData;
+
         },
         {
             onSuccess: async (data) => {
@@ -30,9 +30,9 @@ export const useDiarySave = (queryClient, saveType, diaryId) =>
                 {
                     setCookie('todayDiaryId', data.diaryId);
                 }
-                queryClient.invalidateQueries(["DIARY_LIST"]);
-                queryClient.invalidateQueries(["USER_INFO"]);
-                queryClient.invalidateQueries(["EMOTION_COUNT"]);
-            }
+            },
+            onError: async (data) => {
+              alert(data.errorMessage+"😥");
+            },
         }
     );

@@ -11,6 +11,7 @@ import moment from 'moment';
 import { getCookie } from "cookies-next";
 import { uploadImg } from '../../api/uploadImg';
 import Image from 'next/image';
+import { analyzeDiary } from '../../api/analyzeDiary';
 
 function Editor({ editorLoaded, name, value, date, diaryId, thumbnail }) {
     
@@ -61,8 +62,7 @@ function Editor({ editorLoaded, name, value, date, diaryId, thumbnail }) {
     const router = useRouter();
 
     function closeSaveModal() { setIsSaveModalOpen(false) }
-    function openSaveModal() {
-        console.log(thumbnail);
+    function openSaveModal() {        
         // 일기 수정의 경우 기존의 thumbnail이 초기값으로 설정되어 변경하지 않고도 저장할 수 있도록 함
         setIsSaved((thumbnail != undefined) ? true : false)
         setSaveMessage((thumbnail != undefined) ? '저장되었던 썸네일을 가져왔어요!😎' : '썸네일을 선택해주세요😲');
@@ -73,7 +73,10 @@ function Editor({ editorLoaded, name, value, date, diaryId, thumbnail }) {
 
     function openSuccessModal() { setIsSuccessModalOpen(true) }
     function closeSuccessModal() { 
-        setIsSuccessModalOpen(false);
+        setIsSuccessModalOpen(false);               
+        queryClient.invalidateQueries(["DIARY_LIST"]);
+        queryClient.invalidateQueries(["USER_INFO"]);
+        queryClient.invalidateQueries(["EMOTION_COUNT"]);
         router.replace('diary/list/grid');
     }
     
@@ -90,23 +93,22 @@ function Editor({ editorLoaded, name, value, date, diaryId, thumbnail }) {
     }
     
     // diary data 저장을 위한 useMutation
-    const { status, mutate } = useDiarySave(queryClient, saveType, diaryId)
+    const { error, data: savedData, mutate, status } = useDiarySave(queryClient, saveType, diaryId)
+
+    useEffect(() => {
+        if(status == "success"){
+            openSuccessModal()
+        }
+    }, [status])
 
     // 작성한 일기 내용 분석하여 키워드 및 감정 가져오는 함수
-    async function analyzeDiary() {
+    async function analyze() {
 
         let data = new Object();
 
         data.sentences = [text.replace(/<[^>]*>/g, '')];
-
-        const res = await fetch(process.env.NEXT_PUBLIC_BASE_URL+"/api/v0/diaries/analyze", {
-            method:"POST",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        })
-        .then((response) => response.json())
+        
+        const res = await analyzeDiary(data);
         
         if (res == undefined){
             // Error handling - 분석 내용이 비어있을 경우 감정없음, EXECPTION_NO_KEYWORD으로 설정 
@@ -118,7 +120,7 @@ function Editor({ editorLoaded, name, value, date, diaryId, thumbnail }) {
             // 분석 내용으로부터 키워드, 감정 설정
             // Error handling - 길이가 짧거나 다른 이유로 키워드 및 감정 추출이 제대로 이루어지지 않을 경우 감정없음, EXECPTION_NO_KEYWORD으로 설정 
             setEnglishKeywords((res.hasOwnProperty('englishKeywords')) ? res.englishKeywords : ["EXECPTION_NO_KEYWORD"]);
-            setKoreankeywords((res.hasOwnProperty('koreanKeywords')) ? res.koreanKeywords : ["EXECPTION_NO_KEYWORD"]);
+            setKoreankeywords((res.hasOwnProperty('koreanKeywords')) ? res.koreanKeywords.slice(0, 3) : ["EXECPTION_NO_KEYWORD"]);
             setEnglishEmotion((res.hasOwnProperty('englishEmotion')) ? res.englishEmotion : "no emotion");
             setKoreanEmotion((res.hasOwnProperty('koreanEmotion')) ? res.koreanEmotion : "감정없음");
         }
@@ -141,7 +143,7 @@ function Editor({ editorLoaded, name, value, date, diaryId, thumbnail }) {
             randKeywordList.push(englishEmotion)
 
             // space를 _로 대체 (검색시 url에 사용하기 위함)
-            randKeywordList = randKeywordList.map(word => word.replace(' ', '_'));
+            randKeywordList = randKeywordList.map(word => word.replace(' ', '%20'));
 
             // thumbnail 가져오는 부분
             let res = await fetch(`https://api.unsplash.com/photos/random?query=${randKeywordList[randNum]}&client_id=${Access_Key}`);
@@ -255,9 +257,6 @@ function Editor({ editorLoaded, name, value, date, diaryId, thumbnail }) {
         
         // 일기 생성/수정에 따른 mutation 실행
         mutate({data})
-        closeSaveModal()
-        openSuccessModal()
-        
     };
 
     // 이미지 url => File blob 변환 함수
@@ -271,7 +270,9 @@ function Editor({ editorLoaded, name, value, date, diaryId, thumbnail }) {
     async function saveThumbnail() {
         
         // regularThumbnailLink을 blob으로 변환
-        let file = await urlToBlob(regularThumbnailLink)        
+        let file = await urlToBlob(regularThumbnailLink)
+        setThumbnailDirectory("");
+        setIsThumbnailLoading(true);
 
         // 이미지 업로드 API 호출
         const fileUpload = await uploadImg(file, date.replace(/(\d{4})(\d{2})(\d{2})/g, '$1-$2-$3'))
@@ -331,7 +332,7 @@ function Editor({ editorLoaded, name, value, date, diaryId, thumbnail }) {
                                     )
                                 }
                         disabled={((text == undefined)||(text == ""))}
-                        onClick={() => { analyzeDiary(); openSaveModal(); }}>
+                        onClick={() => { analyze(); openSaveModal(); }}>
                     저장하기
                 </button>
                 <button className="inline-flex justify-center px-3 py-2 ml-2 text-sm font-medium duration-200 border border-transparent rounded-md text-zinc-700 bg-zinc-200 mt-7 hover:bg-zinc-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500 focus-visible:ring-offset-2" onClick={() => router.back()}>취소하기</button>
@@ -393,7 +394,7 @@ function Editor({ editorLoaded, name, value, date, diaryId, thumbnail }) {
                                                 {koreanKeywords.map((keyword) => (
                                                     (keyword == "EXECPTION_NO_KEYWORD")
                                                     ?
-                                                    <div className='relative flex items-center mb-3'>
+                                                    <div key={keyword} className='relative flex items-center mb-3'>
                                                         {/* 분석된 키워드가 없을 경우 */}
                                                         <div className="ml-2 font-medium sm:text-sm w-fit text-zinc-500 dark:bg-zinc-200 dark:text-zinc-800 ">
                                                             분석된 키워드가 없습니다
@@ -430,7 +431,7 @@ function Editor({ editorLoaded, name, value, date, diaryId, thumbnail }) {
                                                         regularThumbnailLink != ""
                                                         ?
                                                         <div className="relative top-0 flex items-start w-full h-full group">
-                                                            <Image className='object-cover w-full h-full' fill={true} placeholder={blur} src={regularThumbnailLink} />
+                                                            <Image className='object-cover w-full h-full' sizes='mas-width: 60vw, max-height: 50vh' fill placeholder={blur} alt="thumbnail" src={regularThumbnailLink} />
                                                             {/*thumbnail 저장 시 onClick 비활성화 및 Hover effect 제거*/}
                                                             {
                                                                 (!isSaved || (isSaved && ((thumbnail != undefined) || (thumbnail != ""))))
@@ -514,7 +515,11 @@ function Editor({ editorLoaded, name, value, date, diaryId, thumbnail }) {
                                     ?"text-zinc-700 duration-200 bg-zinc-200 border border-transparent rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500 focus-visible:ring-offset-2"
                                     :"text-red-700 duration-200 bg-red-200 border border-transparent rounded-md hover:bg-red-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2")}
                                 disabled={(thumbnailDirectory == "")}
-                                onClick={() => saveDiary()}>
+                                onClick={() => {
+                                    saveDiary();
+                                    closeSaveModal();
+                                }}
+                                >
                                 저장하기
                             </button>
                         </div>

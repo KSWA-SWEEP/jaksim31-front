@@ -22,7 +22,7 @@ export default async function diaryShow({ params }) {
   
   return (
     <>
-      <div className="px-10 py-12 lg:px-28">
+      <div>
         <DiaryContents diaryId={ diaryId }/>
         {/* <DiaryContents diaryId={ diaryId } diary={diary} /> */}
       </div>

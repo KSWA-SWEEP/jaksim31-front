@@ -12,7 +12,7 @@ export const useUserInfoQuery = (userInfo) =>
             .then(resp => resp.json())
             .then(respData => {
                 if(respData.errorCode) {
-                    throw respData.errorCode;
+                    throw respData;
                 }
 
                 returnData = respData;
@@ -21,6 +21,7 @@ export const useUserInfoQuery = (userInfo) =>
             return returnData;
         },
         { 
+            retry: false,
             cacheTime: 5 * 60 * 1000,
             staleTime: 5 * 60 * 1000,
         }
