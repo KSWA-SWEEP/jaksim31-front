@@ -10,17 +10,18 @@ const queryClient = new QueryClient({
     queryCache: new QueryCache({
         onError: async (error) => {
             console.log(error)
-            if (error.errorCode == 'NO_AUTHORIZATION' || error.errorCode == 'NOT_FOUND_USER') {
-                await logout();
+            if (error.errorCode == 'NO_AUTHORIZATION' || error.errorCode == 'INVALID_ID' || error.errorCode == 'NOT_FOUND_USER') {
+                window.location.href = "/home/landing";
+                logout();
+                controller.abort();
                 alert(error.errorMessage+"😥\n계속하려면 다시 로그인 해주세요.");
                 queryClient.removeQueries();
-                window.location.href = "/home/landing";
             } else if(error.errorCode == 'NOT_FOUND_AUTHENTICATION' || error.errorCode == 'SESSION_EXPIRED' || error.errorCode == 'NO_PERMISSION' || error.errorCode == 'EMPTY_TOKEN') {
                 try {
                     window.location.href = "/home/landing";
+                    controller.abort();
                     alert(error.errorMessage+"😥\n계속하려면 다시 로그인 해주세요.");
                     queryClient.removeQueries();
-                    controller.abort();
                 } catch(e) {
                     console.log(e);
                 }

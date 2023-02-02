@@ -1,4 +1,5 @@
 import { useMutation } from "react-query";
+import { logout } from "../../api/logout";
 import { updateUserInfo } from "../../api/updateUserInfo";
 
 export const useUserInfoUpdate = (queryClient) =>
@@ -19,6 +20,9 @@ export const useUserInfoUpdate = (queryClient) =>
             retry: false,
             onSuccess: async (response) => {
                 alert("개인정보가 수정되었습니다 😊");
+                queryClient.resetQueries(["USER_INFO"]);
+            },
+            onError: async (response) => {
                 queryClient.resetQueries(["USER_INFO"]);
             }
         }
