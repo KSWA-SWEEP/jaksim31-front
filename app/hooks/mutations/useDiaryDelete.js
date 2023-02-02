@@ -17,13 +17,6 @@ export const useDiaryDelete = (diaryId, queryClient) =>
             return response;
         },
         {
-            onSuccess: async (response) => {
-                let todayDiaryId = getCookie('todayDiaryId');
-                if(diaryId == todayDiaryId)
-                {
-                    setCookie('todayDiaryId', "");
-                }
-            }, 
             onError: async (response) => {
                 alert(response.errorMessage+"😥");
             }
