@@ -13,6 +13,9 @@ jobs:
         uses: actions/checkout@v2.3.1
         with:
           persist-credentials: false
+      
+      - name: Create env file
+        run: echo "${{ secrets.ENV_FILE }}" > .env
           
       # NPM install & Build
       - name: Install and Build
@@ -22,18 +25,6 @@ jobs:
       - run: npm install
       - run: npm install sharp
       - run: npm run build
-        env:
-          NEXT_PUBLIC_UNSPLASH_ACCESSKEY: ${{ secrets.NEXT_PUBLIC_UNSPLASH_ACCESSKEY }}
-          NEXT_PUBLIC_BASE_URL: ${{ secrets.NEXT_PUBLIC_BASE_URL }}
-          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
-          NEXT_PUBLIC_KAKAO_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_KAKAO_CLIENT_ID }}
-          NEXT_PUBLIC_KAKAO_REDIRECT_URL: ${{ secrets.NEXT_PUBLIC_KAKAO_REDIRECT_URL }}
-          NEXT_PUBLIC_KAKAO_API_AUTH_URL: ${{ secrets.NEXT_PUBLIC_KAKAO_API_AUTH_URL }}
-          NEXT_PUBLIC_KAKAO_API_AUTH_ACCESSKEY: ${{ secrets.NEXT_PUBLIC_KAKAO_API_AUTH_ACCESSKEY }}
-          NEXT_PUBLIC_KAKAO_API_AUTH_SECRET: ${{ secrets.NEXT_PUBLIC_KAKAO_API_AUTH_SECRET }}
-          NEXT_PUBLIC_KAKAO_FILE_UPLOAD_URL: ${{ secrets.NEXT_PUBLIC_KAKAO_FILE_UPLOAD_URL }}
-          NEXT_PUBLIC_KAKAO_FILE_VIEW_URL: ${{ secrets.NEXT_PUBLIC_KAKAO_FILE_VIEW_URL }}
-          NEXT_PUBLIC_DEFAULT_PROFILE: ${{ secrets.NEXT_PUBLIC_DEFAULT_PROFILE }}
       
       # NPM caching
       - name: Setup Node.js
