@@ -203,7 +203,7 @@ const Profile = () => {
       
       try {
         // 비밀번호 검증 API 호출
-        const checkResponse = await checkPassword(checkData, data.loginId)
+        const checkResponse = await checkPassword(checkData, userInfoData.loginId)
         .then(resp => resp.status != 200 ? resp.json() : resp)
         .then(respData => {
           if(respData.errorCode) {
@@ -212,7 +212,7 @@ const Profile = () => {
         })
 
         // 비밀번호 변경 API 호출
-        const updateResponse = await updatePassword(updateData, data.loginId)
+        const updateResponse = await updatePassword(updateData, userInfoData.loginId)
         .then(resp => resp.status != 200 ? resp.json() : resp)
         .then(respData => {
           if(respData.errorCode) {
