@@ -1,49 +1,47 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
-
+import React, { useEffect, useState } from 'react';
+import { useDiaryQuery } from '../../hooks/queries/useDiaryQuery';
+import Loading from './loading';
 
 export default function DiaryInputFormat(props) {  
+  
   const Editor = dynamic(() => import('./Editor'), { ssr: false });
 
   useEffect(() => {
     setEditorLoaded(true);
   }, []);
   
+  
+  const { data, isLoading, isFetching, isFetched, isError } = useDiaryQuery(props.diaryId)
+
   const [editorLoaded, setEditorLoaded] = useState(false);
 
-  const resultView = useRef(null);
-  
-  const onClick = (str) => {
-    if (resultView.current) {
-      resultView.current.innerHTML = `<h2>html결과 view입니다</h2>${str}`;
-    }
-  };
-
+  if ( isLoading || isFetching || ((props.diaryId != undefined)&&(data == undefined)) ) return <Loading className="flex justify-center w-full"/>
+ 
   return (
     <>
       <div>
         { 
-          props.content
+          (props.diaryId != undefined)
           ? 
             <Editor
               name="description"
-              onClick={onClick}
               editorLoaded={editorLoaded}
-              value={props.content}
-              date={props.date}
+              value={data.content.toString()}
+              date={data.diaryDate}
+              thumbnail={data.thumbnail}
+              diaryId={props.diaryId}
             />
           :
           <Editor
             name="description"
-            onClick={onClick}
             editorLoaded={editorLoaded}
             date={props.date}
           />
         }
       </div>
-      <div ref={resultView} />
     </>
   );
 }

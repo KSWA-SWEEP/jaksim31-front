@@ -1,12 +1,18 @@
+'use client';
 
-import { Fragment, useState, useRef } from "react";
+import { Fragment, useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import Image from 'next/image';
 import { Dialog, Transition } from '@headlessui/react';
-import KakaoLoginBtn from '../../../public/images/KakaoLogin.png'
+import KakaoLoginBtn from '../../../public/images/kakaoLogin.png'
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { useRouter } from 'next/navigation';
 import { init, send } from 'emailjs-com';
+import { updatePassword } from "../../api/updatePassword";
+import { checkIsMember } from "../../api/checkIsMember";
+import { signUp } from "../../api/signUp";
+import { useQueryClient } from "react-query";
+import { useLogin } from "../../hooks/mutations/useLogin";
 
 const Login = () => {
     let [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
@@ -29,7 +35,12 @@ const Login = () => {
     const userName = useRef("");
     const userEmail = useRef("");
     const userPassword = useRef("");
-    const userPasswordCheck = useRef("");
+    const userPasswordCheck = useRef(""); 
+
+    // 카카오 인증 창으로 넘어가는 URL 설정
+    const NEXT_PUBLIC_KAKAO_CLIENT_ID = process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID
+    const NEXT_PUBLIC_KAKAO_REDIRECT_URL = process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URL
+    const KAKAO_AUTH_URL = "https://kauth.kakao.com/oauth/authorize?client_id="+NEXT_PUBLIC_KAKAO_CLIENT_ID+"&redirect_uri="+NEXT_PUBLIC_KAKAO_REDIRECT_URL+"&response_type=code";
 
     // 메일 인증 변수
     const userAuth = useRef(""); // 인증번호 입력값
@@ -49,9 +60,27 @@ const Login = () => {
     const [isPassword, setIsPassword] = useState(false)
     const [isPasswordConfirm, setIsPasswordConfirm] = useState(false)
     
+    // react-query
+    const queryClient = useQueryClient();
+
+    // 로그인을 위한 useMutation
+    const { mutate: mutateLogin, isSuccess: isSuccessLogin, data: dataLogin } = useLogin(queryClient);
+
+    useEffect(()=> {
+      // 로그인 성공 시 대시보드로 이동
+      if(isSuccessLogin) {
+        if(isLoginModalOpen) setIsLoginModalOpen(false);
+        window.location.href = "/diary/dashboard";
+      }
+    }, [dataLogin, isSuccessLogin])
+
     const onNameChange = (e) => {
       userName.current = e.target.value;
     };
+
+    async function kakaologin (){
+      window.location.href = KAKAO_AUTH_URL;
+    }
 
     // 이메일 검증
     const onEmailChange = (e) => {
@@ -128,91 +157,19 @@ const Login = () => {
       }
 
       //로그인 api 호출
-      console.log("======= Login Request");
-      const data = new Object();
-      console.log("userEmail : " + userEmail.current);
-      console.log("userPassword : " + userPassword.current);
+      let data = new Object();
       data.loginId = userEmail.current;
       data.password = userPassword.current;
       
-      const requestLoginBody = {
-          loginId: userEmail.current,
-          password: userPassword.current
-      }
-      
-      try{
-          const responseLogin = await fetch('/api//v0/members/login', {
-              method: 'POST',
-              body: JSON.stringify(requestLoginBody),
-              headers: {
-                  'Content-type': 'application/json',
-              }
-          });
-
-          /*
-          * TODO: accessToken / 로그인 상태 / 만료 시간 저장 기능
-          
-          const responseData = await responseLogin.json();
-          let responseDataJson = JSON.parse(responseData);
-
-          //recoil에 accessToken 저장
-          setAcctoken(responseDataJson.accessToken);
-          
-          //로그인 상태와 만료 시간 sessionStorage에 저장
-          sessionStorage.setItem("isLogin","true")
-          sessionStorage.setItem("expTime",responseDataJson.expTime)
-
-          */
-
-          router.push('/diary/dashboard');
-          return;
-      }catch(e){
-          console.log(e);
-          alert("로그인에 실패했습니다. 다시 시도해 주세요.");
-      }
+      mutateLogin({data});
     }
-
+    
     async function requestIsMember(){
-      
-      console.log("======= isMember Request");
-      console.log("userEmail : " + userEmail.current);
 
-      const data = new Object();
+      let data = new Object();
       data.loginId = userEmail.current;
       
-      try{
-          let resData = new Object();
-        /*
-        * TODO: 회원가입 여부 확인 API 확정되면 수정하기
-
-          const responseLogin = await fetch('/api/v0/members', {
-              method: 'POST',
-              body: JSON.stringify(data),
-              headers: {
-                  'Content-type': 'application/json',
-              }
-          })
-          .then((response) => response.json())
-          .then((result) => {
-              resData = result;
-          });
-
-        */
-
-          /*
-          * API 확정 전 테스트 코드
-          */
-          throw "API 확정 전 테스트용 오류 발생";
-          // 임의로 userName 설정
-          resData.userName = userName.current;
-          let resDataTmp = new Array();
-          resDataTmp.push(resData);
-          setEmailMessage('이미 가입된 메일입니다.');
-          return resDataTmp;
-      }catch(e){
-          console.log(e);
-          if(!isChangePasswordMoal) setEmailMessage('등록되지 않은 메일입니다. 회원가입을 진행해 주세요 🤗')
-      }
+      return checkIsMember(data);
     }
 
     async function requestSignup(){
@@ -225,33 +182,15 @@ const Login = () => {
       }
 
       //회원가입 api 호출
-      console.log("======= SignUp Request");
       const data = new Object();
-      console.log("userEmail : " + userEmail.current);
-      console.log("userPassword : " + userPassword.current);
-      console.log("userName : " + userName.current);
       data.loginId = userEmail.current;
       data.password = userPassword.current;
       data.username = userName.current;
+      // object storage에 있는 default 프로필 이미지로 기본 프로필 이미지 설정
+      data.profileImage = process.env.NEXT_PUBLIC_DEFAULT_PROFILE;
 
-      const requestSignupBody = {
-          loginId: userEmail.current,
-          password: userPassword.current,
-          username: userName.current
-      }
-      
       try{
-          const responseSignup = await fetch('/api/v0/members/register', {
-              method: 'POST',
-              body: JSON.stringify(requestSignupBody),
-              headers: {
-                  'Content-type': 'application/json',
-              }
-          });
-          //check
-          // console.log("Result : " + JSON.stringify(responseSignup));
-          // console.log("User email : "+ response["email"]);
-          
+          signUp(data);
           alert("회원가입이 완료되었습니다 😊");
           openLoginModal();
       } catch (e) {
@@ -262,25 +201,11 @@ const Login = () => {
 
     async function requestChangePassword(){
 
-      console.log("비밀번호 변경하기 버튼 눌림");
+      let data = new Object();
+      data.newPassword = userPassword.current;
 
-      //비밀번호 재설정 api 호출
-      console.log("======= Change Password Request");
-      console.log("newPassword : " + userPassword.current);
-
-      const requestSignupBody = {
-          newPassword: userPassword.current,
-      }
-      
       try{
-          const responseChangePassword = await fetch('/api/v0/members/{loginId}/password', {
-              method: 'POST',
-              body: JSON.stringify(requestSignupBody),
-              headers: {
-                  'Content-type': 'application/json',
-              }
-          });
-          
+          updatePassword(data, userEmail.current);
           alert("비밀번호가 변경되었습니다 😊");
           openLoginModal();
       } catch (e) {
@@ -291,31 +216,47 @@ const Login = () => {
 
     const sendAuthMail =()=>{
 
-      // 인증메일 전송 전, 회원 여부 검증
+      // 인증메일 전송 전, 회원 여부 검증 API 호출
       requestIsMember().then(resp => {
 
-        console.log(resp);
-
-        if(resp == undefined) {  // API 응답 데이터가 없는 경우, 인증 메일 전송
+        // 비밀번호 재설정일 경우 회원이 존재해야 하는 경우와
+        // 회원가입일 경우 회원이 존재하지 않는 경우
+        if((isChangePasswordMoal && resp.status == 200) || (!isChangePasswordMoal && resp.status == 404)) {
           
           setIsAuthIng(true);
 
+          // 인증메일 전송
           send("service_xefuilp", "template_flcknvq", {
             message: "인증번호는 " + randNum.current + " 입니다.",
             user_email: userEmail.current,
           },"cPndipwNGrbp1LMBT").then(resp => {});
 
-          // 인증번호 test 코드
-          console.log("============== "+randNum.current)
+          console.log("전송한 인증번호: "+randNum.current)
           setIsAuthIng(true)
           setCheckAuthMessage("메일을 전송하였습니다. 확인 후 인증번호를 입력해 주세요.");
         }
-        else {  // API 응답 데이터가 있는 경우, 계정 존재
-          console.log("계정 존재");
-          return;
+        else if(!isChangePasswordMoal && resp.status == 200) {  // 회원가입일 경우 이미 회원이 존재하는 경우
+          console.log(resp);
+          alert("이미 가입된 계정입니다.");
+        }
+        else if(isChangePasswordMoal && resp.status == 404) {  // 비밀번호 재설정일 경우 회원이 존재하지 않는 경우
+          console.log(resp);
+          alert("찾을 수 없는 계정입니다. 회원 정보를 확인해 주세요.");
         }
       });
     };
+
+    const checkEmail = () => {
+      requestIsMember().then(resp => {
+
+        if(resp.status == 200) {  // 응답코드가 200인 경우, 계정 존재
+          alert("가입된 계정입니다. 로그인 해주세요.");
+        }
+        else {  // 응답코드가 404인 경우, 계정 없음
+          alert("찾을 수 없는 계정입니다. 회원가입 해주세요.");
+        }
+      });
+    }
 
     return (
       <div>
@@ -370,16 +311,16 @@ const Login = () => {
                             </div>
                             <form>
                               <div className="relative w-full mb-3">
-                                <div class="grid grid-cols-7 gap-1">
-                                  <div class="col-span-2">
+                                <div className="grid grid-cols-7 gap-1">
+                                  <div className="col-span-2">
                                     <label
-                                      className="block mb-2 pt-2 text-m font-bold uppercase text-zinc-600"
+                                      className="block pt-2 mb-2 font-bold uppercase text-m text-zinc-600"
                                       htmlFor="grid-password"
                                     >
                                       이메일
                                     </label>
                                   </div>
-                                  <div class="col-span-5">
+                                  <div className="col-span-5">
                                     <input
                                       type="email"
                                       className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
@@ -392,16 +333,16 @@ const Login = () => {
                               </div>
 
                               <div className="relative w-full mb-5">
-                                <div class="grid grid-cols-7 gap-1">  
-                                  <div class="col-span-2">
+                                <div className="grid grid-cols-7 gap-1">  
+                                  <div className="col-span-2">
                                     <label
-                                      className="block mb-2 pt-2 text-m font-bold uppercase text-zinc-600"
+                                      className="block pt-2 mb-2 font-bold uppercase text-m text-zinc-600"
                                       htmlFor="grid-password"
                                     >
                                       비밀번호
                                     </label>
                                   </div>
-                                  <div class="col-span-5">
+                                  <div className="col-span-5">
                                     <input
                                       type="password"
                                       className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
@@ -424,11 +365,11 @@ const Login = () => {
                               </div>
 
                               <div className="relative w-full mt-1 mb-1">
-                                <div class="grid grid-cols-2 gap-1">
-                                  <div class="grid justify-start">
+                                <div className="grid grid-cols-2 gap-1">
+                                  <div className="grid justify-start">
                                     <strong onClick={openEmailCheckModal} className="text-sm hover:text-gray-500">이메일 조회</strong>
                                   </div>
-                                  <div class="grid justify-end">
+                                  <div className="grid justify-end">
                                     <strong onClick={() => {setIsChangePasswordModal(true); openSignupModal();}} className="text-sm hover:text-gray-500">비밀번호 재설정</strong>
                                   </div>
                                 </div>
@@ -451,9 +392,10 @@ const Login = () => {
                             </div>
                             <div className="text-center">
                               <button
-                                className="items-center mb-1 mr-2 text-xs font-bold duration-150 hover:scale-105"
+                                className="items-center mb-1 mr-2 text-xs font-bold duration-150 hover:scale-105" 
+                                onClick={kakaologin}
                               >
-                                <Image src={KakaoLoginBtn} />
+                                <Image src={KakaoLoginBtn} alt="카카오 로그인"></Image>
                               </button>
                             </div>
                           </div>
@@ -508,16 +450,16 @@ const Login = () => {
                             </div>
                             <form>
                               <div className="relative w-full mb-3">
-                                <div class="grid grid-cols-7 gap-1">
-                                  <div class="col-span-2">
+                                <div className="grid grid-cols-7 gap-1">
+                                  <div className="col-span-2">
                                     <label
-                                      className="block mb-2 pt-2 text-m font-bold uppercase text-zinc-600"
+                                      className="block pt-2 mb-2 font-bold uppercase text-m text-zinc-600"
                                       htmlFor="grid-password"
                                     >
                                       이메일
                                     </label>
                                   </div>
-                                  <div class="col-span-5">
+                                  <div className="col-span-5">
                                     <input
                                       type="email"
                                       className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
@@ -533,7 +475,7 @@ const Login = () => {
                                 <button
                                   className="w-full px-6 py-3 mb-1 mr-1 text-sm font-bold text-white uppercase transition-all duration-150 ease-linear rounded shadow outline-none bg-zinc-800 active:bg-zinc-600 hover:shadow-lg focus:outline-none"
                                   type="button"
-                                  onClick={requestIsMember}
+                                  onClick={checkEmail}
                                   disabled={!isEmail}
                                 >
                                   조회하기
@@ -600,16 +542,16 @@ const Login = () => {
                               :
                               // 회원가입 모달일 경우, 이름 입력란 있음
                                 <div className="relative w-full mb-3">
-                                  <div class="grid grid-cols-7 gap-1">
-                                    <div class="col-span-2">
+                                  <div className="grid grid-cols-7 gap-1">
+                                    <div className="col-span-2">
                                       <label
-                                        className="block mb-2 pt-2 text-m font-bold uppercase text-zinc-600"
+                                        className="block pt-2 mb-2 font-bold uppercase text-m text-zinc-600"
                                         htmlFor="grid-password"
                                       >
                                         이름
                                       </label>
                                     </div>
-                                    <div class="col-span-5">
+                                    <div className="col-span-5">
                                       <input
                                         type="text"
                                         className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
@@ -622,16 +564,16 @@ const Login = () => {
                               }
 
                               <div className="relative w-full mb-3">
-                                <div class="grid grid-cols-7 gap-1">
-                                  <div class="col-span-2">
+                                <div className="grid grid-cols-7 gap-1">
+                                  <div className="col-span-2">
                                     <label
-                                      className="block mb-2 pt-2 text-m font-bold uppercase text-zinc-600"
+                                      className="block pt-2 mb-2 font-bold uppercase text-m text-zinc-600"
                                       htmlFor="grid-password"
                                     >
                                       이메일
                                     </label>
                                   </div>
-                                  <div class="col-span-5">
+                                  <div className="col-span-5">
                                     <input
                                       type="email"
                                       className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
@@ -656,16 +598,16 @@ const Login = () => {
                               </div>
 
                               <div className="relative w-full mb-3">
-                                <div class="grid grid-cols-7 gap-1">
-                                  <div class="col-span-2">
+                                <div className="grid grid-cols-7 gap-1">
+                                  <div className="col-span-2">
                                     <label
-                                      className="block mb-2 pt-2 text-m font-bold uppercase text-zinc-600"
+                                      className="block pt-2 mb-2 font-bold uppercase text-m text-zinc-600"
                                       htmlFor="grid-verify"
                                     >
                                       인증번호
                                     </label>
                                   </div>
-                                  <div class="col-span-5">
+                                  <div className="col-span-5">
                                     <input
                                       type="text"
                                       className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
@@ -679,16 +621,16 @@ const Login = () => {
                               </div>
 
                               <div className="relative w-full mb-5">
-                                <div class="grid grid-cols-7 gap-1">
-                                  <div class="col-span-2">
+                                <div className="grid grid-cols-7 gap-1">
+                                  <div className="col-span-2">
                                     <label
-                                      className="block mb-2 pt-2 text-m font-bold uppercase text-zinc-600"
+                                      className="block pt-2 mb-2 font-bold uppercase text-m text-zinc-600"
                                       htmlFor="grid-password"
                                     >
                                       비밀번호
                                     </label>
                                   </div>
-                                  <div class="col-span-5">
+                                  <div className="col-span-5">
                                     <input
                                       type="password"
                                       className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
@@ -701,16 +643,16 @@ const Login = () => {
                               </div>
                               
                               <div className="relative w-full mb-5">
-                                <div class="grid grid-cols-7 gap-1">
-                                  <div class="col-span-2">
+                                <div className="grid grid-cols-7 gap-1">
+                                  <div className="col-span-2">
                                     <label
-                                      className="block mb-2 pt-2 text-m font-bold uppercase text-zinc-600"
+                                      className="block pt-2 mb-2 font-bold uppercase text-m text-zinc-600"
                                       htmlFor="grid-password"
                                     >
                                       비밀번호 확인
                                     </label>
                                   </div>
-                                  <div class="col-span-5">
+                                  <div className="col-span-5">
                                     <input
                                       type="password"
                                       className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"

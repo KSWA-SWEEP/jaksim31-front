@@ -1,6 +1,7 @@
 import CalendarList from "./calendarList";
 
-export default function calendarList() {
+export default async function calendarList() {
+    
     return (
         <>
             <div className="relative">

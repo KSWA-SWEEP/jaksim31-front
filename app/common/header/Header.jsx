@@ -5,10 +5,18 @@ import { usePathname } from 'next/navigation';
 import { Bars3Icon } from '@heroicons/react/24/outline';
 import Login from './Login';
 import Profile from './Profile';
+import { getCookie } from 'cookies-next';
+import { useQueryClient } from 'react-query';
 
 function Header({ isOpen, setIsOpen }) {
 
   const [top, setTop] = useState(true);
+  const [isLogin, setIsLogin] = useState(false);
+ 
+  useEffect(() => {
+    setIsLogin((getCookie('isLogin') != undefined) ? getCookie('isLogin') : false)
+  }, [])
+
   // detect whether user has scrolled the page down by 10px 
   useEffect(() => {
     const scrollHandler = () => {
@@ -20,6 +28,13 @@ function Header({ isOpen, setIsOpen }) {
 
   let pathname = usePathname();
 
+  // react-query
+  const queryClient = useQueryClient();
+  // 비로그인 시 userInfo 쿼리 캐시 삭제
+  if(!getCookie("isLogin")) {
+    queryClient.removeQueries(["USER_INFO"]);
+  }
+
   return (
     <div className={`fixed z-40 w-full md:bg-opacity-70 transition duration-300 ease-in-out ${!top && 'bg-white backdrop-blur-sm shadow-lg'}`}>
       <div className="max-w-6xl mx-5 md:mx-20 lg:mx-36 xl:mx-56 2xl:mx-72 sm:px-6">
@@ -28,8 +43,7 @@ function Header({ isOpen, setIsOpen }) {
           <Bars3Icon className={"w-6 h-6 hover:scale-105 " + (pathname.includes('home') ? "text-zinc-400" : "text-zinc-600") } aria-hidden="true" onClick={() => setIsOpen(true)}/>
 
           {
-            // TODO 지금은 home경로 포함일때로 해두었는데, isLogin에 따라 변하는 것으로 바꿔주기
-            pathname.includes('home') 
+            !isLogin
             ?
             <>
               {/* 로그인 이전 - 시작하기 버튼 */}
