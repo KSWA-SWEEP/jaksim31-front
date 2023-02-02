@@ -26,14 +26,14 @@ const menuAfterLogin = [
   },
   {
     name: '🌼  튜토리얼',
-    href: 'diary/tutorial',
+    href: 'home/tutorial',
   },
 ]
 
 const menuBeforeLogin = [
   {
     name: '🌼  튜토리얼',
-    href: 'diary/tutorial',
+    href: 'home/tutorial',
   },
 ]
 

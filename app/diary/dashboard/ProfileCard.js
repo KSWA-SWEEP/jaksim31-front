@@ -2,6 +2,7 @@
 
 import Loading from "../list/grid/loading";
 import { useUserInfoQuery } from "../../hooks/queries/useUserInfoQuery";
+import { getCookie } from "cookies-next";
 
 // export default function UserProfile(userInfo) {
 export default function ProfileCard() {
@@ -36,9 +37,13 @@ export default function ProfileCard() {
                         {data.username}
                     </div>
                     {/* 사용자 ID (이메일) */}
-                    <p className="text-l text-zinc-500">
-                        {data.loginId}
-                    </p>
+                    {getCookie("isSocial") ? 
+                        <></>
+                    :
+                        <p className="text-l text-zinc-500">
+                            {data.loginId}
+                        </p>
+                    }
                     {/* divider */}
                     <div className="my-3 border-b-2"></div>
                     <div className='w-full'>
