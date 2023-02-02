@@ -17,6 +17,7 @@
     "chart.js": "^2.9.4",
     "ckeditor5-custom-build": "file:ckeditor5",
     "classnames": "^2.3.2",
+    "cookies-next": "^2.1.1",
     "daisyui": "^2.46.1",
     "dotenv": "^16.0.3",
     "dotenv-webpack": "^8.0.1",
@@ -29,6 +30,8 @@
     "react-calendar": "^4.0.0",
     "react-datepicker": "^4.8.0",
     "react-dom": "18.2.0",
+    "react-js-pagination": "^3.0.3",
+    "react-query": "^3.39.2",
     "react-transition-group": "^4.4.5",
     "tailwind-scrollbar-hide": "^1.1.7"
   },

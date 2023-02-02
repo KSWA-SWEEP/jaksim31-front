@@ -1,16 +1,27 @@
+import { cookies } from "next/headers";
+import { getDiaryList } from "../../../api/getDiaryList";
+import { getUserInfo } from "../../../api/getUserInfo";
 import DiaryGridList from "./gridList";
-import SearchBox from "./SearchBox";
 
-export default function gridList() {
+// async function getDiaryListData() {
+
+//     const res = await fetch(process.env.NEXT_PUBLIC_API_URL+"/v0/diaries/"+process.env.NEXT_PUBLIC_USER_ID+"?page=0&size=6");
+    
+//     if (res.status != 200) {
+//       throw new Error('Failed to fetch data');
+//     }
+  
+//     return res.json();
+// }
+
+export default async function gridList() {
+    // const diaryList = await getDiaryListData();
+
     return (
         <>
-            {/* 검색 영역 */}
-            <div className="mx-auto mt-5 font-medium rounded-3xl bg-red-100/60 lg:mt-2 lg:mb-5 sm:mx-6 lg:mx-8 text-md text-zinc-600">
-                <SearchBox/>
-            </div>
-
             <div className="relative">
-                <DiaryGridList className="w-full"/>
+                <DiaryGridList className="w-full" />
+                {/* <DiaryGridList className="w-full" diaryList={diaryList}/> */}
             </div>
         </>
     )

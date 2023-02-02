@@ -1,5 +1,9 @@
+'use client';
+
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { getCookie } from "cookies-next";
+import { useRouter } from 'next/navigation';
 
 // 오늘 일기 쓰기를 위한 date 설정
 let formatTwoDigits = (digit) => ("0" + digit).slice(-2);
@@ -10,30 +14,53 @@ let date = `${tempDate.getFullYear()}${formatTwoDigits(tempDate.getMonth()+1)}${
 const menuAfterLogin = [
   {
     name: '📊  대시보드',
-    href: '/diary/dashboard',
+    href: 'diary/dashboard',
   },
   {
     name: '📅  일기 목록',
-    href: '/diary/list/calendar',
+    href: 'diary/list/calendar',
   },
   {
     name: '📇  오늘의 일기 쓰기',
-    href: '/diary/create/'+ encodeURIComponent(btoa(date)),
+    href: 'diary/create/'+ encodeURIComponent(btoa(date)),
   },
   {
     name: '🌼  튜토리얼',
-    href: '/diary/tutorial',
+    href: 'home/tutorial',
   },
 ]
 
 const menuBeforeLogin = [
   {
     name: '🌼  튜토리얼',
-    href: '/diary/tutorial',
+    href: 'home/tutorial',
   },
 ]
 
 export default function Drawer({ isOpen, setIsOpen }) {
+
+  const [isLogin, setIsLogin] = useState(false);
+
+  useEffect(() => {
+    setIsLogin((getCookie('isLogin') != undefined) ? getCookie('isLogin') : false)
+  }, [])
+
+  const router = useRouter();
+
+  function todayDiaryPage(link) {
+
+    // 쿠키로부터 오늘 일기값 가져오기
+    let todayDiary = getCookie("todayDiaryId");    
+
+    // 오늘 일기가 있을 경우
+    if((todayDiary == "")||(todayDiary == undefined)) {
+      router.push(link);
+    } 
+    else {
+      router.push('diary/'+todayDiary+'/modify');  
+    }
+  }
+  
   return (
     <main
       className={
@@ -52,13 +79,34 @@ export default function Drawer({ isOpen, setIsOpen }) {
           <div className="relative flex flex-col w-full place-content-between">
             <div className="relative flex flex-col h-full max-w-lg pb-10 space-y-6 ">
               <ul className="mt-5">
-                {/* TODO 우선 로그인 후 목록으로 해둠 (menuAfterLogin) => isLogin인 값 사용해서 로그인 전 상태랑 구분 추가하기 */}
                 <li className="m-3 mt-0 mb-5 text-2xl font-bold text-red-500 sm:text-3xl" onClick={() => { setIsOpen(false); }}><Link href="/home/landing"><div className="w-full">작심삼일</div></Link></li>
-                {menuAfterLogin.map((menu) => (
-                    <li key={menu.name} className="my-1 text-lg hover:rounded-2xl hover:bg-red-100 text-zinc-700" onClick={() => { setIsOpen(false); }}>
-                      <Link href={menu.href}><div className="w-full py-3 pl-4">{menu.name}</div></Link>
-                    </li>
-                ))}
+                {
+                  isLogin
+                  ?
+                  <>
+                    {menuAfterLogin.map((menu) => (
+                        <li key={menu.name} className="my-1 text-lg hover:rounded-2xl hover:bg-red-100 text-zinc-700" onClick={() => { setIsOpen(false); }}>
+                          {
+                            (menu.name.includes("오늘의 일기 쓰기"))
+                            ?
+                            <div className="w-full py-3 pl-4" onClick={() => todayDiaryPage(menu.href)}>{menu.name}</div>
+                            :
+                            <Link href={menu.href}><div className="w-full py-3 pl-4">{menu.name}</div></Link>
+                          }
+                        </li>
+                    ))}
+                  </>
+                  :
+                  <>
+                    {menuBeforeLogin.map((menu) => (
+                        <li key={menu.name} className="my-1 text-lg hover:rounded-2xl hover:bg-red-100 text-zinc-700" onClick={() => { setIsOpen(false); }}>
+                          {
+                            <div className="w-full py-3 pl-4" onClick={() => todayDiaryPage(menu.href)}>{menu.name}</div>
+                          }
+                        </li>
+                    ))}
+                  </>
+                }
               
               </ul>
             {/* {children} */}
