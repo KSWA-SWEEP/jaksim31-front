@@ -8,10 +8,8 @@ export const useDiarySave = (queryClient, saveType, diaryId) =>
     useMutation(
         async ({data}) => {
 
-            let returnData = new Object();
-
             let response = await (saveType === "create" ? addDiary(data) : modifyDiary(data, diaryId))
-            .then(resp => resp.status != 200 ? resp.json() : resp)
+            .then(resp => ((saveType === "create" ? resp.status != 201 : resp.status != 200) ? resp.json() : resp))
             .then(respData => {
                 if(respData.errorCode) {
                     throw respData;
@@ -24,6 +22,9 @@ export const useDiarySave = (queryClient, saveType, diaryId) =>
         {
             onError: async (data) => {
               alert(data.errorMessage+"😥");
+              queryClient.invalidateQueries(["DIARY_LIST"]);
+              queryClient.invalidateQueries(["USER_INFO"]);
+              queryClient.invalidateQueries(["EMOTION_COUNT"]);
             },
         }
     );

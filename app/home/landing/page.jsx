@@ -44,7 +44,7 @@ async function getBgImg() {
   }
 
   let jsonData = await res.json();
-  let imgUrl = jsonData.urls.full;
+  let imgUrl = jsonData.urls.regular;
   
   return imgUrl;
 }
