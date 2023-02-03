@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useUserInfoQuery } from "../../hooks/queries/useUserInfoQuery";
 import Loading from "../list/grid/loading";
 import Error from "../list/grid/error";
+import Image from "next/image";
 
 export default function RecentDiaryCard() {
 
@@ -53,7 +54,7 @@ export default function RecentDiaryCard() {
                         className="w-50 rounded-xl"
                         type="button"
                         href={data.recentDiary.thumbnail}>
-                            <img src={data.recentDiary.thumbnail}/>
+                            <Image src={data.recentDiary.thumbnail} alt="일기 썸네일"></Image>
                         </Link>
                     </div>
                     {/*감정*/}
