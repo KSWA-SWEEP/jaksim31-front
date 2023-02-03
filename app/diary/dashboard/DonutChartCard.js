@@ -77,7 +77,6 @@ export default function DonutChartCard() {
         },
         legend: {
           labels: {
-            fontFamily: "LeeSeoyun",
             fontColor: "rgba(0,0,0,.8)",
             fontSize: 35,
             position: "bottom",
