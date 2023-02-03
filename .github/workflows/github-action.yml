@@ -74,9 +74,9 @@ jobs:
               sudo /usr/sbin/usermod -aG docker `user`
               sudo chown root:docker /var/run/docker.sock
               docker pull r2god7k/jaksim31-frontend:latest
-              docker stop jaksim31-frontend
-              docker rm jaksim31-frontend
-              docker run -d -p 3000:3000 --name jaksim31-front --network centos_default r2god7k/jaksim31-frontend:latest
+              # docker stop jaksim31-frontend
+              # docker rm jaksim31-frontend
+              docker run -d -p 3000:3000 --name jaksim31-frontend --network centos_default r2god7k/jaksim31-frontend:latest
               sleep 10s
               
       # SSH Connect - (Web2)
@@ -95,7 +95,7 @@ jobs:
               sudo /usr/sbin/usermod -aG docker `user`
               sudo chown root:docker /var/run/docker.sock
               docker pull r2god7k/jaksim31-frontend:latest
-              docker stop jaksim31-frontend
-              docker rm jaksim31-frontend
-              docker run -d -p 3000:3000 --name jaksim31-front --network centos_default r2god7k/jaksim31-frontend:latest
+              # docker stop jaksim31-frontend
+              # docker rm jaksim31-frontend
+              docker run -d -p 3000:3000 --name jaksim31-frontend --network centos_default r2god7k/jaksim31-frontend:latest
               sleep 10s
