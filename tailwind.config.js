@@ -25,8 +25,11 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        leeseoyun: ['var(--font-leeseoyun)'],
-        gmarketSans: ['var(--font-gmarketSans)'],
+        "leeseoyun": ['var(--font-leeseoyun)'],
+        "gmarketSans": ['var(--font-gmarketSans)'],
+      },
+      backgroundImage: {
+        "gradient-image": "url('/images/gradient.webp')", 
       }
     }
   },

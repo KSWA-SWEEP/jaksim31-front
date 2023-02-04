@@ -71,12 +71,12 @@ const Tutorial = () => {
                   <Image
                     src={examplePage.src}
                     alt={examplePage.alt}
-                    placeholder={examplePage.alt}
+                    placeholder="blur"
                   />
                 </div>
                 <div className="col-span-2 grid grid-cols-1 grid-rows-5">
-                  <p className="row-span-1 text-3xl font-[GmarketSansMedium] font-semibold leading-8 text-zinc-900 pt-8">{examplePage.title}</p>
-                  <p className="row-span-4 font-[GmarketSansLight] text-base leading-7 text-zinc-600">{examplePage.comment}</p>
+                  <p className="row-span-1 mb-2 text-3xl font-bold leading-8 text-zinc-900 pt-8">{examplePage.title}</p>
+                  <p className="row-span-4 text-lg font-semibold leading-7 text-zinc-600">{examplePage.comment}</p>
                 </div>
               </div>
             </LazyShow>

@@ -47,7 +47,7 @@ export default function RootLayout({ children }) {
         head.jsx. Find out more at https://beta.nextjs.org/docs/api-reference/file-conventions/head
       */}
       <head />
-      <body className='scrollbar-hide'>
+      <body className='scrollbar-hide bg-gradient-image'>
         <ReactQueryWrapper>
           <div className='relative flex scrollbar-hide'>
             {/* Header */}
