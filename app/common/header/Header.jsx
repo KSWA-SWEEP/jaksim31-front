@@ -3,10 +3,12 @@
 import React, { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import { Bars3Icon } from '@heroicons/react/24/outline';
-import Login from './Login';
-import Profile from './Profile';
 import { getCookie } from 'cookies-next';
 import { useQueryClient } from 'react-query';
+import dynamic from 'next/dynamic';
+
+const DynamicLogin = dynamic(() => import('./Login'))
+const DynamicProfile = dynamic(() => import('./Profile'))
 
 function Header({ isOpen, setIsOpen }) {
 
@@ -47,12 +49,12 @@ function Header({ isOpen, setIsOpen }) {
             ?
             <>
               {/* 로그인 이전 - 시작하기 버튼 */}
-              <Login/>
+              <DynamicLogin/>
             </>
             :
             <>
               {/* 로그인 이후 - 사용자 프로필 사진 */}
-              <Profile/>
+              <DynamicProfile/>
             </>
           }
         </div>
