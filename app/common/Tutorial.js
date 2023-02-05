@@ -65,13 +65,14 @@ const Tutorial = () => {
       <div className="container relative mx-auto">
         <div>
           {examplePages.map((examplePage) => (
-            <LazyShow delay={((examplePage.index)*0.5)-examplePage.index*0.2}>
+            <LazyShow delay={((examplePage.index)*0.5)-examplePage.index*0.3}>
               <div className="py-4 grid grid-cols-7">
                 <div className="pr-4 col-span-5">
                   <Image
                     src={examplePage.src}
                     alt={examplePage.alt}
                     placeholder="blur"
+                    priority
                   />
                 </div>
                 <div className="col-span-2 grid grid-cols-1 grid-rows-5">

@@ -54,7 +54,15 @@ export default function RecentDiaryCard() {
                         className="w-50 rounded-xl"
                         type="button"
                         href={data.recentDiary.thumbnail}>
-                            <Image src={data.recentDiary.thumbnail} alt="일기 썸네일"></Image>
+                            <Image 
+                                src={data.recentDiary.thumbnail} 
+                                width="0"
+                                  height="0" 
+                                  alt="일기 썸네일" 
+                                  sizes="100vw"
+                                  priority="true"
+                            >
+                            </Image>
                         </Link>
                     </div>
                     {/*감정*/}

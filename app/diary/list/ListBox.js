@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 
 const ListBox = ({children}) => {
     return (
-        <AnimatePresence exitBeforeEnter>
+        <AnimatePresence mode='wait'>
             <motion.div
                 initial={{ y: 10, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}

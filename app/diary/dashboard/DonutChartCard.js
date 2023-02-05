@@ -77,7 +77,7 @@ export default function DonutChartCard() {
         legend: {
           labels: {
             fontColor: "rgba(0,0,0,.8)",
-            fontSize: 15,
+            fontSize: 35,
             position: "bottom",
             align: "left",
             boxWidth: 30,
