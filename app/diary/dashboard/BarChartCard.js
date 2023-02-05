@@ -170,7 +170,7 @@ export default function BarChartCard() {
   }, [emotionCountThis, emotionCountLast]);
   return (
     <>
-      <div className="relative flex flex-col w-full min-w-0 mb-6 break-words shadow-lg rounded-xl bg-zinc-100">
+      <div className="relative flex flex-col w-full min-w-0 mb-6 break-words shadow-lg rounded-xl bg-zinc-100" data-cy="barChartCard">
         <div className="px-4 py-3 mb-0 bg-transparent rounded-t">
           <div className="flex flex-wrap items-center">
             <div className="relative flex-1 flex-grow w-full max-w-full">

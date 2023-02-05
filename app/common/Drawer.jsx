@@ -79,19 +79,19 @@ export default function Drawer({ isOpen, setIsOpen }) {
           <div className="relative flex flex-col w-full place-content-between">
             <div className="relative flex flex-col h-full max-w-lg pb-10 space-y-6 ">
               <ul className="mt-5">
-                <li className="m-3 mt-0 mb-5 text-2xl font-bold text-red-500 sm:text-3xl" onClick={() => { setIsOpen(false); }}><Link href="/home/landing"><div className="w-full">작심삼일</div></Link></li>
+                <li className="m-3 mt-0 mb-5 text-2xl font-bold text-red-500 sm:text-3xl" onClick={() => { setIsOpen(false); }}><Link href="/home/landing" data-cy="goLandingPageButton"><div className="w-full">작심삼일</div></Link></li>
                 {
                   isLogin
                   ?
                   <>
                     {menuAfterLogin.map((menu) => (
-                        <li key={menu.name} className="my-1 text-lg hover:rounded-2xl hover:bg-red-100 text-zinc-700" onClick={() => { setIsOpen(false); }}>
+                        <li key={menu.name} data-cy={menu.name} className="my-1 text-lg hover:rounded-2xl hover:bg-red-100 text-zinc-700" onClick={() => { setIsOpen(false); }}>
                           {
                             (menu.name.includes("오늘의 일기 쓰기"))
                             ?
-                            <div className="w-full py-3 pl-4" onClick={() => todayDiaryPage(menu.href)}>{menu.name}</div>
+                            <div className="w-full py-3 pl-4" data-cy={menu.name} onClick={() => todayDiaryPage(menu.href)}>{menu.name}</div>
                             :
-                            <Link href={menu.href}><div className="w-full py-3 pl-4">{menu.name}</div></Link>
+                            <Link href={menu.href} data-cy={menu.name}><div className="w-full py-3 pl-4">{menu.name}</div></Link>
                           }
                         </li>
                     ))}
@@ -101,7 +101,7 @@ export default function Drawer({ isOpen, setIsOpen }) {
                     {menuBeforeLogin.map((menu) => (
                         <li key={menu.name} className="my-1 text-lg hover:rounded-2xl hover:bg-red-100 text-zinc-700" onClick={() => { setIsOpen(false); }}>
                           {
-                            <div className="w-full py-3 pl-4" onClick={() => todayDiaryPage(menu.href)}>{menu.name}</div>
+                            <div className="w-full py-3 pl-4" data-cy={menu.name} onClick={() => todayDiaryPage(menu.href)}>{menu.name}</div>
                           }
                         </li>
                     ))}
