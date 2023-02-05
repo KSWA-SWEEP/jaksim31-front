@@ -1,14 +1,55 @@
 name: Jaksim31-Frontend CI/CD
+
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "develop" ]
   pull_request:
     branches: [ "develop" ]
+    types: [ "opened", "assigned", "synchronize", "labeled", "reopened" ]
     
 jobs:
-  Jaksim31-Front:
+  Jaksim31-Front-CI:
     runs-on: ubuntu-latest
     steps:
+      # Checkout code
+      - name: Checkout
+        uses: actions/checkout@v2.3.1
+        with:
+          persist-credentials: false
+      
+      - name: Create env local file
+        run: echo "${{ secrets.ENV_LOCAL_FILE }}" > .env.local
+          
+      # NPM install & Build
+      - name: Install and Build
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16
+      - run: npm install
+      - run: npm install sharp
+      - run: npm run build
+      
+      # NPM caching
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          cache: 'npm'
+          
+      # E2E Test - Cypress
+      - name: Run Cypress E2E test
+        uses: cypress-io/github-action@v5
+        with:
+          browser: chrome
+      - run: npm run e2e      
+      
+          
+  Jaksim31-Front-CD:
+    if: github.event_name == 'push' && contains(github.ref, 'main')
+    needs: Jaksim31-Front-CI
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout code
       - name: Checkout
         uses: actions/checkout@v2.3.1
         with:
