@@ -26,7 +26,7 @@ jobs:
         with:
           node-version: 16
       - run: npm install --force
-      - run: npm install sharp
+      - run: npm install sharp --force
       - run: npm run build
       
       # NPM caching
@@ -65,7 +65,7 @@ jobs:
         with:
           node-version: 16
       - run: npm install --force
-      - run: npm install sharp
+      - run: npm install sharp --force
       - run: npm run build
       
       # NPM caching
