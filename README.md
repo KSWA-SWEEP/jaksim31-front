@@ -1,36 +1,170 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Jaksim31 
 
-## Getting Started
 
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
 ```
+📙 jaksim31-front
+    ├─ 📁 app
+    │  ├─ common
+    │  │  ├─ Drawer.jsx
+    │  │  ├─ header
+    │  │  │  ├─ Header.jsx
+    │  │  │  ├─ loading.js
+    │  │  │  ├─ Login.js
+    │  │  │  └─ Profile.js
+    │  │  ├─ LazyShow.js
+    │  │  └─ Tutorial.js
+    │  ├─ home
+    │  │  ├─ landing
+    │  │  │  ├─ ExampleScreen.js
+    │  │  │  └─ page.jsx
+    │  │  ├─ page.jsx
+    │  │  └─ tutorial
+    │  │     └─ page.jsx
+    │  ├─ diary
+    │  │  ├─ common
+    │  │  │  ├─ backButton.js
+    │  │  │  ├─ diaryInputFormat.js
+    │  │  │  ├─ Editor.js
+    │  │  │  └─ loading.js
+    │  │  ├─ create
+    │  │  │  └─ [date]
+    │  │  │     ├─ createDiary.js
+    │  │  │     └─ page.jsx
+    │  │  ├─ dashboard
+    │  │  │  ├─ BarChartCard.js
+    │  │  │  ├─ DonutChartCard.js
+    │  │  │  ├─ layout.jsx
+    │  │  │  ├─ page.jsx
+    │  │  │  ├─ ProfileCard.js
+    │  │  │  └─ RecentDiaryCard.js
+    │  │  ├─ list
+    │  │  │  ├─ calendar
+    │  │  │  │  ├─ Calendar.css
+    │  │  │  │  ├─ calendarList.js
+    │  │  │  │  ├─ loading.js
+    │  │  │  │  └─ page.jsx
+    │  │  │  ├─ DateRangePicker.js
+    │  │  │  ├─ grid
+    │  │  │  │  ├─ error.js
+    │  │  │  │  ├─ gridList.js
+    │  │  │  │  ├─ loading.js
+    │  │  │  │  ├─ page.jsx
+    │  │  │  │  └─ Pagination.css
+    │  │  │  ├─ layout.jsx
+    │  │  │  ├─ ListBox.js
+    │  │  │  ├─ page.jsx
+    │  │  │  └─ ViewTypeTab.js
+    │  │  ├─ page.jsx
+    │  │  └─ [diaryId]
+    │  │     ├─ diaryContents.js
+    │  │     ├─ loading.js
+    │  │     ├─ modify
+    │  │     │  ├─ date.js
+    │  │     │  ├─ loading.js
+    │  │     │  └─ page.jsx
+    │  │     └─ page.jsx
+    │  ├─ globals.css
+    │  ├─ head.jsx
+    │  ├─ layout.jsx
+    │  ├─ loading.js
+    │  ├─ page.module.css
+    │  ├─ page.jsx
+    │  ├─ api
+    │  │  ├─ addDiary.js
+    │  │  ├─ analyzeDiary.js
+    │  │  ├─ checkIsMember.js
+    │  │  ├─ checkPassword.js
+    │  │  ├─ deleteDiary.js
+    │  │  ├─ getDiary.js
+    │  │  ├─ getDiaryList.js
+    │  │  ├─ getEmotionCount.js
+    │  │  ├─ getKakaoApiAccessKey.js
+    │  │  ├─ getUserInfo.js
+    │  │  ├─ login.js
+    │  │  ├─ logout.js
+    │  │  ├─ modifyDiary.js
+    │  │  ├─ signUp.js
+    │  │  ├─ updatePassword.js
+    │  │  ├─ updateUserInfo.js
+    │  │  └─ uploadImg.js
+    │  ├─ hooks
+    │  │  ├─ mutations
+    │  │  │  ├─ useDiaryDelete.js
+    │  │  │  ├─ useDiarySave.js
+    │  │  │  ├─ useLogin.js
+    │  │  │  ├─ useLogout.js
+    │  │  │  └─ useUserInfoUpdate.js
+    │  │  └─ queries
+    │  │     ├─ useDiaryListPageQuery.js
+    │  │     ├─ useDiaryListQuery.js
+    │  │     ├─ useDiaryQuery.js
+    │  │     ├─ useEmotionCountQuery.js
+    │  │     └─ useUserInfoQuery.js
+    │  └─ ReactQueryWrapper.jsx
+    │  
+    ├─ 😺 .github
+    │  └─ workflows
+    │     └─ github-action.yml
+    │  
+    ├─ 🧪 cypress
+    │  ├─ downloads
+    │  ├─ e2e
+    │  │  ├─ diary
+    │  │  │  ├─ diaryEdit.cy.js
+    │  │  │  ├─ diaryList.cy.js
+    │  │  │  └─ diarySave.cy.js
+    │  │  └─ member
+    │  │     ├─ userInfo.cy.js
+    │  │     └─ userLogin.cy.js
+    │  ├─ fixtures
+    │  │  └─ example.json
+    │  └─ support
+    │     ├─ commands.js
+    │     └─ e2e.js
+    │  
+    ├─ 📦 public
+    │  ├─ favicon.ico
+    │  ├─ images
+    │  │  ├─ emotion
+    │  │  │  ├─ bad-small.png
+    │  │  │  ├─ bad.png
+    │  │  │  ├─ bored-small.png
+    │  │  │  ├─ bored.png
+    │  │  │  ├─ embarrassed-small.png
+    │  │  │  ├─ embarrassed.png
+    │  │  │  ├─ good-small.png
+    │  │  │  ├─ good.png
+    │  │  │  ├─ nothing-small.png
+    │  │  │  ├─ nothing.png
+    │  │  │  ├─ sad-small.png
+    │  │  │  ├─ sad.png
+    │  │  │  ├─ scared-small.png
+    │  │  │  ├─ scared.png
+    │  │  │  ├─ surprised-small.png
+    │  │  │  ├─ surprised.png
+    │  │  │  ├─ unsure-small.png
+    │  │  │  └─ unsure.png
+    │  │  ├─ gradient.jpg
+    │  │  ├─ kakaoLogin.png
+    │  │  ├─ landing-example.png
+    │  │  ├─ paperTexture.jpg
+    │  │  └─ tutorial
+    │  │     ├─ create.png
+    │  │     ├─ drawer.png
+    │  │     ├─ login.png
+    │  │     └─ signUp.png
+    │  ├─ next.svg
+    │  ├─ svgs
+    │  │  └─ spinner.svg
+    │  ├─ thirteen.svg
+    │  └─ vercel.svg
+    │  
+    ├─ 📖 README.md
+    ├─ 🐳 Dockerfile
+    ├─ package.json
+    ├─ next.config.js
+    ├─ cypress.config.js
+    ├─ postcss.config.js
+    └─ tailwind.config.js
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.jsx`. The page auto-updates as you edit the file.
-
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+```

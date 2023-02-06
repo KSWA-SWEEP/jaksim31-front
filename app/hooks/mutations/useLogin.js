@@ -17,7 +17,11 @@ export const useLogin = (queryClient) =>
         },
         {   
             onError: async (response) => {
-                alert(response.errorMessage+"😥")
+                if(response == undefined) {
+                    alert("로그인에 실패하였습니다😥\n회원 가입하시거나 올바른 비밀번호를 입력해주세요!")
+                } else { 
+                    alert(response.errorMessage+"😥")
+                }
             }
         }
     );
