@@ -94,7 +94,7 @@ export default function DonutChartCard() {
   }, [emotionCountThis]);
   return (
     <>
-      <div className="w-full max-w-md p-6 pt-4 mb-6 overflow-hidden text-left align-middle transition-all transform bg-zinc-100 shadow-xl lg:max-w-lg rounded-xl">
+      <div className="w-full max-w-md p-6 pt-4 mb-6 overflow-hidden text-left align-middle transition-all transform bg-zinc-100 shadow-xl lg:max-w-lg rounded-xl" data-cy="donutChartCard">
           <div className="px-4 py-3 mb-0 border-0 rounded-t">
               <div className="flex flex-wrap items-center">
               <div className="relative flex-1 flex-grow w-full max-w-full px-4">

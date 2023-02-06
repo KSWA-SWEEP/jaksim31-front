@@ -266,7 +266,7 @@ const Login = () => {
               whileTap={{ scale: 0.95 }}
               transition={{ duration: 0.2, type: "spring", stiffness: 400, damping: 17 }}
             >
-              <div onClick={openLoginModal} className="z-40 inline-flex items-center justify-center px-4 py-2 ml-8 text-base font-medium text-white duration-150 border border-transparent shadow-sm whitespace-nowrap rounded-xl bg-rose-400 hover:bg-rose-500">시작하기</div>
+              <div onClick={openLoginModal} className="z-40 inline-flex items-center justify-center px-4 py-2 ml-8 text-base font-medium text-white duration-150 border border-transparent shadow-sm whitespace-nowrap rounded-xl bg-rose-400 hover:bg-rose-500" data-cy="startButton">시작하기</div>
             </motion.div>
             
             {/* 로그인 Modal */}
@@ -295,7 +295,7 @@ const Login = () => {
                       leaveFrom="opacity-100 scale-100"
                       leaveTo="opacity-0 scale-95"
                     >
-                      <Dialog.Panel className="w-full max-w-md p-6 pt-4 text-left align-middle transition-all transform bg-white shadow-xl lg:max-w-lg rounded-2xl">
+                      <Dialog.Panel className="w-full max-w-md p-6 pt-4 text-left align-middle transition-all transform bg-white shadow-xl lg:max-w-lg rounded-2xl" data-cy="loginModal">
                         
                         <div className='flex justify-end'>
                           <XMarkIcon
@@ -326,6 +326,7 @@ const Login = () => {
                                       className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
                                       placeholder="Email"
                                       onChange={onEmailChange}
+                                      data-cy="loginEmailInput"
                                     />
                                     {userEmail.current.length > 0 && <span className={`message ${isEmail ? 'success text-xs text-blue-500' : 'error text-xs text-red-500'}`}>{emailMessage}</span>}
                                   </div>
@@ -348,6 +349,7 @@ const Login = () => {
                                       className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
                                       placeholder="Password"
                                       onChange={onPasswordChange}
+                                      data-cy="passwordInput"
                                     />
                                   </div>
                                 </div>
@@ -359,6 +361,7 @@ const Login = () => {
                                   type="button"
                                   onClick={requestLogin}
                                   disabled={!isEmail}
+                                  data-cy="loginSubmitButton"
                                 >
                                   로그인
                                 </button>
@@ -367,16 +370,16 @@ const Login = () => {
                               <div className="relative w-full mt-1 mb-1">
                                 <div className="grid grid-cols-2 gap-1">
                                   <div className="grid justify-start">
-                                    <strong onClick={openEmailCheckModal} className="text-sm hover:text-gray-500">이메일 조회</strong>
+                                    <strong onClick={openEmailCheckModal} className="text-sm hover:text-gray-500" data-cy="checkEmailButton">이메일 조회</strong>
                                   </div>
                                   <div className="grid justify-end">
-                                    <strong onClick={() => {setIsChangePasswordModal(true); openSignupModal();}} className="text-sm hover:text-gray-500">비밀번호 재설정</strong>
+                                    <strong onClick={() => {setIsChangePasswordModal(true); openSignupModal();}} className="text-sm hover:text-gray-500" data-cy="resetPasswordButton">비밀번호 재설정</strong>
                                   </div>
                                 </div>
                               </div>
 
                               <div className="relative w-full mt-4 mb-2">
-                                <p>회원이 아니신가요? <strong onClick={openSignupModal} className='text-red-400 hover:text-red-500'>회원 가입하기</strong></p>
+                                <p>회원이 아니신가요? <strong onClick={openSignupModal} className='text-red-400 hover:text-red-500' data-cy="joinButton">회원 가입하기</strong></p>
                               </div>
                             </form>
                           </div>
@@ -394,6 +397,7 @@ const Login = () => {
                               <button
                                 className="items-center mb-1 mr-2 text-xs font-bold duration-150 hover:scale-105" 
                                 onClick={kakaologin}
+                                data-cy="kakaoLoginButton"
                               >
                                 <Image src={KakaoLoginBtn} alt="카카오 로그인"></Image>
                               </button>
@@ -434,7 +438,7 @@ const Login = () => {
                       leaveFrom="opacity-100 scale-100"
                       leaveTo="opacity-0 scale-95"
                     >
-                      <Dialog.Panel className="w-full max-w-md p-6 pt-4 text-left align-middle transition-all transform bg-white shadow-xl lg:max-w-lg rounded-2xl">
+                      <Dialog.Panel className="w-full max-w-md p-6 pt-4 text-left align-middle transition-all transform bg-white shadow-xl lg:max-w-lg rounded-2xl" data-cy="checkEmailModal">
                         
                         <div className='flex justify-end'>
                           <XMarkIcon
@@ -445,7 +449,7 @@ const Login = () => {
 
                         <div className='flex flex-col text-center justify-items-center'>
                           <div className="flex-auto px-4 py-4 pt-2 lg:px-10">
-                            <div className="mb-5 text-2xl font-bold text-center text-zinc-700">
+                            <div className="mb-5 text-2xl font-bold text-center text-zinc-700" data-cy="checkEmail">
                               이메일 조회
                             </div>
                             <form>
@@ -465,6 +469,7 @@ const Login = () => {
                                       className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
                                       placeholder="Email"
                                       onChange={onEmailChange}
+                                      data-cy="isMemberEmailInput"
                                     />
                                     {userEmail.current.length > 0 && <span className={`message ${isEmail ? 'success text-xs text-blue-500' : 'error text-xs text-red-500'}`}>{emailMessage}</span>}
                                   </div>
@@ -477,13 +482,14 @@ const Login = () => {
                                   type="button"
                                   onClick={checkEmail}
                                   disabled={!isEmail}
+                                  data-cy="isMemberSubmitButton"
                                 >
                                   조회하기
                                 </button>
                               </div>
 
                               <div className="relative w-full mt-4 mb-2">
-                                <p>회원이 아니신가요?  <strong onClick={openSignupModal} className='text-red-400 hover:text-red-500'>회원 가입하기</strong></p>
+                                <p>회원이 아니신가요?  <strong onClick={openSignupModal} className='text-red-400 hover:text-red-500' data-cy="join">회원 가입하기</strong></p>
                               </div>
                             </form>
                           </div>
@@ -521,7 +527,7 @@ const Login = () => {
                       leaveFrom="opacity-100 scale-100"
                       leaveTo="opacity-0 scale-95"
                     >
-                      <Dialog.Panel className="w-full max-w-md p-6 pt-4 text-left align-middle transition-all transform bg-white shadow-xl lg:max-w-lg rounded-2xl">
+                      <Dialog.Panel className="w-full max-w-md p-6 pt-4 text-left align-middle transition-all transform bg-white shadow-xl lg:max-w-lg rounded-2xl" data-cy="joinModal">
                         
                         <div className='flex justify-end'>
                           <XMarkIcon
@@ -557,6 +563,7 @@ const Login = () => {
                                         className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
                                         placeholder="Name"
                                         onChange={onNameChange}
+                                        data-cy="nameInput"
                                       />
                                     </div>
                                   </div>
@@ -579,6 +586,7 @@ const Login = () => {
                                       className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
                                       placeholder="Email"
                                       onChange={onEmailChange}
+                                      data-cy="validationEmailInput"
                                     />
                                   </div>
                                 </div>
@@ -591,6 +599,7 @@ const Login = () => {
                                   type="button"
                                   onClick={sendAuthMail}
                                   disabled={!(isEmail)}
+                                  data-cy="sendEmailButton"
                                 >
                                   인증메일 전송
                                 </button>
@@ -614,6 +623,7 @@ const Login = () => {
                                       placeholder="인증번호를 입력하세요"
                                       disabled={!(isAuthIng)}
                                       onChange={onAuthChange}
+                                      data-cy="authCodeInput"
                                     />
                                   </div>
                                 </div>
@@ -636,6 +646,7 @@ const Login = () => {
                                       className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
                                       placeholder="Password"
                                       onChange={onPasswordChange}
+                                      data-cy="passwordInput"
                                     />
                                   </div>
                                 </div>
@@ -658,6 +669,7 @@ const Login = () => {
                                       className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
                                       placeholder="Password"
                                       onChange={onPasswordCheckChange}
+                                      data-cy="passwordCheckInput"
                                     />
                                   </div>
                                 </div>
@@ -670,6 +682,7 @@ const Login = () => {
                                   type="button"
                                   disabled={!(isEmail && isPassword && isPasswordConfirm && isAuthConfirm)}
                                   onClick={isChangePasswordMoal ? requestChangePassword : requestSignup}
+                                  data-cy="submitButton"
                                 >
                                   {isChangePasswordMoal ? <>비밀번호 변경하기</> : <>회원가입</>}
                                 </button>
@@ -678,7 +691,7 @@ const Login = () => {
                           </div>
 
                           <div className="mb-3 text-center">
-                            <h6 onClick={() => {closeSignupModal(); openLoginModal();}} className="text-sm font-bold text-zinc-400">
+                            <h6 onClick={() => {closeSignupModal(); openLoginModal();}} className="text-sm font-bold text-zinc-400" data-cy="back">
                               로그인 화면으로 돌아가기
                             </h6>
                           </div>
