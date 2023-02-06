@@ -23,7 +23,7 @@ module.exports = {
     appDir: true,
   },
   images: {
-    domains: ['source.unsplash.com', 'images.unsplash.com', 'objectstorage.kr-central-1.kakaoi.io'],
+    domains: ['source.unsplash.com', 'images.unsplash.com', 'objectstorage.kr-central-1.kakaoi.io', 'k.kakaocdn.net'],
   },
   webpack(config) {
     config.module.rules.push({

@@ -15,7 +15,7 @@
     "cypress": "^12.5.0",
     "@headlessui/react": "^1.7.7",
     "@heroicons/react": "^2.0.13",
-    "@next/font": "13.1.1",
+    "@next/font": "^13.1.1",
     "@popperjs/core": "^2.11.6",
     "chart.js": "^2.9.4",
     "ckeditor5-custom-build": "file:ckeditor5",

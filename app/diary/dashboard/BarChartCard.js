@@ -81,7 +81,7 @@ export default function BarChartCard() {
         ],
         title: {
           font: {
-            family: "LeeSeoYun"
+            family: "font-leeseoyun"
           }
         },
         datasets: [
@@ -115,7 +115,7 @@ export default function BarChartCard() {
         legend: {
           labels: {
             fontColor: "rgba(0,0,0,.8)",
-            fontFamily: "LeeSeoyun",
+            fontFamily: "font-leeseoyun",
           },
           align: "end",
           position: "bottom",
@@ -126,7 +126,7 @@ export default function BarChartCard() {
               display: true,
               scaleLabel: {
                 display: true,
-                fontFamily: "LeeSeoyun",
+                fontFamily: "font-leeseoyun",
                 fontSize: 15,
                 labelString: "감정 종류",
               },
@@ -144,7 +144,7 @@ export default function BarChartCard() {
             {
               display: true,
               scaleLabel: {
-                fontFamily: "LeeSeoyun",
+                fontFamily: "font-leeseoyun",
                 display: false,
                 labelString: "Value",
               },

@@ -23,10 +23,15 @@ module.exports = {
     "./components/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    fontFamily: {
-      custom1 : ["LeeSeoyun", "GangwonEdu", "sans-serif", "GmarketSansLight", "GmarketSansMedium", "GmarketSansBold"],
-    },
-    extend: {},
+    extend: {
+      fontFamily: {
+        "leeseoyun": ['var(--font-leeseoyun)'],
+        "gmarketSans": ['var(--font-gmarketSans)'],
+      },
+      backgroundImage: {
+        "gradient-image": "url('/images/gradient.webp')", 
+      }
+    }
   },
   plugins: [
     require("daisyui"),
