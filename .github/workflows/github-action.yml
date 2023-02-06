@@ -2,9 +2,9 @@ name: Jaksim31-Frontend CI/CD
 
 on:
   push:
-    branches: [ "main", "develop" ]
-  pull_request:
     branches: [ "develop" ]
+  pull_request:
+    branches: [ "develop", "main" ]
     types: [ "opened", "assigned", "synchronize", "labeled", "reopened" ]
     
 jobs:
@@ -58,15 +58,6 @@ jobs:
       
       - name: Create env file
         run: echo "${{ secrets.ENV_FILE }}" > .env
-          
-      # NPM install & Build
-      - name: Install and Build
-        uses: actions/setup-node@v1
-        with:
-          node-version: 16
-      - run: npm install --force
-      - run: npm install sharp --force
-      - run: npm run build
       
       # NPM caching
       - name: Setup Node.js
