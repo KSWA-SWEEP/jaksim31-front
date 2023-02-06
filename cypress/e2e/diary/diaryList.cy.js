@@ -3,10 +3,10 @@ describe('Diary List Test', () => {
     beforeEach(() => {
         // 로그인
         cy.visit('/home/landing');
-        cy.wait(1000);
+        cy.wait(2000);
         cy.get('[data-testid="title"]', { timeout: 30000 }).should('be.visible');
         cy.get('[data-testid="startButton"]', { timeout: 30000 }).click();
-        cy.wait(1000);
+        cy.wait(1500);
         cy.get('[data-testid="loginModal"]').should('be.visible');
         cy.get('[data-testid="loginEmailInput"]').clear();
         cy.get('[data-testid="loginEmailInput"]').type('test@sweep.com');
@@ -16,7 +16,7 @@ describe('Diary List Test', () => {
         cy.get('[data-testid="loginSubmitButton"]', { timeout: 30000 }).click();
 
         // 일기 목록 페이지로 이동 
-        cy.wait(1500);
+        cy.wait(2000);
         cy.get('[data-testid="drawerButton"]', { timeout: 30000 }).should('be.visible');
         cy.wait(1500);
         cy.get('[data-testid="drawerButton"]', { timeout: 30000 }).click();

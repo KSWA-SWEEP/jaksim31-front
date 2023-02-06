@@ -10,6 +10,7 @@ describe('User Login test', () => {
   });
 
   it('check email', function() {
+    cy.wait(1000);
     cy.get('[data-testid="checkEmailButton"]', { timeout: 30000 }).click();
     cy.wait(1000);
     cy.get('[data-testid="isMemberEmailInput"]').clear();
@@ -27,6 +28,7 @@ describe('User Login test', () => {
   });
 
   it('join', function() {
+    cy.wait(1000);
     cy.get('[data-testid="joinButton"]', { timeout: 30000 }).click();
     cy.wait(1000);
     cy.get('[data-testid="nameInput"]').clear();
@@ -37,6 +39,7 @@ describe('User Login test', () => {
     cy.get('[data-testid="validationEmailInput"]').clear();
     cy.get('[data-testid="validationEmailInput"]').type('sweep@gmail.com');
     cy.get('[data-testid="sendEmailButton"]', { timeout: 30000 }).click();
+    cy.wait(1000);
     cy.get('.mt-3 > .text-xs').should('be.visible');
     cy.get('[data-testid="authCodeInput"]').click();
     cy.get('[data-testid="authCodeInput"]').clear();
@@ -69,7 +72,7 @@ describe('User Login test', () => {
     cy.get('[data-testid="passwordInput"]').clear();
     cy.get('[data-testid="passwordInput"]').type('test1234!');
     cy.get('[data-testid="loginSubmitButton"]', { timeout: 30000 }).click();
-    cy.wait(1000);
+    cy.wait(2000);
     
     cy.get('[data-testid="profileImageButton"]', { timeout: 30000 }).should('be.visible');
     cy.wait(1500);
