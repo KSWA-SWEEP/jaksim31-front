@@ -304,7 +304,6 @@ export default function DiaryGridList() {
                                                             alt={diary.emotion}
                                                             placeholder="empty"
                                                             fill
-                                                            priority
                                                             sizes='mas-width: 20vw, max-height: 10vh'
                                                             className="object-cover duration-200 hover:opacity-20 hover:scale-105"
                                                         />

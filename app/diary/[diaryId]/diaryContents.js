@@ -71,7 +71,7 @@ export default function DiaryContents(props) {
             <div className="text-2xl font-extrabold">{moment(data.diaryDate).format("YYYY. MM. DD.")}</div>
             <div className="flex flex-wrap mt-3">
                 {data.keywords.map((keyword) => (
-                    <>
+                    <div key={keyword}>
                     {
                         (keyword == "EXECPTION_NO_KEYWORD")
                         ?
@@ -86,11 +86,11 @@ export default function DiaryContents(props) {
                             </div>
                         </div>
                         :
-                        <div key={keyword} className="px-3 mb-2 py-1 mr-2.5 text-sm font-medium text-zinc-500 bg-zinc-200 rounded-xl dark:bg-zinc-200 dark:text-zinc-800 ">
+                        <div className="px-3 mb-2 py-1 mr-2.5 text-sm font-medium text-zinc-500 bg-zinc-200 rounded-xl dark:bg-zinc-200 dark:text-zinc-800 ">
                             #{keyword}
                         </div>
                     }
-                    </>
+                    </div>
                 ))}
             </div>
           </div>
