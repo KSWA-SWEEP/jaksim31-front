@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@ckeditor/ckeditor5-react": "^5.0.5",
-    "cypress": "^12.5.0",
+    "@cypress/react18": "^2.0.0",
     "@headlessui/react": "^1.7.7",
     "@heroicons/react": "^2.0.13",
     "@next/font": "^13.1.1",
@@ -39,10 +39,9 @@
     "tailwind-scrollbar-hide": "^1.1.7"
   },
   "devDependencies": {
+    "@cypress/webpack-dev-server": "^3.2.3",
     "@svgr/webpack": "^6.5.1",
     "@testing-library/cypress": "^9.0.0",
-    "@cypress/react": "^7.0.2",
-    "@cypress/webpack-dev-server": "^3.2.3",
     "autoprefixer": "^10.4.13",
     "eslint": "8.33.0",
     "eslint-config-next": "13.1.6",
