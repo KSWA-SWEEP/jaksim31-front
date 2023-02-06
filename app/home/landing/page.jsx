@@ -79,12 +79,12 @@ export default async function Home() {
               <div className="w-full px-4 ml-auto mr-auto text-center">
                 <div className="">
                   <LazyShow delay={0}>
-                    <h1 className="text-2xl sm:text-5xl lg:text-7xl font-semibold font-[GmarketSansBold] text-white" data-cy="title">
+                    <h1 className="text-2xl sm:text-5xl lg:text-7xl font-bold font-gmarketSans text-white" data-cy="title">
                       작지만 심플하고 쌈박한 일기
                     </h1>
                   </LazyShow>
                   <LazyShow delay={0.25}>
-                    <p className="mt-4 text-base sm:text-xl lg:text-3xl text-zinc-200 font-[GmarketSansLight]">
+                    <p className="mt-4 text-base sm:text-xl lg:text-3xl text-zinc-200 font-light font-gmarketSans">
                       작심삼일로 하루의 감정과 키워드를 남겨보세요🥰
                     </p>
                   </LazyShow>
@@ -161,15 +161,15 @@ export default async function Home() {
               <div className="sm:text-center">
                 
                 <LazyShow delay={0}>
-                  <h2 className="text-lg font-semibold leading-8 text-red-500 font-[GmarketSansMedium]">Features</h2>
+                  <h2 className="text-lg font-semibold leading-8 text-red-500 font-gmarketSans">Features</h2>
                 </LazyShow>
   
                 <LazyShow delay={0.2}>
-                  <p className="mt-2 text-3xl font-bold tracking-tight text-zinc-800 font-[GmarketSansBold] sm:text-4xl">작심삼일은 이런 기능들을 지원합니다</p>
+                  <p className="mt-2 text-3xl font-bold tracking-tight text-zinc-800 font-gmarketSans sm:text-4xl">작심삼일은 이런 기능들을 지원합니다</p>
                 </LazyShow>
                 
                 <LazyShow delay={0.3}>
-                  <p className="max-w-2xl mx-auto mt-6 text-base sm:text-lg leading-7 sm:leading-3 font-[GmarketSansMedium] text-zinc-600">
+                  <p className="max-w-2xl mx-auto mt-6 text-base sm:text-lg leading-7 sm:leading-3 font-gmarketSans text-zinc-600">
                     사용자들은 작심삼일에서 가볍고 쉬우면서도 재미있게 일기를 작성할 수 있습니다💗
                   </p>
                 </LazyShow>
@@ -184,8 +184,8 @@ export default async function Home() {
                           <feature.icon className="w-8 h-8" aria-hidden="true" />
                         </div>
                         <div className="sm:min-w-0 sm:flex-1">
-                          <p className="text-lg font-[GmarketSansMedium] font-semibold leading-8 text-zinc-900">{feature.name}</p>
-                          <p className="mt-2 font-[GmarketSansLight] text-base leading-7 text-zinc-600">{feature.description}</p>
+                          <p className="text-lg font-gmarketSans font-semibold leading-8 text-zinc-900">{feature.name}</p>
+                          <p className="mt-2 font-gmarketSans text-base leading-7 text-zinc-600">{feature.description}</p>
                         </div>
                       </div>
                     </LazyShow>
@@ -223,15 +223,15 @@ export default async function Home() {
               <div className="sm:text-center">
                 
                 <LazyShow delay={0}>
-                  <h2 className="text-lg font-semibold leading-8 text-red-500 font-[GmarketSansMedium]">Features</h2>
+                  <h2 className="text-lg font-semibold leading-8 text-red-500 font-gmarketSans">Features</h2>
                 </LazyShow>
   
                 <LazyShow delay={0.2}>
-                  <p className="mt-2 text-3xl font-bold tracking-tight text-zinc-800 font-[GmarketSansBold] sm:text-4xl">작심삼일은 이런 기능들을 지원합니다</p>
+                  <p className="mt-2 text-3xl font-bold tracking-tight text-zinc-800 font-gmarketSans sm:text-4xl">작심삼일은 이런 기능들을 지원합니다</p>
                 </LazyShow>
                 
                 <LazyShow delay={0.3}>
-                  <p className="max-w-2xl mx-auto mt-6 text-base sm:text-lg leading-7 sm:leading-3 font-[GmarketSansMedium] text-zinc-600">
+                  <p className="max-w-2xl mx-auto mt-6 text-base sm:text-lg leading-7 sm:leading-3 font-gmarketSans text-zinc-600">
                     사용자들은 작심삼일에서 가볍고 쉬우면서도 재미있게 일기를 작성할 수 있습니다💗
                   </p>
                 </LazyShow>
@@ -246,8 +246,8 @@ export default async function Home() {
                           <feature.icon className="w-8 h-8" aria-hidden="true" />
                         </div>
                         <div className="sm:min-w-0 sm:flex-1">
-                          <p className="text-lg font-[GmarketSansMedium] font-semibold leading-8 text-zinc-900">{feature.name}</p>
-                          <p className="mt-2 font-[GmarketSansLight] text-base leading-7 text-zinc-600">{feature.description}</p>
+                          <p className="text-lg font-gmarketSans font-semibold leading-8 text-zinc-900">{feature.name}</p>
+                          <p className="mt-2 font-gmarketSans text-base leading-7 text-zinc-600">{feature.description}</p>
                         </div>
                       </div>
                     </LazyShow>
