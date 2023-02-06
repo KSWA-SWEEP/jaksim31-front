@@ -298,7 +298,7 @@ function Editor({ editorLoaded, name, value, date, diaryId, thumbnail }) {
 
     return (
         <>
-            <div className="mx-5 my-3 outline outline-1 outline-zinc-200" data-cy="editorParent">
+            <div className="mx-5 my-3 outline outline-1 outline-zinc-200" data-testid="editorParent">
             {editorLoaded ? (
                 <CKEditor
                     className="overflow-clip"
@@ -315,7 +315,7 @@ function Editor({ editorLoaded, name, value, date, diaryId, thumbnail }) {
                         previewsInData: true,
                         },
                     }}
-                    data-cy="editor"
+                    data-testid="editor"
                 />
             ) : (        
                 <div className='relative flex items-center justify-center'>
@@ -334,7 +334,7 @@ function Editor({ editorLoaded, name, value, date, diaryId, thumbnail }) {
                                 }
                         disabled={((text == undefined)||(text == ""))}
                         onClick={() => { analyze(); openSaveModal(); }}
-                        data-cy="saveDiaryButton">
+                        data-testid="saveDiaryButton">
                     저장하기
                 </button>
                 <button className="inline-flex justify-center px-3 py-2 ml-2 text-sm font-medium duration-200 border border-transparent rounded-md text-zinc-700 bg-zinc-200 mt-7 hover:bg-zinc-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500 focus-visible:ring-offset-2" onClick={() => router.back()}>취소하기</button>
@@ -366,7 +366,7 @@ function Editor({ editorLoaded, name, value, date, diaryId, thumbnail }) {
                     leaveFrom="opacity-100 scale-100"
                     leaveTo="opacity-0 scale-95"
                     >
-                    <Dialog.Panel data-cy="saveDiaryModal" className="z-50 w-full max-w-xl p-6 pt-4 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl lg:px-10 lg:max-w-2xl rounded-2xl">
+                    <Dialog.Panel data-testid="saveDiaryModal" className="z-50 w-full max-w-xl p-6 pt-4 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl lg:px-10 lg:max-w-2xl rounded-2xl">
                         
                         <div className='flex justify-end mt-4'>
                             <XMarkIcon
@@ -433,12 +433,12 @@ function Editor({ editorLoaded, name, value, date, diaryId, thumbnail }) {
                                                         regularThumbnailLink != ""
                                                         ?
                                                         <div className="relative top-0 flex items-start w-full h-full group">
-                                                            <Image data-cy="thumbnailImage" className='object-cover w-full h-full' sizes='mas-width: 60vw, max-height: 50vh' fill placeholder={blur} alt="thumbnail" src={regularThumbnailLink} />
+                                                            <Image data-testid="thumbnailImage" className='object-cover w-full h-full' sizes='mas-width: 60vw, max-height: 50vh' fill placeholder={blur} alt="thumbnail" src={regularThumbnailLink} />
                                                             {/*thumbnail 저장 시 onClick 비활성화 및 Hover effect 제거*/}
                                                             {
                                                                 (!isSaved || (isSaved && ((thumbnail != undefined) || (thumbnail != ""))))
                                                                 ?
-                                                                <div data-cy="getNewThumbnailButton" onClick={getThumbnail} className='absolute top-0 flex items-center justify-center w-full h-full bg-black opacity-0 hover:opacity-50'>
+                                                                <div data-testid="getNewThumbnailButton" onClick={getThumbnail} className='absolute top-0 flex items-center justify-center w-full h-full bg-black opacity-0 hover:opacity-50'>
                                                                     <div className='relative flex items-center'>
                                                                         <ArrowPathIcon className='hidden text-white w-7 h-7 group-hover:block'/> <p className='ml-3 text-white'>다른 이미지 가져오기</p>
                                                                     </div>
@@ -479,7 +479,7 @@ function Editor({ editorLoaded, name, value, date, diaryId, thumbnail }) {
                                         regularThumbnailLink != ""
                                             ?
                                             <button className={"inline-flex justify-center px-3 py-2 mr-2 text-sm font-medium rounded-xl " + ( thumbnailDirectory == "" ? "btn-secondary rounded-md":("border border-transparent rounded-md "+(isThumbnailLoading ? "text-zinc-600 bg-zinc-400" : "text-sky-700 bg-sky-200")))}
-                                                data-cy="uploadThumbnailButton" onClick={() => { if( !isSaved ){ setIsThumbnailLoading(true); saveThumbnail() } }}>
+                                                data-testid="uploadThumbnailButton" onClick={() => { if( !isSaved ){ setIsThumbnailLoading(true); saveThumbnail() } }}>
                                                 {
                                                     isSaved
                                                     ?
@@ -501,7 +501,7 @@ function Editor({ editorLoaded, name, value, date, diaryId, thumbnail }) {
                                     }
                                 </div>
                                 {/* 작성한 내용 미리보기 */}
-                                <div data-cy="diaryPreview" className='px-5 py-3 mx-2 my-3 overflow-y-scroll text-sm border border-red-100 max-h-36 min-h-16 rounded-xl' dangerouslySetInnerHTML={{__html: text}}></div>
+                                <div data-testid="diaryPreview" className='px-5 py-3 mx-2 my-3 overflow-y-scroll text-sm border border-red-100 max-h-36 min-h-16 rounded-xl' dangerouslySetInnerHTML={{__html: text}}></div>
                             </div>
                             :
                             <div className='relative flex items-center justify-center'>
@@ -521,7 +521,7 @@ function Editor({ editorLoaded, name, value, date, diaryId, thumbnail }) {
                                     saveDiary();
                                     closeSaveModal();
                                 }}
-                                data-cy="uploadDiaryButton"
+                                data-testid="uploadDiaryButton"
                                 >
                                 저장하기
                             </button>
@@ -559,7 +559,7 @@ function Editor({ editorLoaded, name, value, date, diaryId, thumbnail }) {
                         leaveFrom="opacity-100 scale-100"
                         leaveTo="opacity-0 scale-95"
                     >
-                        <Dialog.Panel className="w-full max-w-md p-6 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl" data-cy="diarySaveSuccessModal">
+                        <Dialog.Panel className="w-full max-w-md p-6 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl" data-testid="diarySaveSuccessModal">
                         <Dialog.Title
                             as="h3"
                             className="text-base font-extrabold leading-6 text-zinc-900"
@@ -577,7 +577,7 @@ function Editor({ editorLoaded, name, value, date, diaryId, thumbnail }) {
                                 type="button"
                                 className="justify-center px-2 py-1.5 mx-2 text-base font-semibold text-green-700 duration-200 bg-green-200 border border-transparent rounded-md hover:bg-green-300 focus:outline-none "
                                 onClick={closeSuccessModal}
-                                data-cy="closeSaveDiarySuccessModalButton"
+                                data-testid="closeSaveDiarySuccessModalButton"
                                 >
                                 확인
                             </button>

@@ -11,7 +11,7 @@ export default function BackButton() {
   return (
     <div className="flex w-full m-3 justify-items-start">
         <div>
-          <button onClick={() => router.back()} data-cy="diaryBackButton">
+          <button onClick={() => router.back()} data-testid="diaryBackButton">
               <ChevronLeftIcon className="block w-6 h-6 text-zinc-600"/>
           </button>
         </div>
