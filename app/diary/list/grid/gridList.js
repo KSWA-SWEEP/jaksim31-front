@@ -161,7 +161,7 @@ export default function DiaryGridList() {
             {/* 검색 영역 */}
             <div className="mx-4 mt-5 font-medium rounded-3xl bg-red-100/60 lg:mt-2 lg:mb-5 sm:mx-6 lg:mx-8 text-md text-zinc-600">
                 <div className="collapse rounded-3xl">
-                    <input type="checkbox" className="peer" data-cy="openFilterSearchBoxCheckbox"/> 
+                    <input type="checkbox" className="peer" data-testid="openFilterSearchBoxCheckbox"/> 
                         <div className="collapse-title peer-checked:bg-secondary peer-checked:text-secondary-content">
                             <div className='relative flex items-center justify-center'>
                                 <MagnifyingGlassIcon className='block w-5 h-5 ml-2 mr-5'/>
@@ -188,7 +188,7 @@ export default function DiaryGridList() {
                                                     placeholder='검색어를 입력하세요'
                                                     defaultValue={(optionData.hasOwnProperty('searchWord') ? optionData.searchWord : "")}
                                                     onChange={onSearchWordChange}
-                                                    data-cy="searchWordInput"
+                                                    data-testid="searchWordInput"
                                                     className="w-full pl-4 mt-1 shadow-sm border-zinc-300 focus:outline-zinc-300 h-9 rounded-xl "
                                                 />
                                             </div>
@@ -204,7 +204,7 @@ export default function DiaryGridList() {
                                                     autoComplete="emotion-value"
                                                     onClick={onEmotionChange}
                                                     defaultValue={optionData.emotion}
-                                                    data-cy="emotionSelectInput"
+                                                    data-testid="emotionSelectInput"
                                                     className="w-full px-3 py-2 mt-1 shadow-sm border-zinc-300 focus:outline-zinc-300 h-9 rounded-xl "
                                                 >
                                                     <option value="">전체</option>
@@ -240,7 +240,7 @@ export default function DiaryGridList() {
                                                     autoComplete="sort-value"
                                                     onClick={onSortChange}
                                                     defaultValue={optionData.sort}
-                                                    data-cy="sortInput"
+                                                    data-testid="sortInput"
                                                     className="w-full px-3 py-2 mt-1 shadow-sm border-zinc-300 focus:outline-zinc-300 h-9 rounded-xl "
                                                 >
                                                     <option value={"desc"}>최신순</option>
@@ -251,13 +251,13 @@ export default function DiaryGridList() {
                                         <div className="flex justify-center">
                                             <button
                                                 onClick={() => search()}
-                                                data-cy="searchFilteredDataButton"
+                                                data-testid="searchFilteredDataButton"
                                                 className="justify-center px-4 py-2 mx-1 mt-5 text-sm font-medium border border-transparent shadow-sm w-30 rounded-xl bg-primary text-primary-content hover:bg-primary-focus focus:outline-none focus:ring-2">
                                                 검색하기🔍
                                             </button>
                                             <button
                                                 onClick={() => resetOptions()}
-                                                data-cy="resetFiltersButton"
+                                                data-testid="resetFiltersButton"
                                                 className="justify-center px-4 py-2 mx-1 mt-5 text-sm font-medium bg-red-200 border border-transparent shadow-sm w-30 rounded-xl text-accent-content hover:bg-accent-focus focus:outline-none focus:ring-2">
                                                 초기화
                                             </button>
@@ -282,7 +282,7 @@ export default function DiaryGridList() {
                                 <div className="text-xl font-semibold text-red-600">조회 가능한 일기가 없습니다</div>
                                 <button
                                     onClick={() => resetOptions()}
-                                    data-cy="resetFilterButton"
+                                    data-testid="resetFilterButton"
                                     className="self-center justify-center px-4 py-2 mx-1 mt-12 text-sm font-medium duration-200 border border-transparent shadow-sm bg-zinc-200 w-fit w-30 rounded-3xl text-accent-content hover:bg-zinc-400 hover:text-white focus:outline-none focus:ring-2">
                                     설정된 검색 조건 초기화하기
                                 </button>
@@ -399,7 +399,7 @@ export default function DiaryGridList() {
                                     prevPageText={"‹"}
                                     nextPageText={"›"}
                                     onChange={handlePageChange}
-                                    data-cy="pagination"
+                                    data-testid="pagination"
                                 />  
                             </div>
                         </div>
@@ -432,7 +432,7 @@ export default function DiaryGridList() {
                                 leaveFrom="opacity-100 scale-100"
                                 leaveTo="opacity-0 scale-95"
                             >
-                                <Dialog.Panel className="w-full max-w-md p-6 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl" data-cy="deleteDiaryModal">
+                                <Dialog.Panel className="w-full max-w-md p-6 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl" data-testid="deleteDiaryModal">
                                 <Dialog.Title
                                     as="h3"
                                     className="text-base font-extrabold leading-6 text-zinc-900"
@@ -464,7 +464,7 @@ export default function DiaryGridList() {
                                             deleteDiary(); 
                                             closeDeleteModal();
                                         }}
-                                        data-cy="deleteDiaryButton"
+                                        data-testid="deleteDiaryButton"
                                         >
                                         일기 삭제하기
                                     </button>
@@ -502,7 +502,7 @@ export default function DiaryGridList() {
                                 leaveFrom="opacity-100 scale-100"
                                 leaveTo="opacity-0 scale-95"
                             >
-                                <Dialog.Panel className="w-full max-w-md p-6 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl"data-cy="deleteDiarySuccessModal">
+                                <Dialog.Panel className="w-full max-w-md p-6 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl"data-testid="deleteDiarySuccessModal">
                                 <Dialog.Title
                                     as="h3"
                                     className="text-base font-extrabold leading-6 text-zinc-900"
@@ -520,7 +520,7 @@ export default function DiaryGridList() {
                                         type="button"
                                         className="justify-center px-2 py-1.5 mx-2 text-base font-semibold text-green-700 duration-200 bg-green-200 border border-transparent rounded-md hover:bg-green-300 focus:outline-none "
                                         onClick={() => closeSuccessModal()}
-                                        data-cy="closeDiaryDeleteSuccessModalButton"
+                                        data-testid="closeDiaryDeleteSuccessModalButton"
                                         >
                                         확인
                                     </button>

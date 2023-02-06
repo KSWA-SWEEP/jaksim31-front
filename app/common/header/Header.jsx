@@ -42,7 +42,7 @@ function Header({ isOpen, setIsOpen }) {
       <div className="max-w-6xl mx-5 md:mx-20 lg:mx-36 xl:mx-56 2xl:mx-72 sm:px-6">
         <div className="flex items-center justify-between h-16 md:h-20">
 
-          <Bars3Icon className={"w-6 h-6 hover:scale-105 " + (pathname.includes('home') ? "text-zinc-400" : "text-zinc-600") } aria-hidden="true" onClick={() => setIsOpen(true)} data-cy="drawerButton"/>
+          <Bars3Icon className={"w-6 h-6 hover:scale-105 " + (pathname.includes('home') ? "text-zinc-400" : "text-zinc-600") } aria-hidden="true" onClick={() => setIsOpen(true)} data-testid="drawerButton"/>
 
           {
             !isLogin
