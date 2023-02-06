@@ -6,10 +6,15 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "cypress": "cypress open",
+    "e2e": "start-server-and-test start http://localhost:3000 cypress"
   },
   "dependencies": {
     "@ckeditor/ckeditor5-react": "^5.0.5",
+    "cypress": "^12.5.0",
+    "@cypress/react": "^7.0.2",
+    "@cypress/webpack-dev-server": "^3.2.3",
     "@headlessui/react": "^1.7.7",
     "@heroicons/react": "^2.0.13",
     "@next/font": "13.1.1",
@@ -37,8 +42,12 @@
   },
   "devDependencies": {
     "@svgr/webpack": "^6.5.1",
+    "@testing-library/cypress": "^9.0.0",
     "autoprefixer": "^10.4.13",
+    "eslint": "8.33.0",
+    "eslint-config-next": "13.1.6",
     "postcss": "^8.4.20",
+    "start-server-and-test": "^1.15.3",
     "tailwindcss": "^3.2.4"
   }
 }

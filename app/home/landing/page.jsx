@@ -79,7 +79,7 @@ export default async function Home() {
               <div className="w-full px-4 ml-auto mr-auto text-center">
                 <div className="">
                   <LazyShow delay={0}>
-                    <h1 className="text-2xl sm:text-5xl lg:text-7xl font-semibold font-[GmarketSansBold] text-white">
+                    <h1 className="text-2xl sm:text-5xl lg:text-7xl font-semibold font-[GmarketSansBold] text-white" data-cy="title">
                       작지만 심플하고 쌈박한 일기
                     </h1>
                   </LazyShow>
@@ -274,6 +274,7 @@ export default async function Home() {
               href="https://github.com/KSWA-SWEEP"
               target="_blank"
               rel="noreferrer"
+              data-cy="goGitHubButton"
             >
               <svg
                 className="fill-current text-zinc-500 dark:text-white hover:text-red-200"
@@ -290,6 +291,7 @@ export default async function Home() {
               href="https://www.notion.so/SWEEP-0720ff930d644ddb80388400628c89d7"
               target="_blank"
               rel="noreferrer"
+              data-cy="goNotionButton"
             >
               <svg 
                 className="fill-current text-zinc-500 dark:text-white hover:text-red-200"
@@ -305,6 +307,7 @@ export default async function Home() {
               href="mailto:gsa.sweep@gmail.com  "
               target="_blank"
               rel="noreferrer"
+              data-cy="contactButton"
             >
             <svg
               className="fill-current text-zinc-500 dark:text-white hover:text-red-200"
