@@ -72,7 +72,7 @@ describe('User Login test', () => {
     cy.get('[data-testid="passwordInput"]').clear();
     cy.get('[data-testid="passwordInput"]').type('test1234!');
     cy.get('[data-testid="loginSubmitButton"]', { timeout: 30000 }).click();
-    cy.wait(2000);
+    cy.wait(3000);
     
     cy.get('[data-testid="profileImageButton"]', { timeout: 30000 }).should('be.visible');
     cy.wait(1500);

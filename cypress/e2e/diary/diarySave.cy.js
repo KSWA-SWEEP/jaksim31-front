@@ -17,11 +17,11 @@ describe('Diary Save Test', () => {
     cy.get('[data-testid="loginSubmitButton"]', { timeout: 30000 }).click();
 
     // 오늘 일기 쓰기 페이지로 이동
-    cy.wait(2000);
+    cy.wait(2500);
     cy.get('[data-testid="drawerButton"]', { timeout: 30000 }).should('be.visible');
-    cy.wait(1500);
+    cy.wait(2000);
     cy.get('[data-testid="drawerButton"]', { timeout: 30000 }).click();
-    cy.wait(1000);
+    cy.wait(2000);
     cy.get('li[data-testid="📇  오늘의 일기 쓰기"] > [data-testid="📇  오늘의 일기 쓰기"]', { timeout: 30000 }).click();
     cy.wait(2000);
 
