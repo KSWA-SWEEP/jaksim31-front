@@ -35,6 +35,6 @@ module.exports = {
     return config
   },
   // compiler: {
-  //   reactRemoveProperties: { properties: ['^data-cy$'] },
+  //   reactRemoveProperties: { properties: ['^data-testid$'] },
   // },
 }

@@ -22,7 +22,7 @@ export default function ProfileCard() {
 
     return (
         <>
-            <div className="w-full max-w-md p-6 pt-4 mb-6 overflow-hidden text-left align-middle transition-all transform shadow-xl bg-zinc-100 lg:max-w-lg rounded-xl" data-cy="profileCard">
+            <div className="w-full max-w-md p-6 pt-4 mb-6 overflow-hidden text-left align-middle transition-all transform shadow-xl bg-zinc-100 lg:max-w-lg rounded-xl" data-testid="profileCard">
                 <div className="text-xl font-semibold text-zinc-700">
                 My Profile🙋
                 </div>
