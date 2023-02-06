@@ -40,8 +40,9 @@ jobs:
       - name: Run Cypress E2E test
         uses: cypress-io/github-action@v5
         with:
+          install: false
           browser: chrome
-      - run: npm run e2e      
+          run: npm run e2e      
       
           
   Jaksim31-Front-CD:
@@ -63,7 +64,7 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 16
-      - run: npm install
+      - run: npm install --force
       - run: npm install sharp
       - run: npm run build
       
