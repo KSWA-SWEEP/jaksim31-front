@@ -25,7 +25,7 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 16
-      - run: npm install
+      - run: npm install --force
       - run: npm install sharp
       - run: npm run build
       
