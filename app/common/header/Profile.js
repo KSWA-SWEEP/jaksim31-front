@@ -14,6 +14,7 @@ import { checkPassword } from '../../api/checkPassword';
 import { useLogout } from '../../hooks/mutations/useLogout';
 import { uploadImg } from '../../api/uploadImg';
 import { getCookie } from 'cookies-next';
+import Image from 'next/image';
 
 const Profile = () => {
 
@@ -241,7 +242,16 @@ const Profile = () => {
         <div className="dropdown dropdown-end">
               <label tabIndex={0} className="btn btn-ghost hover:bg-red-300 btn-circle avatar" data-cy="profileButton">
                 <div className="w-10 rounded-full">
-                  <img src={userInfoData.profileImage} data-cy="profileImageButton" />
+                  <Image 
+                    src={userInfoData.profileImage} 
+                    width="0"
+                    height="0" 
+                    alt="프로필 이미지" 
+                    sizes="100vw"
+                    priority="true"
+                    data-cy="profileImageButton"
+                    >
+                  </Image>
                 </div>
               </label>
               <ul tabIndex={0} className="w-32 p-2 mt-3 bg-white shadow menu menu-compact dropdown-content rounded-box">
@@ -300,7 +310,15 @@ const Profile = () => {
                             {/* 프로필 사진 */}
                             <div className="justify-center m-5 avatar">
                               <div className="relative top-0 flex items-start w-32 rounded-full group">
-                                <img src={userProfileImageURL ? userProfileImageURL : userInfoData.profileImage} />
+                                <Image 
+                                  src={userProfileImageURL ? userProfileImageURL : userInfoData.profileImage} 
+                                  width="0"
+                                  height="0" 
+                                  alt="프로필 이미지" 
+                                  sizes="100vw"
+                                  priority="true"
+                                  >
+                                  </Image>
                                 <div className='absolute top-0 flex items-center justify-center w-full h-full bg-black opacity-0 hover:opacity-50'>
                                   {/* 파일 선택 창 hidden 설정 */}
                                   <input

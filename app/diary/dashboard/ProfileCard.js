@@ -3,6 +3,7 @@
 import Loading from "../list/grid/loading";
 import { useUserInfoQuery } from "../../hooks/queries/useUserInfoQuery";
 import { getCookie } from "cookies-next";
+import Image from "next/image";
 
 // export default function UserProfile(userInfo) {
 export default function ProfileCard() {
@@ -29,7 +30,15 @@ export default function ProfileCard() {
                     {/* 프로필 사진 */}
                     <div className="justify-center m-5 avatar">
                         <div className="w-32 rounded-full">
-                            <img src={data.profileImage}/>
+                            <Image 
+                                src={data.profileImage} 
+                                width="0"
+                                height="0" 
+                                alt="프로필 이미지" 
+                                sizes="100vw"
+                                priority="true"
+                            >
+                            </Image>
                         </div>
                     </div>
                     {/* 이름 */}

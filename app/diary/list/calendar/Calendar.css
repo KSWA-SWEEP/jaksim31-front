@@ -132,7 +132,7 @@
 .react-calendar {
   justify-content: center;
   text-align: center;
-  font-family: LeeSeoyun;
+  font-family: var(--font-leeseoyun);
 }
 /* 일 */
 .react-calendar__month-view__days__day {

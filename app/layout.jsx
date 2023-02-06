@@ -6,6 +6,31 @@ import Drawer from './common/Drawer';
 import Header from './common/header/Header';
 import { usePathname } from 'next/navigation';
 import ReactQueryWrapper from './ReactQueryWrapper';
+import localFont from '@next/font/local'
+
+const leeSeoyunFont = localFont({
+  src: './fonts/LeeSeoyun.otf',
+  weight: '600',
+  variable: '--font-leeseoyun',
+});
+
+const gmarketSansFont = localFont({
+  src: [
+    {
+      path: './fonts/GmarketSansBold.otf',
+      weight: '700',
+    },
+    {
+      path: './fonts/GmarketSansMedium.otf',
+      weight: '600',
+    },
+    {
+      path: './fonts/GmarketSansLight.otf',
+      weight: '300',
+    },
+  ],
+  variable: '--font-gmarketSans',
+});
 
 export default function RootLayout({ children }) {  
   const [isOpen, setIsOpen] = useState(false);
@@ -16,13 +41,13 @@ export default function RootLayout({ children }) {
   useEffect(() => window.scroll(0, 0), [pathname]);
 
   return (
-    <html lang="en" data-theme="garden">
+    <html lang="en" data-theme="garden" className={`${leeSeoyunFont.variable} ${gmarketSansFont.variable}`}>
       {/*
         <head /> will contain the components returned by the nearest parent
         head.jsx. Find out more at https://beta.nextjs.org/docs/api-reference/file-conventions/head
       */}
       <head />
-      <body className='scrollbar-hide'>
+      <body className='scrollbar-hide bg-gradient-image'>
         <ReactQueryWrapper>
           <div className='relative flex scrollbar-hide'>
             {/* Header */}
