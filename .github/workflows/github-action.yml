@@ -60,7 +60,7 @@ jobs:
        
           
   Jaksim31-Front-CD:
-    if: ${{ github.event_name == 'push' || github.event.pull_request.merged == true }} && contains(github.ref, 'main')
+    if: contains(github.ref, 'main')
     needs: Jaksim31-Front-CI
     runs-on: ubuntu-latest
     steps:
