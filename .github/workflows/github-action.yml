@@ -94,7 +94,7 @@ jobs:
             file: ./Dockerfile
             platforms: linux/amd64
             push: true
-            tags: r2god7k/jaksim31-frontend:latest
+            tags: ${{ secrets.DOCKER_ID }}/jaksim31-frontend:latest
             cache-from: type=gha    # gha=Github Action Cache
             cache-to: type=gha,mode=max
 
@@ -107,16 +107,9 @@ jobs:
             key: ${{ secrets.REMOTE_SSH_KEY }}
             port: ${{ secrets.REMOTE_SSH_PORT }}
             script: |
-              ls -a
-              sudo su
-              # sudo chmod 666 /var/run/docker.sock
-              sudo /usr/sbin/groupadd -f docker
-              sudo /usr/sbin/usermod -aG docker `user`
-              sudo chown root:docker /var/run/docker.sock
-              docker pull r2god7k/jaksim31-frontend:latest
-              docker stop jaksim31-front
-              docker rm jaksim31-front
-              docker run -d -p 3000:3000 --name jaksim31-front --network centos_default r2god7k/jaksim31-frontend:latest
+              sudo docker stop jaksim31-front
+              sudo docker rm jaksim31-front
+              sudo docker run -d -p 3000:3000 --name jaksim31-front --network centos_default ${{ secrets.DOCKER_ID }}/jaksim31-frontend
               sleep 10s
               
       # SSH Connect - (Web2)
@@ -128,14 +121,7 @@ jobs:
             key: ${{ secrets.REMOTE_SSH_KEY }}
             port: ${{ secrets.REMOTE_SSH_PORT_2 }}
             script: |
-              ls -a
-              sudo su
-              # sudo chmod 666 /var/run/docker.sock
-              sudo /usr/sbin/groupadd -f docker
-              sudo /usr/sbin/usermod -aG docker `user`
-              sudo chown root:docker /var/run/docker.sock
-              docker stop jaksim31-front
-              docker rm jaksim31-front
-              docker image prune
-              docker run -d -p 3000:3000 --name jaksim31-front --network centos_default r2god7k/jaksim31-frontend
+              sudo docker stop jaksim31-front
+              sudo docker rm jaksim31-front
+              sudo docker run -d -p 3000:3000 --name jaksim31-front --network centos_default ${{ secrets.DOCKER_ID }}/jaksim31-frontend
               sleep 10s
