@@ -1,10 +1,11 @@
 # *
 User-agent: *
 Disallow: /404
+Disallow: /diary/
 
 # *
 User-agent: *
-Allow: /
+Allow: /home/
 
 # Host
 Host: https://jaksim31.xyz
