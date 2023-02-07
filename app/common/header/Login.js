@@ -346,7 +346,6 @@ const Login = () => {
                                       placeholder="Password"
                                       onChange={onPasswordChange}
                                       data-testid="passwordInput"
-
                                     />
                                   </div>
                                 </div>
