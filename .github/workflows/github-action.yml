@@ -134,8 +134,8 @@ jobs:
               sudo /usr/sbin/groupadd -f docker
               sudo /usr/sbin/usermod -aG docker `user`
               sudo chown root:docker /var/run/docker.sock
-              docker pull r2god7k/jaksim31-frontend:latest
               docker stop jaksim31-front
               docker rm jaksim31-front
-              docker run -d -p 3000:3000 --name jaksim31-front --network centos_default r2god7k/jaksim31-frontend:latest
+              docker image prune
+              docker run -d -p 3000:3000 --name jaksim31-front --network centos_default r2god7k/jaksim31-frontend
               sleep 10s
