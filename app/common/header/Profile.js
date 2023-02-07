@@ -146,9 +146,6 @@ const Profile = () => {
     };
 
     async function requestLogout() {
-
-      console.log("로그아웃 버튼 눌림");
-      
       mutateLogout();
     }
 
