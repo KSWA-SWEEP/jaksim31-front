@@ -239,8 +239,8 @@ const Profile = () => {
                 <div className="w-10 rounded-full">
                   <Image 
                     src={userInfoData.profileImage} 
-                    width="0"
-                    height="0" 
+                    width={100}
+                    height={100} 
                     alt="프로필 이미지" 
                     sizes="100vw"
                     priority="true"
@@ -307,8 +307,8 @@ const Profile = () => {
                               <div className="relative top-0 flex items-start w-32 rounded-full group">
                                 <Image 
                                   src={userProfileImageURL ? userProfileImageURL : userInfoData.profileImage} 
-                                  width="0"
-                                  height="0" 
+                                  width={100}
+                                  height={100} 
                                   alt="프로필 이미지" 
                                   sizes="100vw"
                                   priority="true"

@@ -32,8 +32,8 @@ export default function ProfileCard() {
                         <div className="w-32 rounded-full">
                             <Image 
                                 src={data.profileImage} 
-                                width="0"
-                                height="0" 
+                                width={200}
+                                height={200}
                                 alt="프로필 이미지" 
                                 sizes="100vw"
                                 priority="true"

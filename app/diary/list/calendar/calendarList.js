@@ -158,7 +158,7 @@ export default function CalendarList() {
           {/* 감정 아이콘 버튼 */}
           {emotions.map((emotion) => (
             <div key={emotion.name} className="relative w-6 h-6 sm:w-10 sm:h-10 lg:w-12 lg:h-12 tooltip" onClick={(e) => {setEmotionState(e, emotion.name);}} data-tip={emotion.name}>
-              <Image data-testid={emotion.name} src={emotion.src} alt={emotion.alt} placeholder='empty' className={'duration-200 opacity-60 hover:scale-105 hover:opacity-100' + (((clickState.length == 0)&&(isEmotionClicked)) ? ' opacity-100 drop-shadow-lg' : ' opacity-60')}/>
+              <Image data-testid={emotion.name} src={emotion.src} alt={emotion.alt} placeholder='empty' priority className={'duration-200 opacity-60 hover:scale-105 hover:opacity-100' + (((clickState.length == 0)&&(isEmotionClicked)) ? ' opacity-100 drop-shadow-lg' : ' opacity-60')}/>
             </div>
           ))}
         </div>
@@ -190,7 +190,7 @@ export default function CalendarList() {
                   <>
                     <Link data-testid="goDiaryPage" href={"/diary/"+matchedDiary.diaryId} className="flex items-center justify-center mt-2 dayBox">
                       <div className="relative w-6 h-6 duration-200 sm:w-10 sm:h-10 lg:w-12 lg:h-12 hover:drop-shadow-lg hover:opacity-80 hover:scale-105">
-                        <Image src={matchedEmotion.src} alt="emotion" placeholder='empty' width={100} height={100}/>
+                        <Image src={matchedEmotion.src} alt="emotion" placeholder='empty'/>
                       </div>
                     </Link>
                   </>
