@@ -2,6 +2,8 @@ export default function DefaultTags() {
     return (
       <>
         <meta content="width=device-width, initial-scale=1" name="viewport" />
+        <meta name="theme-color" content="#FFE8E8" />
+        <meta name="description" content="작지만 심플하고 쌈박한 일기" />
         <link rel="icon" href="/jaksim31.ico" />
 
         {/* Open Graph */}
