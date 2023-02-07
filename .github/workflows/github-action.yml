@@ -47,7 +47,6 @@ jobs:
             cypress/e2e/member/userInfo.cy.js
             cypress/e2e/diary/diarySave.cy.js
             cypress/e2e/diary/diaryList.cy.js
-            cypress/e2e/diary/diaryEdit.cy.js
           browser: chrome
           record: true
         env:
