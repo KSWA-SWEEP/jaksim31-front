@@ -9,7 +9,7 @@
     "lint": "next lint",
     "cypress": "cypress open",
     "e2e": "start-server-and-test start http://localhost:3000 cypress",
-    "jest": "jest"
+    "test": "jest --coverage --silent --watch"
   },
   "dependencies": {
     "@ckeditor/ckeditor5-react": "^5.0.5",

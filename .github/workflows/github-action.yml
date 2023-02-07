@@ -39,7 +39,7 @@ jobs:
 
       # Unit Test - Jest
       - name: Run Jest Unit Test
-        run: jest --watch --silent --coverage
+        run: npm test
       
       # E2E Test - Cypress
       - name: Run Cypress E2E test
