@@ -7,6 +7,7 @@ import Header from './common/header/Header';
 import { usePathname } from 'next/navigation';
 import ReactQueryWrapper from './ReactQueryWrapper';
 import localFont from '@next/font/local'
+import * as gtag from '../lib/gtag';
 
 const leeSeoyunFont = localFont({
   src: './fonts/LeeSeoyun.otf',
@@ -48,6 +49,24 @@ export default function RootLayout({ children }) {
       */}
       <head />
       <body className='scrollbar-hide bg-gradient-image'>
+        
+        {/* Google Analytics */}
+        <script strategy="afterInteractive" src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_TRACKING_ID}`} />
+        <script
+          id="gtag-init"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', '${process.env.NEXT_PUBLIC_GA_TRACKING_ID}', {
+            page_path: window.location.pathname,
+          });
+        `
+          }}
+        />
+
         <ReactQueryWrapper>
           <div className='relative flex scrollbar-hide'>
             {/* Header */}
