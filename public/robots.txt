@@ -1,0 +1,13 @@
+# *
+User-agent: *
+Disallow: /404
+
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://jaksim31.xyz
+
+# Sitemaps
+Sitemap: https://jaksim31.xyz/sitemap.xml

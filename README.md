@@ -123,7 +123,7 @@
     │     └─ e2e.js
     │  
     ├─ 📦 public
-    │  ├─ favicon.ico
+    │  ├─ jaksim31.ico
     │  ├─ images
     │  │  ├─ emotion
     │  │  │  ├─ bad-small.png

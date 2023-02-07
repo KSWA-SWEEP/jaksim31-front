@@ -1,5 +1,6 @@
 module.exports = {
   reactStrictMode: false,
+  swcMinify: true,
   async rewrites() {
     return [
       {
