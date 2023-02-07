@@ -146,8 +146,6 @@ const Login = () => {
     };
 
     async function requestLogin(){
-      
-      console.log("로그인 버튼 눌림");
 
       if(!userPassword.current) {
         alert("비밀번호를 입력해 주세요 😮");
