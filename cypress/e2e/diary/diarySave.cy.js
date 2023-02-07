@@ -32,10 +32,16 @@ describe('Diary Save Test', () => {
 
     // 일기 저장하기 버튼 클릭
     cy.get('[data-testid="saveDiaryButton"]', { timeout: 30000 }).click();
+    cy.wait(2000);
+    cy.get('[data-testid="saveDiaryModal"]', { timeout: 30000 }).should('be.visible');
+    cy.get('[data-testid="getNewThumbnailButton"]', { timeout: 30000 }).click();
+    cy.wait(1500);
     cy.get('[data-testid="uploadThumbnailButton"]', { timeout: 30000 }).click();
     cy.wait(5000);
     cy.get('.cursor-not-allowed').should('have.text', '썸네일 생성 완료👍', { timeout: 30000 });
+    
     cy.get('[data-testid="uploadDiaryButton"]', { timeout: 30000 }).click();
+    cy.wait(1500);
     cy.get('[data-testid="closeSaveDiarySuccessModalButton"]', { timeout: 30000 }).click();
     cy.wait(1500);
 
