@@ -2,9 +2,7 @@
 
 import { PencilSquareIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Dialog, Transition } from '@headlessui/react';
-import userData from '../../../public/data/user.json'
 import { Fragment, useState, useRef } from 'react';
-import { useRouter } from 'next/navigation';
 import { useUserInfoQuery } from '../../hooks/queries/useUserInfoQuery';
 import Loading from './loading';
 import { useQueryClient } from 'react-query';
@@ -20,9 +18,6 @@ const Profile = () => {
 
     let [isProfileModalOpen, setIsProfileModalOpen] = useState(false)
     let [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false)  
-
-    const user = userData;
-    const router = useRouter();
 
     // 사용자 입력 변수
     const userName = useRef("");

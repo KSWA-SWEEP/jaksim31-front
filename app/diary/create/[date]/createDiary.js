@@ -23,7 +23,7 @@ const CreateDiary = (props) => {
         (isNumeric(date) && dateIsValid(new Date(date)))
         ?
         <>
-          <div className="relative flex m-6 text-2xl font-bold">
+          <div className="relative flex m-6 text-2xl font-bold" data-testid="diaryInput">
             <div>
               {/* YYYY. MM. DD. 형식으로 date 표시 */}
               {date.replace(/(\d{4})(\d{2})(\d{2})/g, '$1. $2. $3.')}
