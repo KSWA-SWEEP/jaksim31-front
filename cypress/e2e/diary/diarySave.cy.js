@@ -62,9 +62,9 @@ describe('Diary Save Test', () => {
       cy.wait(1500);
 
       // 일기 수정        
-      cy.get('.diaryMenuButton', { timeout: 30000 }).click();
+      cy.get('.diaryMenuButton', { timeout: 30000 }).first().click();
       cy.wait(1000);
-      cy.get('.diaryModifyButton', { timeout: 30000 }).click();
+      cy.get('.diaryModifyButton', { timeout: 30000 }).first().click();
       cy.wait(1500);
       cy.get('[data-testid="saveDiaryButton"]', { timeout: 30000 }).click();
       cy.wait(2000);
@@ -93,9 +93,9 @@ describe('Diary Save Test', () => {
       cy.wait(1500);
 
       // 일기 삭제
-      cy.get('.diaryMenuButton', { timeout: 30000 }).click();
+      cy.get('.diaryMenuButton', { timeout: 30000 }).first().click();
       cy.wait(1000);
-      cy.get('.diaryDeleteButton', { timeout: 30000 }).click();
+      cy.get('.diaryDeleteButton', { timeout: 30000 }).first().click();
       cy.wait(1000);
       cy.get('[data-testid="deleteDiaryButton"]', { timeout: 30000 }).click();
       cy.wait(1500);
