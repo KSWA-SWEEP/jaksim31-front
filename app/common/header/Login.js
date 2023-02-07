@@ -6,7 +6,6 @@ import Image from 'next/image';
 import { Dialog, Transition } from '@headlessui/react';
 import KakaoLoginBtn from '../../../public/images/kakaoLogin.png'
 import { XMarkIcon } from '@heroicons/react/24/outline';
-import { useRouter } from 'next/navigation';
 import { init, send } from 'emailjs-com';
 import { updatePassword } from "../../api/updatePassword";
 import { checkIsMember } from "../../api/checkIsMember";
@@ -28,7 +27,6 @@ const Login = () => {
     function openEmailCheckModal() { setIsEmailCheckModalOpen(true); setIsLoginModalOpen(false); setEmailMessage("") }
     function closeEmailCheckModal() { setIsEmailCheckModalOpen(false); setIsLoginModalOpen(true); setEmailMessage("") }
     
-    const router = useRouter();
     const [isChangePasswordMoal, setIsChangePasswordModal] = useState("false");   // 회원가입과 비밀번호 재설정 모달 구분을 위한 변수
 
     // 사용자 입력 변수
@@ -148,8 +146,6 @@ const Login = () => {
     };
 
     async function requestLogin(){
-      
-      console.log("로그인 버튼 눌림");
 
       if(!userPassword.current) {
         alert("비밀번호를 입력해 주세요 😮");
