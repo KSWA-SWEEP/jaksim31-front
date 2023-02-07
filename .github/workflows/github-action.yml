@@ -2,9 +2,9 @@ name: Jaksim31-Frontend CI/CD
 
 on:
   push:
-    branches: [ "develop" ]
+    branches: [ "main", "develop" ]
   pull_request:
-    branches: [ "develop", "main" ]
+    branches: [ "main", "develop", "release" ]
     types: [ "opened", "assigned", "synchronize", "labeled", "reopened" ]
     
 jobs:
@@ -25,28 +25,42 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 16
-      - run: npm install --force
-      - run: npm install sharp --force
-      - run: npm run build
+      - run: |
+          npm install
+          npm install sharp
+          npm run build      
       
       # NPM caching
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '16'
-          cache: 'npm'
-          
-      # E2E Test - Cypress
-      #- name: Run Cypress E2E test
-      #  uses: cypress-io/github-action@v5
-      #  with:
-      #    install: false
-      #    browser: chrome
-      #    run: npm run e2e      
+          cache: 'npm'   
+
+      # Unit Test - Jest
+      - name: Run Jest Unit Test
+        run: npm test
       
+      # E2E Test - Cypress
+      - name: Run Cypress E2E test
+        uses: cypress-io/github-action@v5
+        with:
+          start: npm start
+          spec: |
+            cypress/e2e/member/userLogin.cy.js
+            cypress/e2e/member/userInfo.cy.js
+            cypress/e2e/diary/diarySave.cy.js
+            cypress/e2e/diary/diaryList.cy.js
+          browser: chrome
+          record: true
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        if: contains(github.ref, 'main')
+       
           
   Jaksim31-Front-CD:
-    if: github.event_name == 'push' && contains(github.ref, 'main')
+    if: contains(github.ref, 'main')
     needs: Jaksim31-Front-CI
     runs-on: ubuntu-latest
     steps:
@@ -58,13 +72,6 @@ jobs:
       
       - name: Create env file
         run: echo "${{ secrets.ENV_FILE }}" > .env
-      
-      # NPM caching
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16'
-          cache: 'npm'
           
       # Docker Buildx Setting
       - name: Set up Docker Buildx
