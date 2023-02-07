@@ -112,6 +112,7 @@ jobs:
               sudo docker pull ${{ secrets.DOCKER_ID }}/jaksim31-frontend:latest
               sudo docker run -d -p 3000:3000 --name jaksim31-front --network centos_default ${{ secrets.DOCKER_ID }}/jaksim31-frontend
               sudo docker image prune -f
+
               sleep 10s
               
       # SSH Connect - (Web2)
@@ -129,3 +130,4 @@ jobs:
               sudo docker run -d -p 3000:3000 --name jaksim31-front --network centos_default ${{ secrets.DOCKER_ID }}/jaksim31-frontend
               sudo docker image prune -f
               sleep 10s
+
