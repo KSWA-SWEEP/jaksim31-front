@@ -251,10 +251,10 @@ const Profile = () => {
               </label>
               <ul tabIndex={0} className="w-32 p-2 mt-3 bg-white shadow menu menu-compact dropdown-content rounded-box">
                 <li>
-                  <a onClick={openProfileModal} className="text-base hover:bg-red-100" data-testid="myPageButton">내 프로필</a>
+                  <div onClick={openProfileModal} className="text-base hover:bg-red-100" data-testid="myPageButton">내 프로필</div>
                 </li>
                 <li>
-                  <a onClick={requestLogout} className="text-base hover:bg-red-100" data-testid="logoutButton">로그아웃</a>
+                  <div onClick={requestLogout} className="text-base hover:bg-red-100" data-testid="logoutButton">로그아웃</div>
                 </li>
               </ul>
 
