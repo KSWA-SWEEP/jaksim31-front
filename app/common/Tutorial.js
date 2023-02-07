@@ -61,16 +61,19 @@ const examplePages = [
 
 const Tutorial = () => {
   return (
-    <div className="relative flex justify-center pb-10 sm:pt-10 sm:pb-10 lg:pt-10 lg:pb-10 bg-white">
+    <div className="relative flex justify-center pb-10 sm:pt-10 sm:pb-10 lg:pt-10 lg:pb-10 bg-white rounded-2xl">
       <div className="container relative mx-auto">
         <div>
           {examplePages.map((examplePage) => (
             <LazyShow delay={((examplePage.index)*0.5)-examplePage.index*0.3}>
               <div className="py-4 grid grid-cols-7">
-                <div className="pr-4 col-span-5">
+                <div className="px-4 col-span-5">
                   <Image
                     src={examplePage.src}
                     alt={examplePage.alt}
+                    width={800}
+                    height={400}
+                    sizes="100vw"
                     placeholder="blur"
                     priority
                   />

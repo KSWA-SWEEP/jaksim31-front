@@ -20,7 +20,7 @@ const ExampleScreen = () => {
                             (max-height: 1200px) 100vw,
                             33vw"
                     priority
-                    />
+                  />
                 </div>
               </div>
             </motion.div>
