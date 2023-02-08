@@ -38,11 +38,11 @@ function Header({ isOpen, setIsOpen }) {
   }
 
   return (
-    <div className={`fixed z-40 w-full md:bg-opacity-70 transition duration-300 ease-in-out ${!top && 'bg-white backdrop-blur-sm shadow-lg'}`}>
-      <div className="max-w-6xl mx-5 md:mx-20 lg:mx-36 xl:mx-56 2xl:mx-72 sm:px-6">
+    <div className={`fixed z-40 w-full md:bg-opacity-70 transition duration-300 ease-in-out ${!top && 'bg-white dark:bg-zinc-800 backdrop-blur-sm shadow-lg'}`}>
+      <div className="mx-5 md:mx-20 lg:mx-36 xl:mx-56 2xl:mx-72 sm:px-6">
         <div className="flex items-center justify-between h-16 md:h-20">
 
-          <Bars3Icon className={"w-6 h-6 hover:scale-105 " + (pathname.includes('home') ? "text-zinc-400" : "text-zinc-600") } aria-hidden="true" onClick={() => setIsOpen(true)} data-testid="drawerButton"/>
+          <Bars3Icon className={"w-6 h-6 hover:scale-105 " + (pathname.includes('home') ? "text-zinc-400" : "text-zinc-600 dark:text-zinc-100") } aria-hidden="true" onClick={() => setIsOpen(true)} data-testid="drawerButton"/>
 
           {
             !isLogin

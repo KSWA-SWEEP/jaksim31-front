@@ -12,7 +12,7 @@ export const useEmotionCountQuery = (options, key) =>
             .then(resp => resp.json())
             .then(respData => {
                 if(respData.errorCode) {
-                    throw respData.errorCode;
+                    throw respData;
                 }
 
                 returnData = respData;

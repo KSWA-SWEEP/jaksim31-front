@@ -105,7 +105,7 @@ export default function DiaryGridList() {
 
         setOptionData((prevState) => {
             return { ...prevState, 
-                searchWord: searchWord,
+                searchWord: (searchWord != "" ? searchWord.replace(/\s/g, '') : ""),
                 emotion: (emotion=="전체" ? "" : emotion),
                 startDate: startDate,
                 endDate: endDate,
@@ -159,25 +159,25 @@ export default function DiaryGridList() {
     return (
         <div>
             {/* 검색 영역 */}
-            <div className="mx-4 mt-5 font-medium rounded-3xl bg-red-100/60 lg:mt-2 lg:mb-5 sm:mx-6 lg:mx-8 text-md text-zinc-600">
+            <div className="mx-4 mt-5 font-medium rounded-3xl dark:bg-zinc-100/30 bg-red-100/60 lg:mt-2 lg:mb-5 sm:mx-6 lg:mx-8 text-md text-zinc-600">
                 <div className="collapse rounded-3xl">
                     <input type="checkbox" className="peer" data-testid="openFilterSearchBoxCheckbox"/> 
-                        <div className="collapse-title peer-checked:bg-secondary peer-checked:text-secondary-content">
+                        <div className="collapse-title dark:peer-checked:bg-zinc-700/20 dark:peer-checked:text peer-checked:bg-secondary peer-checked:text-secondary-content">
                             <div className='relative flex items-center justify-center'>
-                                <MagnifyingGlassIcon className='block w-5 h-5 ml-2 mr-5'/>
-                                <div className='text-lg'>
+                                <MagnifyingGlassIcon className='block w-5 h-5 ml-2 mr-5 dark:text-zinc-100'/>
+                                <div className='text-lg dark:text-zinc-100'>
                                     검색하기
                                 </div>
                             </div>
                         </div>
-                        <div className="pb-0 collapse-content peer-checked:bg-secondary peer-checked:text-secondary-content"> 
+                        <div className="pb-0 collapse-content dark:peer-checked:bg-zinc-700/20 dark:peer-checked:text-zinc-100 peer-checked:bg-secondary peer-checked:text-secondary-content"> 
                             <div className='m-1 sm:m-4'>
                                 <div className="md:col-span-2">
                                     <div className="overflow-hidden">
                                         <div className="grid grid-cols-6 sm:gap-2">
                                             {/* 단어 검색 */}
                                             <div className="col-span-6 px-2 py-1 sm:col-span-3">
-                                                <label htmlFor="search-word" className="block text-base font-medium text-zinc-700">
+                                                <label htmlFor="search-word" className="block text-base font-medium dark:text-zinc-100 text-zinc-700">
                                                     검색어
                                                 </label>
                                                 <input
@@ -189,13 +189,13 @@ export default function DiaryGridList() {
                                                     defaultValue={(optionData.hasOwnProperty('searchWord') ? optionData.searchWord : "")}
                                                     onChange={onSearchWordChange}
                                                     data-testid="searchWordInput"
-                                                    className="w-full pl-4 mt-1 shadow-sm border-zinc-300 focus:outline-zinc-300 h-9 rounded-xl "
+                                                    className="w-full pl-4 mt-1 shadow-sm dark:border-zinc-600 dark:bg-zinc-600 border-zinc-300 focus:outline-zinc-300 h-9 rounded-xl dark:focus:outline-zinc-600 "
                                                 />
                                             </div>
 
                                             {/* 감정 검색 */}
                                             <div className="col-span-6 px-2 py-1 sm:col-span-3">
-                                                <label htmlFor="emotion" className="block text-base font-medium text-zinc-700">
+                                                <label htmlFor="emotion" className="block text-base font-medium dark:text-zinc-100 text-zinc-700">
                                                     감정
                                                 </label>
                                                 <select
@@ -205,25 +205,25 @@ export default function DiaryGridList() {
                                                     onClick={onEmotionChange}
                                                     defaultValue={optionData.emotion}
                                                     data-testid="emotionSelectInput"
-                                                    className="w-full px-3 py-2 mt-1 shadow-sm border-zinc-300 focus:outline-zinc-300 h-9 rounded-xl "
+                                                    className="w-full px-3 py-2 mt-1 shadow-sm dark:border-zinc-600 dark:bg-zinc-600 border-zinc-300 focus:outline-zinc-300 h-9 rounded-xl dark:focus:outline-zinc-600 "
                                                 >
                                                     <option value="">전체</option>
-                                                    <option value="😕 싫음">싫음</option>
-                                                    <option value="😑 지루함">지루함</option>
-                                                    <option value="🤢 창피함">창피함</option>
-                                                    <option value="🥰 좋음">좋음</option>
-                                                    <option value="😶 감정없음">감정없음</option>
-                                                    <option value="😯 놀람">놀람</option>
-                                                    <option value="😬 두려움">두려움</option>
-                                                    <option value="😭 슬픔">슬픔</option>
-                                                    <option value="🤔 불확실">불확실</option>
+                                                    <option value="싫음">싫음</option>
+                                                    <option value="지루함">지루함</option>
+                                                    <option value="창피함">창피함</option>
+                                                    <option value="좋음">좋음</option>
+                                                    <option value="감정없음">감정없음</option>
+                                                    <option value="놀람">놀람</option>
+                                                    <option value="두려움">두려움</option>
+                                                    <option value="슬픔">슬픔</option>
+                                                    <option value="불확실">불확실</option>
                                                 </select>
                                             </div>
 
                                             {/* 달력 형식일 경우 아래 두 항목 (기간, 정렬) 비활성화 필요 */}
                                             {/* 기간 검색 */}
                                             <div className="col-span-6 px-2 py-1 sm:col-span-3">
-                                                <label htmlFor="first-name" className="block text-base font-medium text-zinc-700">
+                                                <label htmlFor="first-name" className="block text-base font-medium dark:text-zinc-100 text-zinc-700">
                                                     기간
                                                 </label>
                                                 <DateRangePicker setStartDate={setStartDate} setEndDate={setEndDate} setDateFormat={setDateFormat} />
@@ -231,7 +231,7 @@ export default function DiaryGridList() {
 
                                             {/* 정렬 */}
                                             <div className="col-span-6 px-2 py-1 sm:col-span-3">
-                                                <label htmlFor="sort" className="block text-base font-medium text-zinc-700 ">
+                                                <label htmlFor="sort" className="block text-base font-medium dark:text-zinc-100 text-zinc-700 ">
                                                     정렬
                                                 </label>
                                                 <select
@@ -241,7 +241,7 @@ export default function DiaryGridList() {
                                                     onClick={onSortChange}
                                                     defaultValue={optionData.sort}
                                                     data-testid="sortInput"
-                                                    className="w-full px-3 py-2 mt-1 shadow-sm border-zinc-300 focus:outline-zinc-300 h-9 rounded-xl "
+                                                    className="w-full px-3 py-2 mt-1 shadow-sm border-zinc-300 dark:border-zinc-600 dark:bg-zinc-600 dark:focus:outline-zinc-600 focus:outline-zinc-300 h-9 rounded-xl "
                                                 >
                                                     <option value={"desc"}>최신순</option>
                                                     <option value={"asc"}>오래된 순</option>
@@ -252,13 +252,13 @@ export default function DiaryGridList() {
                                             <button
                                                 onClick={() => search()}
                                                 data-testid="searchFilteredDataButton"
-                                                className="justify-center px-4 py-2 mx-1 mt-5 text-sm font-medium border border-transparent shadow-sm w-30 rounded-xl bg-primary text-primary-content hover:bg-primary-focus focus:outline-none focus:ring-2">
+                                                className="justify-center px-4 py-2 mx-1 mt-5 text-sm font-medium border border-transparent shadow-sm w-30 rounded-xl bg-primary text-primary-content dark:text-zinc-100 dark:bg-blue-200/40 dark:hover:bg-blue-200/60 hover:bg-primary-focus focus:outline-none focus:ring-2">
                                                 검색하기🔍
                                             </button>
                                             <button
                                                 onClick={() => resetOptions()}
                                                 data-testid="resetFiltersButton"
-                                                className="justify-center px-4 py-2 mx-1 mt-5 text-sm font-medium bg-red-200 border border-transparent shadow-sm w-30 rounded-xl text-accent-content hover:bg-accent-focus focus:outline-none focus:ring-2">
+                                                className="justify-center px-4 py-2 mx-1 mt-5 text-sm font-medium bg-red-200 border border-transparent shadow-sm w-30 rounded-xl text-accent-content dark:text-zinc-100 dark:bg-zinc-500 dark:hover:bg-zinc-700 hover:bg-accent-focus focus:outline-none focus:ring-2">
                                                 초기화
                                             </button>
                                         </div>
@@ -270,7 +270,7 @@ export default function DiaryGridList() {
             </div>
 
             {/* 일기 목록 */}
-            <div className="bg-white">
+            <div>
                 <div className="px-4 py-8 mx-auto sm:py-8 sm:px-6 lg:px-8 lg:py-3">
                     {
                         diaryListData.totalElements == 0
@@ -279,7 +279,7 @@ export default function DiaryGridList() {
 
                             <div className="flex flex-col justify-center text-center">
                                 <div className="my-5 text-5xl">🙊</div>
-                                <div className="text-xl font-semibold text-red-600">조회 가능한 일기가 없습니다</div>
+                                <div className="text-xl font-semibold text-red-600 dark:text-blue-400">조회 가능한 일기가 없습니다</div>
                                 <button
                                     onClick={() => resetOptions()}
                                     data-testid="resetFilterButton"
@@ -292,8 +292,8 @@ export default function DiaryGridList() {
                         <div> 
                             <div className="grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 2xl:grid-cols-3">
                                 {diarys.map((diary) => (
-                                    <div key={diary.diaryId} className="rounded-2xl bg-zinc-200/50">
-                                        <div className="w-full overflow-hidden rounded-t-lg bg-zinc-200 aspect-w-4 aspect-h-3 xl:aspect-w-4 xl:aspect-h-3">
+                                    <div key={diary.diaryId} className="rounded-2xl bg-zinc-200/50 dark:bg-zinc-600">
+                                        <div className="w-full overflow-hidden rounded-t-lg bg-zinc-200 dark:bg-zinc-700 aspect-w-4 aspect-h-3 xl:aspect-w-4 xl:aspect-h-3">
                                                 <Link
                                                     href={{
                                                         pathname: 'diary/'+diary.diaryId
@@ -320,7 +320,7 @@ export default function DiaryGridList() {
                                         <div className="flex justify-between mx-4 mt-5 mb-2">
                                             <div className="w-full">
                                                 <div className="flex justify-between">
-                                                    <p className="ml-2 text-lg font-bold truncate text-zinc-900">{moment(diary.diaryDate).format('YYYY. MM. DD.')}</p>
+                                                    <p className="ml-2 text-lg font-bold truncate text-zinc-900 dark:text-zinc-100">{moment(diary.diaryDate).format('YYYY. MM. DD.')}</p>
                                                     <Menu as="div" className="relative ml-3">
                                                         <div>
                                                             <Menu.Button className="flex max-w-xs text-sm focus:outline-none">
@@ -336,7 +336,7 @@ export default function DiaryGridList() {
                                                             leaveFrom="transform opacity-100 scale-100"
                                                             leaveTo="transform opacity-0 scale-95"
                                                         >
-                                                        <Menu.Items className="absolute right-0 z-10 py-1 mt-2 mb-10 origin-top-right bg-white rounded-md shadow-lg w-36 ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                                        <Menu.Items className="absolute right-0 z-10 py-1 mt-2 mb-10 origin-top-right bg-white rounded-md shadow-lg dark:bg-zinc-700 w-28 ring-1 ring-black ring-opacity-5 focus:outline-none">
                                                             {diaryMenu.map((item) => (
                                                                 <Menu.Item key={item.name}>                                             
                                                                     {
@@ -346,8 +346,8 @@ export default function DiaryGridList() {
                                                                                 <Link
                                                                                     href={item.href + diary.diaryId + '/modify'}                                             >
                                                                                     <div className={classNames(
-                                                                                        active ? 'bg-zinc-100' : '',
-                                                                                        'diaryModifyButton block px-4 py-2 text-sm text-zinc-700 border-b-2 border-gray-100'
+                                                                                        active ? 'bg-zinc-100 dark:bg-zinc-600' : '',
+                                                                                        'diaryModifyButton block px-4 py-2 text-sm text-zinc-700 dark:text-zinc-100 border-b-2 hover:bg-zinc-600 border-gray-100 dark:border-zinc-500'
                                                                                     )}>
                                                                                         {item.name}
                                                                                     </div>
@@ -356,7 +356,7 @@ export default function DiaryGridList() {
                                                                             :
                                                                             <a
                                                                                 onClick={() =>openDeleteModal(diary.diaryId)}
-                                                                                className='block px-4 py-2 text-sm border-b-2 diaryDeleteButton text-zinc-700 border-zinc-100 hover:bg-zinc-100 '
+                                                                                className='block px-4 py-2 text-sm diaryDeleteButton text-zinc-700 dark:text-zinc-100 hover:bg-zinc-600 '
                                                                             >
                                                                                 {item.name}
                                                                             </a>
@@ -372,7 +372,7 @@ export default function DiaryGridList() {
                                                         (
                                                             keyword != "EXECPTION_NO_KEYWORD"
                                                             ?
-                                                            <div key={keyword} className="px-3 mb-2 py-1 mr-2.5 text-sm font-medium text-zinc-500 bg-zinc-200 rounded-xl dark:bg-zinc-200 dark:text-zinc-800 hover:scale-105 hover:bg-zinc-300 hover:text-zinc-600 duration-200">
+                                                            <div key={keyword} className="px-3 mb-2 py-1 mr-2.5 text-sm font-medium dark:text-zinc-300 dark:bg-zinc-700 text-zinc-500 bg-zinc-200 rounded-xl hover:scale-105 hover:bg-zinc-300 hover:text-zinc-600 duration-200 dark:hover:bg-zinc-600 dark:hover:text-zinc-200">
                                                                 #{keyword}
                                                             </div>
                                                             :
@@ -433,15 +433,15 @@ export default function DiaryGridList() {
                                 leaveFrom="opacity-100 scale-100"
                                 leaveTo="opacity-0 scale-95"
                             >
-                                <Dialog.Panel className="w-full max-w-md p-6 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl" data-testid="deleteDiaryModal">
+                                <Dialog.Panel className="w-full max-w-md p-6 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl dark:bg-zinc-700 rounded-2xl" data-testid="deleteDiaryModal">
                                 <Dialog.Title
                                     as="h3"
-                                    className="text-base font-extrabold leading-6 text-zinc-900"
+                                    className="text-base font-extrabold leading-6 text-zinc-900 dark:text-zinc-100"
                                 >
                                     일기 삭제
                                 </Dialog.Title>
                                 <div className="mt-3">
-                                    <p className="text-lg text-zinc-500">
+                                    <p className="text-lg text-zinc-500 dark:text-zinc-300">
                                     일기을 삭제하시겠습니까?
                                     </p>
                                     <p className="mt-1 text-base text-red-500">
@@ -452,7 +452,7 @@ export default function DiaryGridList() {
                                 <div className="flex justify-center mt-4">
                                     <button
                                         type="button"
-                                        className="justify-center px-2 py-1.5 mx-2 text-base font-semibold duration-200 border border-transparent rounded-md text-zinc-700 bg-zinc-200 hover:bg-zinc-300 focus:outline-none "
+                                        className="justify-center px-2 py-1.5 mx-2 text-base font-semibold duration-200 border border-transparent rounded-md text-zinc-700 bg-zinc-200 hover:bg-zinc-300 focus:outline-none  dark:text-zinc-100 dark:bg-zinc-500 dark:hover:bg-zinc-600 dark:focus:outline-none dark:focus-visible:ring-2 dark:focus-visible:ring-zinc-300 dark:focus-visible:ring-offset-2"
                                         onClick={() => closeDeleteModal()}
                                         >
                                         닫기
@@ -460,7 +460,7 @@ export default function DiaryGridList() {
 
                                     <button
                                         type="button"
-                                        className="justify-center px-2 py-1.5 mx-2 text-base font-semibold text-red-900 duration-200 bg-red-100 border border-transparent rounded-md hover:bg-red-200 focus:outline-none "
+                                        className="justify-center px-2 py-1.5 mx-2 text-base font-semibold text-red-900 duration-200 bg-red-100 border border-transparent rounded-md hover:bg-red-200 focus:outline-none  dark:text-zinc-100 dark:bg-red-400 dark:hover:bg-red-500 dark:focus:outline-none dark:focus-visible:ring-2 dark:focus-visible:ring-red-300 dark:focus-visible:ring-offset-2"
                                         onClick={() => {
                                             deleteDiary(); 
                                             closeDeleteModal();
@@ -503,15 +503,15 @@ export default function DiaryGridList() {
                                 leaveFrom="opacity-100 scale-100"
                                 leaveTo="opacity-0 scale-95"
                             >
-                                <Dialog.Panel className="w-full max-w-md p-6 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl"data-testid="deleteDiarySuccessModal">
+                                <Dialog.Panel className="w-full max-w-md p-6 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl dark:bg-zinc-700 rounded-2xl"data-testid="deleteDiarySuccessModal">
                                 <Dialog.Title
                                     as="h3"
-                                    className="text-base font-extrabold leading-6 text-zinc-900"
+                                    className="text-base font-extrabold leading-6 text-zinc-900 dark:text-zinc-100"
                                 >
                                     일기 삭제 성공
                                 </Dialog.Title>
                                 <div className="mt-2">
-                                    <p className="text-lg text-zinc-500">
+                                    <p className="text-lg text-zinc-500 dark:text-zinc-300">
                                     일기가 성공적으로 삭제되었습니다!
                                     </p>
                                 </div>
@@ -519,7 +519,7 @@ export default function DiaryGridList() {
                                 <div className="flex justify-center mt-4">
                                     <button
                                         type="button"
-                                        className="justify-center px-2 py-1.5 mx-2 text-base font-semibold text-green-700 duration-200 bg-green-200 border border-transparent rounded-md hover:bg-green-300 focus:outline-none "
+                                        className="justify-center px-2 py-1.5 mx-2 text-base font-semibold text-green-700 duration-200 bg-green-200 border border-transparent rounded-md hover:bg-green-300 focus:outline-none  dark:text-zinc-100 dark:bg-blue-400 dark:hover:bg-blue-500 dark:focus:outline-none dark:focus-visible:ring-2 dark:focus-visible:ring-blue-300 dark:focus-visible:ring-offset-2"
                                         onClick={() => closeSuccessModal()}
                                         data-testid="closeDiaryDeleteSuccessModalButton"
                                         >

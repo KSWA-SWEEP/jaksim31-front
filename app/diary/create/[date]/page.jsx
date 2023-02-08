@@ -10,7 +10,7 @@ export default function Page({ params }) {
         <div className="p-4">
           <BackButton/>
           <div className="flex justify-center w-full">
-            <div className="text-2xl font-extrabold text-center lg:text-3xl text-zinc-500">
+            <div className="text-2xl font-extrabold text-center lg:text-3xl dark:text-zinc-100 text-zinc-500">
               일기 쓰기
             </div>
           </div>

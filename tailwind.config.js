@@ -1,6 +1,13 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   daisyui: {
+    styled: true,
+    base: true,
+    utils: true,
+    logs: true,
+    rtl: false,
+    prefix: "",
+    darkTheme: "dark",
     themes: ["light", "dark", "garden", 
       {
         mytheme: {
@@ -30,6 +37,7 @@ module.exports = {
       },
       backgroundImage: {
         "gradient-image": "url('/images/gradient.webp')", 
+        "background-image-dark": "url('/images/dark-background.webp')", 
       }
     }
   },
