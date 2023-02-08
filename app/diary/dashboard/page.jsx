@@ -2,30 +2,9 @@ import React from "react";
 import BarChartCard from "./BarChartCard";
 import RecentDiaryCard from "./RecentDiaryCard";
 import DonutChartCard from "./DonutChartCard";
-import { getUserInfo } from "../../api/getUserInfo";
 import ProfileCard from "./ProfileCard";
 
-// async function getUserInfoData() {
-//     const nextCookies = cookies();
-//     const userId = nextCookies.get('userId');
-
-//     if((userId != "")||(userId != undefined)) {
-//         const res = await fetch(process.env.NEXT_PUBLIC_BASE_URL+"/api/v0/members/" + userId, { cache: 'no-store' })
-
-//         // if (res.status != 200) {
-//         //     throw new Error('Failed to fetch data');
-//         // }
-//         console.log(res);
-//         return res.json();
-//     }
-
-//     return {};
-// }
-
 export default async function diaryPage() {
-
-    // 유저 정보 호출하여 프로필 데이터 초기화 값 가져오기
-    // const userInfo = await getUserInfoData();
     
     return (
         <>

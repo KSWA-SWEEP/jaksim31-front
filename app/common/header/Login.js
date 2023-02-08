@@ -85,7 +85,6 @@ const Login = () => {
       const emailRegex =
           /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/
       userEmail.current = e.target.value;
-      // console.log("Email : "+userEmail.current);
 
       if (!emailRegex.test(userEmail.current)) {
           setEmailMessage('이메일 형식이 틀렸습니다. 다시 확인해 주세요 😢')
@@ -105,7 +104,6 @@ const Login = () => {
 
     const onAuthChange = (e) => {
       userAuth.current = e.target.value;
-      // console.log("인증번호##" + randNum.current)
 
       if (randNum.current != userAuth.current) {
           setAuthMessage('인증 번호가 틀렸습니다. 다시 확인해 주세요 😢')
@@ -123,7 +121,7 @@ const Login = () => {
 
       const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/
       userPassword.current = e.target.value;
-      // console.log("userPassword : "+userPassword.current);
+
       if (!passwordRegex.test(userPassword.current)) {
           setPasswordMessage('숫자+영문자+특수문자 조합으로 8자리 이상 입력해 주세요 🚨')
           setIsPassword(false)
@@ -135,7 +133,7 @@ const Login = () => {
 
     const onPasswordCheckChange = (e) => {
         userPasswordCheck.current = e.target.value;
-        // console.log("userPasswordCheck : "+userPasswordCheck.current);
+
         if (userPassword.current === userPasswordCheck.current) {
             setPasswordConfirmMessage('비밀번호를 똑같이 입력했어요 ✅')
             setIsPasswordConfirm(true)
@@ -169,8 +167,6 @@ const Login = () => {
     }
 
     async function requestSignup(){
-
-      console.log("회원가입 버튼 눌림");
 
       if(!userName.current){
           alert("이름을 입력해 주세요 😮");
@@ -227,16 +223,14 @@ const Login = () => {
             user_email: userEmail.current,
           },"cPndipwNGrbp1LMBT").then(resp => {});
 
-          console.log("전송한 인증번호: "+randNum.current)
+          // console.log("전송한 인증번호: "+randNum.current)
           setIsAuthIng(true)
           setCheckAuthMessage("메일을 전송하였습니다. 확인 후 인증번호를 입력해 주세요.");
         }
         else if(!isChangePasswordMoal && resp.status == 200) {  // 회원가입일 경우 이미 회원이 존재하는 경우
-          console.log(resp);
           alert("이미 가입된 계정입니다.");
         }
         else if(isChangePasswordMoal && resp.status == 404) {  // 비밀번호 재설정일 경우 회원이 존재하지 않는 경우
-          console.log(resp);
           alert("찾을 수 없는 계정입니다. 회원 정보를 확인해 주세요.");
         }
       });
