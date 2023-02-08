@@ -49,18 +49,18 @@ export default function RecentDiaryCard() {
                         {data.recentDiary.diaryDate}
                     </div>
                     {/* 썸네일 사진 */}
-                    <div className="justify-center m-3 avatar">
+                    <div className="justify-center m-3 avatar aspect-[4/3] w-full">
                         <Link 
                         className="w-50 rounded-xl"
                         type="button"
                         href={data.recentDiary.thumbnail}>
                             <Image 
                                 src={data.recentDiary.thumbnail} 
-                                width="0"
-                                  height="0" 
-                                  alt="일기 썸네일" 
-                                  sizes="100vw"
-                                  priority="true"
+                                fill
+                                alt="일기 썸네일" 
+                                sizes="100vw"
+                                priority="true"
+                                prefetch={false}
                             >
                             </Image>
                         </Link>
