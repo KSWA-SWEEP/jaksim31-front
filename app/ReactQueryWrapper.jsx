@@ -14,13 +14,13 @@ const queryClient = new QueryClient({
                 window.location.href = "/home/landing";
                 logout();
                 controller.abort();
-                alert(error.errorMessage+"😥\n계속하려면 다시 로그인 해주세요.");
+                alert((error.errorMessage == undefined ? "오류가 발생했습니다" : error.errorMessage)+"😥\n계속하려면 다시 로그인 해주세요.");
                 queryClient.removeQueries();
             } else if(error.errorCode == 'NOT_FOUND_AUTHENTICATION' || error.errorCode == 'SESSION_EXPIRED' || error.errorCode == 'NO_PERMISSION' || error.errorCode == 'EMPTY_TOKEN') {
                 try {
                     window.location.href = "/home/landing";
                     controller.abort();
-                    alert(error.errorMessage+"😥\n계속하려면 다시 로그인 해주세요.");
+                    alert((error.errorMessage == undefined ? "오류가 발생했습니다" : error.errorMessage)+"😥\n계속하려면 다시 로그인 해주세요.");
                     queryClient.removeQueries();
                 } catch(e) {
                     console.log(e);

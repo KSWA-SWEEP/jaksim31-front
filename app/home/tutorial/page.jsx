@@ -1,5 +1,5 @@
 import React from "react";
-import Tutorial from "../../common/Tutorial";
+import Tutorial from "./Tutorial";
 
 export default function tutorial() {
   return (
