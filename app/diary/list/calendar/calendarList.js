@@ -164,8 +164,8 @@ export default function CalendarList() {
         </div>
       </div>         
       <div className='flex justify-center'>
-        <div className='flex items-center px-2 py-1 mx-2 text-xs text-white duration-200 hover:scale-105 bg-zinc-400 rounded-xl w-fit hover:bg-zinc-500' onClick={(e) => {resetEmotions(e);}} data-testid="resetEmotionButton"><ArrowPathIcon className='w-3 h-3 mr-1 text-white'/>감정 선택 초기화</div>
-        <div className='flex items-center px-2 py-1 mx-2 text-xs text-white duration-200 bg-red-300 hover:scale-105 rounded-xl w-fit hover:bg-red-400' onClick={(e) => {resetEmotions(e); onChange(new Date());}} data-testid="goTodayButton"><CalendarDaysIcon className='w-3 h-3 mr-1 text-white'/>오늘로 이동하기</div>
+        <div className='flex items-center px-2 py-1 mx-2 text-xs text-white duration-200 hover:scale-105 rounded-xl w-fit bg-zinc-400 hover:bg-zinc-500 dark:bg-zinc-600 dark:hover:bg-zinc-500' onClick={(e) => {resetEmotions(e);}} data-testid="resetEmotionButton"><ArrowPathIcon className='w-3 h-3 mr-1 text-white'/>감정 선택 초기화</div>
+        <div className='flex items-center px-2 py-1 mx-2 text-xs text-white duration-200 bg-red-300 hover:scale-105 rounded-xl w-fit hover:bg-red-400 dark:bg-blue-300/50 dark:hover:bg-blue-400/70' onClick={(e) => {resetEmotions(e); onChange(new Date());}} data-testid="goTodayButton"><CalendarDaysIcon className='w-3 h-3 mr-1 text-white'/>오늘로 이동하기</div>
       </div>
       {/* Calendar */}
       <div className='flex justify-center mb-5 md:mb-12 sm:mt-2'>

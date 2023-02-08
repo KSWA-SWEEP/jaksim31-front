@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import Chart from "chart.js";
 import { useEmotionCountQuery } from "../../hooks/queries/useEmotionCountQuery";
 import moment from 'moment';
+import Loading from "./loading";
 
 export default function BarChartCard() {
   
@@ -33,7 +34,7 @@ export default function BarChartCard() {
   requestData.endDate = moment(endDateLast).format("YYYY-MM-DD");
   
   // 지난 달 감정 통계 정보 data fetching을 위한 useQuery
-  const { data: dataEmotionLast, isSuccessLast } = useEmotionCountQuery(requestData, "LAST_MONTH");
+  const { data: dataEmotionLast, error, isLoading, isFetching, isError, isSuccessLast } = useEmotionCountQuery(requestData, "LAST_MONTH");
   
   // 이번 달 emotionCount data-fetching
   useEffect(() => {
@@ -81,23 +82,24 @@ export default function BarChartCard() {
         ],
         title: {
           font: {
+            fontColor: "#989898",
             family: "font-leeseoyun"
           }
         },
         datasets: [
           {
-            label: "이번 달",
-            backgroundColor: "#4c51bf",
-            borderColor: "#4c51bf",
-            data: [emotionCountThis[0], emotionCountThis[1], emotionCountThis[2], emotionCountThis[3], emotionCountThis[4], emotionCountThis[5], emotionCountThis[6], emotionCountThis[7], emotionCountThis[8]],
-            fill: false
-          },
-          {
             label: "지난 달",
             fill: false,
-            backgroundColor: "#ed64a6",
-            borderColor: "#ed64a6",
+            backgroundColor: "#CBC0FF",
+            borderColor: "#CBC0FF",
             data: [emotionCountLast[0], emotionCountLast[1], emotionCountLast[2], emotionCountLast[3], emotionCountLast[4], emotionCountLast[5], emotionCountLast[6], emotionCountLast[7], emotionCountLast[8]],
+          },
+          {
+            label: "이번 달",
+            backgroundColor: "#FFC0C0",
+            borderColor: "#FFC0C0",
+            data: [emotionCountThis[0], emotionCountThis[1], emotionCountThis[2], emotionCountThis[3], emotionCountThis[4], emotionCountThis[5], emotionCountThis[6], emotionCountThis[7], emotionCountThis[8]],
+            fill: false
           },
         ],
       },
@@ -114,7 +116,7 @@ export default function BarChartCard() {
         },
         legend: {
           labels: {
-            fontColor: "rgba(0,0,0,.8)",
+            fontColor: "#989898",
             fontFamily: "font-leeseoyun",
           },
           align: "end",
@@ -128,6 +130,7 @@ export default function BarChartCard() {
                 display: true,
                 fontFamily: "font-leeseoyun",
                 fontSize: 15,
+                fontColor: "#989898",
                 labelString: "감정 종류",
               },
               gridLines: {
@@ -168,21 +171,38 @@ export default function BarChartCard() {
     }
     window.myBar = new Chart(ctx, config);
   }, [emotionCountThis, emotionCountLast]);
+  
+
+  if( isLoading || isFetching ) return (
+    <div className="flex justify-center w-full">
+        <Loading dataType="이번 달 감정"/>
+        <canvas id="bar-chart" hidden ></canvas>
+    </div>
+  )
+    
+  if ( isError ) return (
+      <div className="flex justify-center">
+          <div className="my-16 text-2xl text-center">
+              😥<br/>{error.errorMessage}
+          </div>
+      </div>
+  )
+
   return (
     <>
-      <div className="relative flex flex-col w-full min-w-0 mb-6 break-words shadow-lg rounded-xl bg-zinc-100" data-testid="barChartCard">
+      <div className="relative flex flex-col w-full h-full min-w-0 mb-6 break-words shadow-lg rounded-xl dark:bg-zinc-700 bg-zinc-100" data-testid="barChartCard">
         <div className="px-4 py-3 mb-0 bg-transparent rounded-t">
           <div className="flex flex-wrap items-center">
             <div className="relative flex-1 flex-grow w-full max-w-full">
-              <h2 className="text-xl font-semibold text-zinc-700">
+              <div className="text-xl font-semibold text-zinc-700 dark:text-zinc-100">
                 지난 달과 감정 빈도를 비교해봐요!😊
-              </h2>
+              </div>
             </div>
           </div>
         </div>
         <div className="flex-auto p-4">
           {/* Chart */}
-          <div className="relative h-350-px">
+          <div className="flex items-center h-full">
             <canvas id="bar-chart"></canvas>
           </div>
         </div>

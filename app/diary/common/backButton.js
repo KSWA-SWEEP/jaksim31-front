@@ -12,7 +12,7 @@ export default function BackButton() {
     <div className="flex w-full m-3 justify-items-start">
         <div>
           <button onClick={() => router.back()} data-testid="diaryBackButton">
-              <ChevronLeftIcon className="block w-6 h-6 text-zinc-600"/>
+              <ChevronLeftIcon className="block w-6 h-6 text-zinc-600 dark:text-zinc-100"/>
           </button>
         </div>
     </div>
