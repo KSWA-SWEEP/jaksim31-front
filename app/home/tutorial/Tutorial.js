@@ -1,8 +1,8 @@
-import LazyShow from "./LazyShow";
-import loginImage from "../../public/images/tutorial/login.png"
-import signUpImage from "../../public/images/tutorial/signUp.png"
-import drawerImage from "../../public/images/tutorial/drawer.png"
-import createImage from "../../public/images/tutorial/create.png"
+import LazyShow from "../../common/LazyShow";
+import loginImage from "../../../public/images/tutorial/login.png"
+import signUpImage from "../../../public/images/tutorial/signUp.png"
+import drawerImage from "../../../public/images/tutorial/drawer.png"
+import createImage from "../../../public/images/tutorial/create.png"
 
 import Image from "next/image";
 
@@ -61,13 +61,13 @@ const examplePages = [
 
 const Tutorial = () => {
   return (
-    <div className="relative flex justify-center pb-10 sm:pt-10 sm:pb-10 lg:pt-10 lg:pb-10 bg-white rounded-2xl">
+    <div className="relative flex justify-center pb-10 bg-white dark:bg-zinc-800 sm:pt-10 sm:pb-10 lg:pt-10 lg:pb-10 rounded-2xl">
       <div className="container relative mx-auto">
         <div>
           {examplePages.map((examplePage) => (
             <LazyShow delay={((examplePage.index)*0.5)-examplePage.index*0.3}>
-              <div className="py-4 grid grid-cols-7">
-                <div className="px-4 col-span-5">
+              <div className="grid grid-cols-7 py-4">
+                <div className="col-span-5 px-4">
                   <Image
                     src={examplePage.src}
                     alt={examplePage.alt}
@@ -78,9 +78,9 @@ const Tutorial = () => {
                     priority
                   />
                 </div>
-                <div className="col-span-2 grid grid-cols-1 grid-rows-5">
-                  <p className="row-span-1 mb-2 text-3xl font-bold leading-8 text-zinc-900 pt-8">{examplePage.title}</p>
-                  <p className="row-span-4 text-lg font-semibold leading-7 text-zinc-600">{examplePage.comment}</p>
+                <div className="grid grid-cols-1 col-span-2 grid-rows-5">
+                  <p className="row-span-1 pt-8 mb-2 text-3xl font-bold leading-8 dark:text-zinc-100 text-zinc-900">{examplePage.title}</p>
+                  <p className="row-span-4 text-lg font-semibold leading-7 dark:text-zinc-500 text-zinc-600">{examplePage.comment}</p>
                 </div>
               </div>
             </LazyShow>

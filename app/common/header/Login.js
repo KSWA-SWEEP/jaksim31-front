@@ -256,7 +256,7 @@ const Login = () => {
               whileTap={{ scale: 0.95 }}
               transition={{ duration: 0.2, type: "spring", stiffness: 400, damping: 17 }}
             >
-              <div onClick={openLoginModal} className="z-40 inline-flex items-center justify-center px-4 py-2 ml-8 text-base font-medium text-white duration-150 border border-transparent shadow-sm whitespace-nowrap rounded-xl bg-rose-400 hover:bg-rose-500" data-testid="startButton">시작하기</div>
+              <div onClick={openLoginModal} className="z-40 inline-flex items-center justify-center px-4 py-2 ml-8 text-base font-medium text-white duration-150 border border-transparent shadow-sm whitespace-nowrap rounded-xl bg-rose-400 hover:bg-rose-500 dark:bg-zinc-600 dark:hover:bg-zinc-700" data-testid="startButton">시작하기</div>
             </motion.div>
             
             {/* 로그인 Modal */}
@@ -285,7 +285,7 @@ const Login = () => {
                       leaveFrom="opacity-100 scale-100"
                       leaveTo="opacity-0 scale-95"
                     >
-                      <Dialog.Panel className="w-full max-w-md p-6 pt-4 text-left align-middle transition-all transform bg-white shadow-xl lg:max-w-lg rounded-2xl" data-testid="loginModal">
+                      <Dialog.Panel className="w-full max-w-md p-6 pt-4 text-left align-middle transition-all transform bg-white shadow-xl dark:bg-zinc-700 lg:max-w-lg rounded-2xl" data-testid="loginModal">
                         
                         <div className='flex justify-end'>
                           <XMarkIcon
@@ -296,7 +296,7 @@ const Login = () => {
 
                         <div className='flex flex-col text-center justify-items-center'>
                           <div className="flex-auto px-4 py-4 pt-2 lg:px-10">
-                            <div className="mb-5 text-2xl font-bold text-center text-zinc-700">
+                            <div className="mb-5 text-2xl font-bold text-center text-zinc-700 dark:text-zinc-100">
                               로그인
                             </div>
                             <form>
@@ -304,7 +304,7 @@ const Login = () => {
                                 <div className="grid grid-cols-7 gap-1">
                                   <div className="col-span-2">
                                     <label
-                                      className="block pt-2 mb-2 font-bold uppercase text-m text-zinc-600"
+                                      className="block pt-2 mb-2 font-bold uppercase text-m text-zinc-600 dark:text-zinc-300"
                                       htmlFor="grid-password"
                                     >
                                       이메일
@@ -313,7 +313,7 @@ const Login = () => {
                                   <div className="col-span-5">
                                     <input
                                       type="email"
-                                      className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
+                                      className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 dark:text-zinc-300 dark:bg-zinc-600 dark:placeholder-zinc-400 text-zinc-600 focus:outline-none focus:ring"
                                       placeholder="Email"
                                       onChange={onEmailChange}
                                       data-testid="loginEmailInput"
@@ -327,7 +327,7 @@ const Login = () => {
                                 <div className="grid grid-cols-7 gap-1">  
                                   <div className="col-span-2">
                                     <label
-                                      className="block pt-2 mb-2 font-bold uppercase text-m text-zinc-600"
+                                      className="block pt-2 mb-2 font-bold uppercase text-m text-zinc-600 dark:text-zinc-300"
                                       htmlFor="grid-password"
                                     >
                                       비밀번호
@@ -336,7 +336,7 @@ const Login = () => {
                                   <div className="col-span-5">
                                     <input
                                       type="password"
-                                      className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
+                                      className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 dark:text-zinc-300 dark:bg-zinc-600 dark:placeholder-zinc-400 text-zinc-600 focus:outline-none focus:ring"
                                       placeholder="Password"
                                       onChange={onPasswordChange}
                                       data-testid="passwordInput"
@@ -428,18 +428,18 @@ const Login = () => {
                       leaveFrom="opacity-100 scale-100"
                       leaveTo="opacity-0 scale-95"
                     >
-                      <Dialog.Panel className="w-full max-w-md p-6 pt-4 text-left align-middle transition-all transform bg-white shadow-xl lg:max-w-lg rounded-2xl" data-testid="checkEmailModal">
+                      <Dialog.Panel className="w-full max-w-md p-6 pt-4 text-left align-middle transition-all transform bg-white shadow-xl dark:bg-zinc-700 lg:max-w-lg rounded-2xl" data-testid="checkEmailModal">
                         
                         <div className='flex justify-end'>
                           <XMarkIcon
-                            className="w-6 h-6 text-sm text-zinc-500 "
+                            className="w-6 h-6 text-sm text-zinc-500 dark:text-zinc-100 "
                             onClick={closeEmailCheckModal}
                           />
                         </div>
 
                         <div className='flex flex-col text-center justify-items-center'>
                           <div className="flex-auto px-4 py-4 pt-2 lg:px-10">
-                            <div className="mb-5 text-2xl font-bold text-center text-zinc-700" data-testid="checkEmail">
+                            <div className="mb-5 text-2xl font-bold text-center text-zinc-700 dark:text-zinc-100" data-testid="checkEmail">
                               이메일 조회
                             </div>
                             <form>
@@ -447,7 +447,7 @@ const Login = () => {
                                 <div className="grid grid-cols-7 gap-1">
                                   <div className="col-span-2">
                                     <label
-                                      className="block pt-2 mb-2 font-bold uppercase text-m text-zinc-600"
+                                      className="block pt-2 mb-2 font-bold uppercase text-m text-zinc-600 dark:text-zinc-300"
                                       htmlFor="grid-password"
                                     >
                                       이메일
@@ -456,7 +456,7 @@ const Login = () => {
                                   <div className="col-span-5">
                                     <input
                                       type="email"
-                                      className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
+                                      className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring dark:text-zinc-300 dark:bg-zinc-600 dark:placeholder-zinc-400 "
                                       placeholder="Email"
                                       onChange={onEmailChange}
                                       data-testid="isMemberEmailInput"
@@ -517,18 +517,18 @@ const Login = () => {
                       leaveFrom="opacity-100 scale-100"
                       leaveTo="opacity-0 scale-95"
                     >
-                      <Dialog.Panel className="w-full max-w-md p-6 pt-4 text-left align-middle transition-all transform bg-white shadow-xl lg:max-w-lg rounded-2xl" data-testid="joinModal">
+                      <Dialog.Panel className="w-full max-w-md p-6 pt-4 text-left align-middle transition-all transform bg-white shadow-xl dark:bg-zinc-700 lg:max-w-lg rounded-2xl" data-testid="joinModal">
                         
                         <div className='flex justify-end'>
                           <XMarkIcon
-                            className="w-6 h-6 text-sm text-zinc-500 "
+                            className="w-6 h-6 text-sm text-zinc-500 dark:text-zinc-100"
                             onClick={closeSignupModal}
                           />
                         </div>
 
                         <div className='flex flex-col text-center justify-items-center'>
                           <div className="flex-auto px-4 py-10 pt-2 lg:px-10">
-                            <div className="mb-5 text-2xl font-bold text-center text-zinc-700">
+                            <div className="mb-5 text-2xl font-bold text-center text-zinc-700 dark:text-zinc-100">
                               {isChangePasswordMoal ? <>비밀번호 재설정</> : <>회원가입</>}
                             </div>
                             <form>
@@ -541,7 +541,7 @@ const Login = () => {
                                   <div className="grid grid-cols-7 gap-1">
                                     <div className="col-span-2">
                                       <label
-                                        className="block pt-2 mb-2 font-bold uppercase text-m text-zinc-600"
+                                        className="block pt-2 mb-2 font-bold uppercase text-m text-zinc-600 dark:text-zinc-300"
                                         htmlFor="grid-password"
                                       >
                                         이름
@@ -550,7 +550,7 @@ const Login = () => {
                                     <div className="col-span-5">
                                       <input
                                         type="text"
-                                        className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
+                                        className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring dark:text-zinc-300 dark:bg-zinc-600 dark:placeholder-zinc-400 "
                                         placeholder="Name"
                                         onChange={onNameChange}
                                         data-testid="nameInput"
@@ -564,7 +564,7 @@ const Login = () => {
                                 <div className="grid grid-cols-7 gap-1">
                                   <div className="col-span-2">
                                     <label
-                                      className="block pt-2 mb-2 font-bold uppercase text-m text-zinc-600"
+                                      className="block pt-2 mb-2 font-bold uppercase text-m text-zinc-600 dark:text-zinc-300"
                                       htmlFor="grid-password"
                                     >
                                       이메일
@@ -573,7 +573,7 @@ const Login = () => {
                                   <div className="col-span-5">
                                     <input
                                       type="email"
-                                      className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
+                                      className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring dark:text-zinc-300 dark:bg-zinc-600 dark:placeholder-zinc-400 "
                                       placeholder="Email"
                                       onChange={onEmailChange}
                                       data-testid="validationEmailInput"
@@ -600,7 +600,7 @@ const Login = () => {
                                 <div className="grid grid-cols-7 gap-1">
                                   <div className="col-span-2">
                                     <label
-                                      className="block pt-2 mb-2 font-bold uppercase text-m text-zinc-600"
+                                      className="block pt-2 mb-2 font-bold uppercase text-m text-zinc-600 dark:text-zinc-300"
                                       htmlFor="grid-verify"
                                     >
                                       인증번호
@@ -609,7 +609,7 @@ const Login = () => {
                                   <div className="col-span-5">
                                     <input
                                       type="text"
-                                      className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
+                                      className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring dark:text-zinc-300 dark:bg-zinc-600 dark:placeholder-zinc-400 "
                                       placeholder="인증번호를 입력하세요"
                                       disabled={!(isAuthIng)}
                                       onChange={onAuthChange}
@@ -624,7 +624,7 @@ const Login = () => {
                                 <div className="grid grid-cols-7 gap-1">
                                   <div className="col-span-2">
                                     <label
-                                      className="block pt-2 mb-2 font-bold uppercase text-m text-zinc-600"
+                                      className="block pt-2 mb-2 font-bold uppercase text-m text-zinc-600 dark:text-zinc-300"
                                       htmlFor="grid-password"
                                     >
                                       비밀번호
@@ -633,7 +633,7 @@ const Login = () => {
                                   <div className="col-span-5">
                                     <input
                                       type="password"
-                                      className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
+                                      className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring dark:text-zinc-300 dark:bg-zinc-600 dark:placeholder-zinc-400 "
                                       placeholder="Password"
                                       onChange={onPasswordChange}
                                       data-testid="passwordInput"
@@ -647,7 +647,7 @@ const Login = () => {
                                 <div className="grid grid-cols-7 gap-1">
                                   <div className="col-span-2">
                                     <label
-                                      className="block pt-2 mb-2 font-bold uppercase text-m text-zinc-600"
+                                      className="block pt-2 mb-2 font-bold uppercase text-m text-zinc-600 dark:text-zinc-300"
                                       htmlFor="grid-password"
                                     >
                                       비밀번호 확인
@@ -656,7 +656,7 @@ const Login = () => {
                                   <div className="col-span-5">
                                     <input
                                       type="password"
-                                      className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
+                                      className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring dark:text-zinc-300 dark:bg-zinc-600 dark:placeholder-zinc-400 "
                                       placeholder="Password"
                                       onChange={onPasswordCheckChange}
                                       data-testid="passwordCheckInput"

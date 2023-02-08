@@ -48,7 +48,7 @@ export default function RootLayout({ children }) {
         head.jsx. Find out more at https://beta.nextjs.org/docs/api-reference/file-conventions/head
       */}
       <head />
-      <body className='scrollbar-hide bg-gradient-image'>
+      <body className='scrollbar-hide bg-gradient-image dark:bg-background-image-dark'>
         
         {/* Google Analytics */}
         <script strategy="afterInteractive" src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_TRACKING_ID}`} />
@@ -81,7 +81,7 @@ export default function RootLayout({ children }) {
               :
               <div className="relative z-0 flex flex-col w-full min-h-[100vh] mx-5 mt-20 mb-5 xl:mb-10 scrollbar-hide md:mt-24 md:mx-20 lg:mx-36 xl:mx-56 2xl:mx-72">
                 {/* 하위 Page 표시 영역 */}
-                <div className='p-2 bg-white min-h-fit rounded-2xl scrollbar-hide'>
+                <div className='p-2 bg-white dark:bg-zinc-800 min-h-fit rounded-2xl scrollbar-hide'>
                   {children}
                 </div>
               

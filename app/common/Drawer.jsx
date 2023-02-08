@@ -72,20 +72,20 @@ export default function Drawer({ isOpen, setIsOpen }) {
     >
         <div
             className={
-            "flex  z-10 w-64 px-6 py-5 bg-red-50 scrollbar-hide left-0 absolute h-full shadow-xl delay-400 duration-500 ease-in-out transition-all transform  " +
+            "flex  z-10 w-64 px-6 py-5 bg-red-50 dark:bg-zinc-800 scrollbar-hide left-0 absolute h-full shadow-xl delay-400 duration-500 ease-in-out transition-all transform  " +
             (isOpen ? " translate-x-0 " : " -translate-x-full ")
             }
         >
           <div className="relative flex flex-col w-full place-content-between">
             <div className="relative flex flex-col h-full max-w-lg pb-10 space-y-6 ">
               <ul className="mt-5">
-                <li className="m-3 mt-0 mb-5 text-2xl font-bold text-red-500 sm:text-3xl" onClick={() => { setIsOpen(false); }}><Link href="/home/landing" data-testid="goLandingPageButton"><div className="w-full">작심삼일</div></Link></li>
+                <li className="m-3 mt-0 mb-5 text-2xl font-bold text-red-500 dark:text-zinc-200 sm:text-3xl" onClick={() => { setIsOpen(false); }}><Link href="/home/landing" data-testid="goLandingPageButton"><div className="w-full">작심삼일</div></Link></li>
                 {
                   isLogin
                   ?
                   <>
                     {menuAfterLogin.map((menu) => (
-                        <li key={menu.name} data-testid={menu.name} className="my-1 text-lg hover:rounded-2xl hover:bg-red-100 text-zinc-700" onClick={() => { setIsOpen(false); }}>
+                        <li key={menu.name} data-testid={menu.name} className="my-1 text-lg hover:rounded-2xl hover:bg-red-100 dark:hover:bg-zinc-600 text-zinc-700 dark:text-zinc-100" onClick={() => { setIsOpen(false); }}>
                           {
                             (menu.name.includes("오늘의 일기 쓰기"))
                             ?
@@ -99,7 +99,7 @@ export default function Drawer({ isOpen, setIsOpen }) {
                   :
                   <>
                     {menuBeforeLogin.map((menu) => (
-                        <li key={menu.name} className="my-1 text-lg hover:rounded-2xl hover:bg-red-100 text-zinc-700" onClick={() => { setIsOpen(false); }}>
+                        <li key={menu.name} className="my-1 text-lg hover:rounded-2xl hover:bg-red-100 dark:hover:bg-zinc-600 text-zinc-700 dark:text-zinc-100" onClick={() => { setIsOpen(false); }}>
                           {
                             <div className="w-full py-3 pl-4" data-testid={menu.name} onClick={() => todayDiaryPage(menu.href)}>{menu.name}</div>
                           }

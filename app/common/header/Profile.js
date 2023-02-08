@@ -232,7 +232,7 @@ const Profile = () => {
     return (
       <div>
         <div className="dropdown dropdown-end">
-              <label tabIndex={0} className="btn btn-ghost hover:bg-red-300 btn-circle avatar" data-testid="profileButton">
+              <label tabIndex={0} className="btn btn-ghost dark:hover:bg-zinc-300 hover:bg-red-300 btn-circle avatar" data-testid="profileButton">
                 <div className="w-10 rounded-full">
                   <Image 
                     src={userInfoData.profileImage} 
@@ -246,12 +246,12 @@ const Profile = () => {
                   </Image>
                 </div>
               </label>
-              <ul tabIndex={0} className="w-32 p-2 mt-3 bg-white shadow menu menu-compact dropdown-content rounded-box">
+              <ul tabIndex={0} className="w-32 p-2 mt-3 bg-white shadow dark:bg-zinc-700 menu menu-compact dropdown-content rounded-box">
                 <li>
-                  <div onClick={openProfileModal} className="text-base hover:bg-red-100" data-testid="myPageButton">내 프로필</div>
+                  <div onClick={openProfileModal} className="text-base dark:text-zinc-100 dark:hover:text-zinc-700 hover:bg-red-100 dark:hover:bg-blue-200" data-testid="myPageButton">내 프로필</div>
                 </li>
                 <li>
-                  <div onClick={requestLogout} className="text-base hover:bg-red-100" data-testid="logoutButton">로그아웃</div>
+                  <div onClick={requestLogout} className="text-base dark:text-zinc-100 dark:hover:text-zinc-700 hover:bg-red-100 dark:hover:bg-blue-200" data-testid="logoutButton">로그아웃</div>
                 </li>
               </ul>
 
@@ -281,7 +281,7 @@ const Profile = () => {
                         leaveFrom="opacity-100 scale-100"
                         leaveTo="opacity-0 scale-95"
                       >
-                        <Dialog.Panel className="w-full max-w-md p-6 pt-4 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl lg:max-w-lg rounded-2xl"data-testid="myPageModal">
+                        <Dialog.Panel className="w-full max-w-md p-6 pt-4 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl dark:bg-zinc-700 lg:max-w-lg rounded-2xl"data-testid="myPageModal">
                           
                           <div className='flex justify-end'>
                             <XMarkIcon
@@ -293,7 +293,7 @@ const Profile = () => {
                           
                           <Dialog.Title
                             as="h3"
-                            className="text-lg font-medium leading-6 text-center text-zinc-900"
+                            className="text-lg font-medium leading-6 text-center dark:text-zinc-100 text-zinc-900"
                           >
                             내 프로필
                           </Dialog.Title>
@@ -338,15 +338,15 @@ const Profile = () => {
                               {/* 이름 */}
                               {isNameEdit ? 
                                 <div className="justify-center w-30 form-control">
-                                  <input type="text" placeholder="이름을 입력하세요" defaultValue={userInfoData.username} className="w-full h-10 input input-bordered" onChange={onNameChange}  data-testid="profileNameInput"/>
+                                  <input type="text" placeholder="이름을 입력하세요" defaultValue={userInfoData.username} className="w-full h-10 input input-bordered dark:bg-zinc-600" onChange={onNameChange}  data-testid="profileNameInput"/>
                                 </div>
                                 :
-                                <div className='text-3xl font-extrabold text-zinc-700'>
+                                <div className='text-3xl font-extrabold dark:text-zinc-100 text-zinc-700'>
                                   {userInfoData.username}
                                 </div>
                               }
                               <PencilSquareIcon
-                                className="w-8 h-8 pl-2 text-black"
+                                className="w-8 h-8 pl-2 text-zinc-800 dark:text-zinc-400"
                                 onClick={onNameEdit}
                                 data-testid="editProfileNameButton"
                               />
@@ -355,14 +355,14 @@ const Profile = () => {
                             {getCookie("isSocial") ? 
                               <></>
                             :
-                              <p className="text-sm text-zinc-500">
+                              <p className="text-sm text-zinc-500 dark:text-zinc-400">
                                 {userInfoData.loginId}
                               </p>
                             }
                             <div className='flex items-center justify-center'> 
                               <button
                                   type="button"
-                                  className="inline-flex justify-center px-3 py-2 mt-4 mr-2 text-sm font-medium text-red-700 bg-red-200 border border-transparent rounded-md hover:bg-red-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
+                                  className="inline-flex justify-center px-3 py-2 mt-4 mr-2 text-sm font-medium text-red-700 bg-red-200 border border-transparent rounded-md hover:bg-red-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 dark:text-zinc-100 dark:bg-red-400 dark:hover:bg-red-500 dark:focus:outline-none dark:focus-visible:ring-2 dark:focus-visible:ring-red-300 dark:focus-visible:ring-offset-2"
                                   onClick={requestChangeProfile}
                                   disabled={userName.current || userProfileImage.current ? false : true}
                                   data-testid="changeProfileInfoButton"
@@ -376,7 +376,7 @@ const Profile = () => {
                                 <div className='justify-center '>
                                 <button
                                   type="button"
-                                  className="px-3 py-2 mt-4 text-sm font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md w-fit hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                                  className="px-3 py-2 mt-4 text-sm font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md w-fit hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:text-zinc-100 dark:bg-blue-400 dark:hover:bg-blue-500 dark:focus:outline-none dark:focus-visible:ring-2 dark:focus-visible:ring-blue-300 dark:focus-visible:ring-offset-2"
                                   onClick={openPasswordModal}
                                   data-testid="changePasswordButton"
                                 >
@@ -394,7 +394,7 @@ const Profile = () => {
                                 
                                 {/* 총 작성한 일기 */}
                                 <div className='col-span-3 mb-1 ml-10 sm:col-span-1'>
-                                  <div className="mb-1 text-lg text-zinc-600">
+                                  <div className="mb-1 text-lg text-zinc-600 dark:text-zinc-500">
                                     총 작성한 일기
                                   </div>
                                   <div className='text-3xl font-bold'>
@@ -404,7 +404,7 @@ const Profile = () => {
 
                                 {/* 최근 일기 */}
                                 <div className='col-span-3 sm:col-span-2'>
-                                  <div className="mb-1 text-lg text-zinc-600">
+                                  <div className="mb-1 text-lg text-zinc-600 dark:text-zinc-500">
                                     최근 일기
                                   </div>
 
@@ -420,12 +420,12 @@ const Profile = () => {
                                         </div>
                                       </div>
                                       <div className='flex flex-wrap place-content-center'>
-                                        <div className='w-1/3 pb-2 text-zinc-500 text-m'>
+                                        <div className='w-1/3 pb-2 text-zinc-500 dark:text-zinc-400 text-m'>
                                             {userInfoData.recentDiary.emotion}
                                         </div>
                                         <div className='relative flex flex-wrap justify-center'>
                                             {userInfoData.recentDiary.keywords.map((keyword) => (
-                                                <div key={keyword} className="px-2 py-1 mb-1 mr-2 text-xs font-medium w-fit text-zinc-500 bg-zinc-200 rounded-xl dark:bg-zinc-200 dark:text-zinc-800 ">
+                                                <div key={keyword} className="px-2 py-1 mb-1 mr-2 text-xs font-medium w-fit text-zinc-500 bg-zinc-200 rounded-xl dark:bg-zinc-800 dark:text-zinc-400 ">
                                                     {keyword == "EXECPTION_NO_KEYWORD" ? <>#키워드 없음</> : <>#{keyword}</>}
                                                 </div>
                                             ))}
@@ -457,7 +457,7 @@ const Profile = () => {
                     leaveFrom="opacity-100"
                     leaveTo="opacity-0"
                   >
-                    <div className="fixed inset-0 bg-black bg-opacity-50" />
+                    <div className="fixed inset-0 bg-black bg-opacity-50 dark:text-zinc-100" />
                   </Transition.Child>
 
                   <div className="fixed inset-0 overflow-y-auto">
@@ -471,11 +471,11 @@ const Profile = () => {
                         leaveFrom="opacity-100 scale-100"
                         leaveTo="opacity-0 scale-95"
                       >
-                        <Dialog.Panel className="w-full max-w-md p-6 pt-4 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl lg:max-w-lg rounded-2xl" data-testid="changePasswordModal">
+                        <Dialog.Panel className="w-full max-w-md p-6 pt-4 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl dark:bg-zinc-700 lg:max-w-lg rounded-2xl" data-testid="changePasswordModal">
                           
                             <div className='flex justify-end'>
                               <XMarkIcon
-                                className="w-6 h-6 text-sm text-zinc-500 "
+                                className="w-6 h-6 text-sm text-zinc-500 dark:text-zinc-100"
                                 onClick={closeProfileModal}
                                 data-testid="closePasswordChangeModal"
                               />
@@ -483,7 +483,7 @@ const Profile = () => {
                             
                             <Dialog.Title
                               as="h3"
-                              className="text-lg font-medium leading-6 text-center text-zinc-900"
+                              className="text-lg font-medium leading-6 text-center text-zinc-900 dark:text-zinc-100"
                             >
                               비밀번호 변경하기
                             </Dialog.Title>
@@ -492,29 +492,29 @@ const Profile = () => {
                               <div>
                                   <div className="w-full form-control">
                                     <label className="label">
-                                      <div className="label-text">현재 비밀번호</div>
+                                      <div className="label-text dark:text-zinc-100">현재 비밀번호</div>
                                     </label>
-                                    <input type="password" placeholder="현재 비밀번호를 입력하세요" className="w-full h-10 input input-bordered" onChange={onOldPasswordChange} data-testid="currentPasswordInput"/>
+                                    <input type="password" placeholder="현재 비밀번호를 입력하세요" className="w-full h-10 input input-bordered dark:bg-zinc-600" onChange={onOldPasswordChange} data-testid="currentPasswordInput"/>
                                   </div>
           
                                   <div className="w-full form-control">
                                     <label className="label">
-                                      <div className="label-text">변경할 비밀번호</div>
+                                      <div className="label-text dark:text-zinc-100">변경할 비밀번호</div>
                                     </label>
-                                    <input type="password" placeholder="변경할 비밀번호를 입력하세요" className="w-full h-10 input input-bordered" onChange={onNewPasswordChange} data-testid="newPasswordInput"/>
+                                    <input type="password" placeholder="변경할 비밀번호를 입력하세요" className="w-full h-10 input input-bordered dark:bg-zinc-600" onChange={onNewPasswordChange} data-testid="newPasswordInput"/>
                                   </div>
                                   {userNewPassword.current.length > 0 && <span className={`message ${isNewPassword ? 'success text-xs text-blue-500' : 'error text-xs text-red-500'}`}>{passwordMessage}</span>}
                                   <div className="w-full form-control">
                                     <label className="label">
-                                      <div className="label-text">비밀번호 확인</div>
+                                      <div className="label-text dark:text-zinc-100">비밀번호 확인</div>
                                     </label>
-                                    <input type="password" placeholder="변경할 비밀번호를 다시 입력하세요" className="w-full h-10 input input-bordered" onChange={onNewPasswordCheckChange} data-testid="passwordCheckInput"/>
+                                    <input type="password" placeholder="변경할 비밀번호를 다시 입력하세요" className="w-full h-10 input input-bordered dark:bg-zinc-600" onChange={onNewPasswordCheckChange} data-testid="passwordCheckInput"/>
                                   </div>
                                   {userNewPasswordCheck.current.length > 0 && <span className={`message ${isNewPasswordConfirm ? 'success text-xs text-blue-500' : 'error text-xs text-red-500'}`}>{passwordConfirmMessage}</span>}
                               </div>
                               <button
                                 type="button"
-                                className="inline-flex justify-center px-3 py-2 text-sm font-medium text-red-700 bg-red-200 border border-transparent rounded-md mt-7 hover:bg-red-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
+                                className="inline-flex justify-center px-3 py-2 text-sm font-medium text-red-700 bg-red-200 border border-transparent rounded-md mt-7 hover:bg-red-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 dark:text-zinc-100 dark:bg-red-400 dark:hover:bg-red-500 dark:focus:outline-none dark:focus-visible:ring-2 dark:focus-visible:ring-red-300 dark:focus-visible:ring-offset-2"
                                 onClick={requestChangePassword}
                                 disabled={(userOldPassword.current.length == 0 || userNewPassword.current.length == 0 || userNewPasswordCheck.current.length == 0) ? true : !(isOldPassword && isNewPassword && isNewPasswordConfirm)}        
                                 data-testid="changePasswordSubmitButton"
@@ -524,7 +524,7 @@ const Profile = () => {
 
                               <button
                                 type="button"
-                                className="inline-flex justify-center px-3 py-2 text-sm font-medium border border-transparent rounded-md text-zinc-700 bg-zinc-200 mt-7 hover:bg-zinc-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500 focus-visible:ring-offset-2"
+                                className="inline-flex justify-center px-3 py-2 text-sm font-medium border border-transparent rounded-md text-zinc-700 bg-zinc-200 mt-7 hover:bg-zinc-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500 focus-visible:ring-offset-2 dark:text-zinc-100 dark:bg-zinc-500 dark:hover:bg-zinc-600 dark:focus:outline-none dark:focus-visible:ring-2 dark:focus-visible:ring-zinc-300 dark:focus-visible:ring-offset-2"
                                 onClick={openProfileModal}
                                 data-testid="backToProfileButton"
                               >

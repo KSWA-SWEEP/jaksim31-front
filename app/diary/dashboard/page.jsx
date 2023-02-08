@@ -11,22 +11,22 @@ export default async function diaryPage() {
             <div className="w-full">
                 <div className="grid w-full grid-cols-6 my-4">
                     {/* 유저 프로필*/}
-                    <div className="col-span-6 px-4 my-4 lg:col-span-2">
-                        {/* <UserProfile userInfo={userInfo}/> */}
+                    <div className="flex flex-col col-span-6 px-4 lg:col-span-2">
                         <ProfileCard/>
                     </div>
+                    
                     {/* 이번 달 / 저번 달 감정빈도 비교 바 차트*/}
-                    <div className="col-span-6 px-4 my-4 mb-10 lg:col-span-4 ">
+                    <div className="flex flex-col col-span-6 px-4 lg:col-span-4 ">
                         <BarChartCard/>
                     </div>
 
                     {/* 이번 달 감정 빈도 도넛 차트*/}
-                    <div className="col-span-6 px-4 my-4 lg:col-span-3">
+                    <div className="flex flex-col col-span-6 px-4 lg:col-span-3">
                         <DonutChartCard/>
                     </div>
 
                     {/*최근 일기*/}
-                    <div className="col-span-6 px-4 my-4 lg:col-span-3">
+                    <div className="flex flex-col col-span-6 px-4 lg:col-span-3">
                         <RecentDiaryCard/>
                     </div>
                 </div>
