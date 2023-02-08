@@ -311,6 +311,7 @@ export default function DiaryGridList() {
                                                             placeholder="empty"
                                                             fill
                                                             sizes='mas-width: 20vw, max-height: 10vh'
+                                                            priority
                                                             className="object-cover duration-200 hover:opacity-20 hover:scale-105"
                                                         />
                                                     </div>
