@@ -146,13 +146,16 @@
     │  │  │  └─ unsure.png
     │  │  ├─ gradient.jpg
     │  │  ├─ kakaoLogin.png
-    │  │  ├─ landing-example.png
+    │  │  ├─ landing-example.webp
     │  │  ├─ paperTexture.jpg
     │  │  └─ tutorial
-    │  │     ├─ create.png
-    │  │     ├─ drawer.png
-    │  │     ├─ login.png
-    │  │     └─ signUp.png
+    │  │     ├─ calendar.webp
+    │  │     ├─ create.webp
+    │  │     ├─ drawer.webp
+    │  │     ├─ dashboard.webp
+    │  │     ├─ grid.webp
+    │  │     ├─ login.webp
+    │  │     └─ signUp.webp
     │  ├─ next.svg
     │  ├─ svgs
     │  │  └─ spinner.svg

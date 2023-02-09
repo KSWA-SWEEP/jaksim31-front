@@ -5,6 +5,7 @@ import { useUserInfoQuery } from "../../hooks/queries/useUserInfoQuery";
 import Loading from "./loading";
 import Error from "../list/grid/error";
 import Image from "next/image";
+import moment from "moment";
 
 export default function RecentDiaryCard() {
 
@@ -62,7 +63,7 @@ export default function RecentDiaryCard() {
                             type="button"
                             href={data.recentDiary.thumbnail}>
                                 <Image 
-                                    src={data.recentDiary.thumbnail} 
+                                    src={data.recentDiary.thumbnail+'?'+moment(new Date()).format("YYYYMMDDhhmmsstt")} 
                                     fill
                                     alt="일기 썸네일" 
                                     sizes="100vw"

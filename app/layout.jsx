@@ -87,7 +87,7 @@ export default function RootLayout({ children }) {
               
                 {/* copyright */}
                 <div className="flex items-center justify-center mt-4">
-                  <p className="text-xs font-light leading-none text-neutral-400 lg:text-sm dark:text-neutral-50">
+                  <p className="text-xs font-light leading-none text-zinc-600 lg:text-sm dark:text-neutral-50">
                     &copy; {new Date().getFullYear()} designed by{' '}
                     <a href="#" rel="nofollow">
                       SWEEP

@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import exampleImg from '../../../public/images/landing-example.png'
+import exampleImg from '../../../public/images/landing-example.webp'
 import { motion } from "framer-motion";
 
 const ExampleScreen = () => {
