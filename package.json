@@ -41,7 +41,7 @@
     "@svgr/webpack": "^6.5.1",
     "react-query": "^3.39.2",
     "react-transition-group": "^4.4.5",
-    "tailwind-scrollbar-hide": "^1.1.7",
+    "tailwind-scrollbar-hide": "^1.1.7"
   },
   "devDependencies": {
     "@cypress/webpack-dev-server": "^3.2.3",
