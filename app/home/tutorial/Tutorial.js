@@ -3,6 +3,8 @@ import loginImage from "../../../public/images/tutorial/login.png"
 import signUpImage from "../../../public/images/tutorial/signUp.png"
 import drawerImage from "../../../public/images/tutorial/drawer.png"
 import createImage from "../../../public/images/tutorial/create.png"
+import calendarImage from "../../../public/images/tutorial/calendar.png"
+import gridImage from "../../../public/images/tutorial/grid.png"
 
 import Image from "next/image";
 
@@ -44,14 +46,14 @@ const examplePages = [
   },
   {
     title: "달력으로 모아보기",
-    src: loginImage,
+    src: calendarImage,
     alt: "calendar",
     comment: "작성한 일기들의 감정을 달력으로 모아볼 수 있습니다. 특정 감정들을 선택하면 해당 감정의 일기들만 조회할 수 있습니다.",
     index: 6,
   },
   {
     title: "썸네일로 모아보기",
-    src: loginImage,
+    src: gridImage,
     alt: "grid",
     comment: "썸네일을 중심으로 작성한 일기들을 모아볼 수도 있습니다. 검색 기능과 감정별, 기간별, 날짜별 정렬 및 조회가 가능합니다. ",
     index: 7,
@@ -66,8 +68,8 @@ const Tutorial = () => {
         <div>
           {examplePages.map((examplePage) => (
             <LazyShow delay={((examplePage.index)*0.5)-examplePage.index*0.3}>
-              <div className="grid grid-cols-7 py-4">
-                <div className="col-span-5 px-4">
+              <div className="grid sm:grid-cols-7 grid-cols-1 py-4">
+                <div className="sm:col-span-5 col-span-1 px-4">
                   <Image
                     src={examplePage.src}
                     alt={examplePage.alt}
@@ -78,9 +80,9 @@ const Tutorial = () => {
                     priority
                   />
                 </div>
-                <div className="grid grid-cols-1 col-span-2 grid-rows-5">
-                  <p className="row-span-1 pt-8 mb-2 text-3xl font-bold leading-8 dark:text-zinc-100 text-zinc-900">{examplePage.title}</p>
-                  <p className="row-span-4 text-lg font-semibold leading-7 dark:text-zinc-500 text-zinc-600">{examplePage.comment}</p>
+                <div className="sm:col-span-2 col-span-1 grid grid-cols-1 px-4 sm:auto-rows-min">
+                  <p className="pt-8 text-3xl font-bold leading-8 text-center sm:auto-rows-row sm:text-left dark:text-zinc-100 text-zinc-900">{examplePage.title}</p>
+                  <p className="text-lg font-semibold leading-7 sm:auto-rows-row dark:text-zinc-500 text-zinc-600">{examplePage.comment}</p>
                 </div>
               </div>
             </LazyShow>
