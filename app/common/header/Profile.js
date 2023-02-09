@@ -236,8 +236,8 @@ const Profile = () => {
                 <div className="w-10 rounded-full">
                   <Image 
                     src={userInfoData.profileImage} 
-                    width={100}
-                    height={100} 
+                    width={200}
+                    height={200} 
                     alt="프로필 이미지" 
                     sizes="100vw"
                     priority="true"
@@ -311,27 +311,36 @@ const Profile = () => {
                                   priority="true"
                                   >
                                   </Image>
-                                <div className='absolute top-0 flex items-center justify-center w-full h-full bg-black opacity-0 hover:opacity-50'>
-                                  {/* 파일 선택 창 hidden 설정 */}
-                                  <input
-                                    hidden
-                                    type="file" 
-                                    onChange={onProfileImageChange} 
-                                    id="profileImage" 
-                                    ref={userProfileImage}
-                                    accept="image/jpeg, image/gif, image/png"
-                                    data-testid="profileImageInput"
-                                  />
-
-                                  {/* 파일 선택 창 대신 아이콘 사용 */}
-                                  {getCookie("isSocial") ? 
-                                    <></>
-                                    :
+                                {getCookie("isSocial") ? 
+                                  <div className='absolute top-0 flex items-center justify-center w-full h-full'>
+                                    {/* 소셜 로그인 사용자일 경우 프로필 변경 비활성화 */}
+                                    <input
+                                      hidden
+                                      type="file" 
+                                      onChange={onProfileImageChange} 
+                                      id="profileImage" 
+                                      ref={userProfileImage}
+                                      accept="image/jpeg, image/gif, image/png"
+                                      data-testid="profileImageInput"
+                                    />
+                                  </div>
+                                  :
+                                  <div className='absolute top-0 flex items-center justify-center w-full h-full bg-black opacity-0 hover:opacity-50'>
+                                    {/* 일반 로그인 사용자일 경우 프로필 변경 활성화 */}
+                                    <input
+                                      hidden
+                                      type="file" 
+                                      onChange={onProfileImageChange} 
+                                      id="profileImage" 
+                                      ref={userProfileImage}
+                                      accept="image/jpeg, image/gif, image/png"
+                                      data-testid="profileImageInput"
+                                    />
                                     <label className="signup-profileImg-label" htmlFor="profileImage">
                                       <PencilSquareIcon data-testid="editProfileImageButton" className='hidden text-white w-7 h-7 group-hover:block'/>
                                     </label>
-                                  }
-                                </div>
+                                  </div>
+                                }
                               </div>
                             </div>
                             <div className='flex items-center justify-center'>
