@@ -1,10 +1,10 @@
 import LazyShow from "../../common/LazyShow";
-import loginImage from "../../../public/images/tutorial/login.png"
-import signUpImage from "../../../public/images/tutorial/signUp.png"
-import drawerImage from "../../../public/images/tutorial/drawer.png"
-import createImage from "../../../public/images/tutorial/create.png"
-import calendarImage from "../../../public/images/tutorial/calendar.png"
-import gridImage from "../../../public/images/tutorial/grid.png"
+import loginImage from "../../../public/images/tutorial/login.webp"
+import signUpImage from "../../../public/images/tutorial/signUp.webp"
+import drawerImage from "../../../public/images/tutorial/drawer.webp"
+import createImage from "../../../public/images/tutorial/create.webp"
+import calendarImage from "../../../public/images/tutorial/calendar.webp"
+import gridImage from "../../../public/images/tutorial/grid.webp"
 
 import Image from "next/image";
 

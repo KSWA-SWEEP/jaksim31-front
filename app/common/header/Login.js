@@ -256,7 +256,7 @@ const Login = () => {
               whileTap={{ scale: 0.95 }}
               transition={{ duration: 0.2, type: "spring", stiffness: 400, damping: 17 }}
             >
-              <div onClick={openLoginModal} className="z-40 inline-flex items-center justify-center px-4 py-2 ml-8 text-base font-medium text-white duration-150 border border-transparent shadow-sm whitespace-nowrap rounded-xl bg-rose-400 hover:bg-rose-500 dark:bg-zinc-600 dark:hover:bg-zinc-700" data-testid="startButton">시작하기</div>
+              <div onClick={openLoginModal} className="z-40 inline-flex items-center justify-center px-4 py-2 ml-8 text-base font-medium text-white duration-150 border border-transparent shadow-sm whitespace-nowrap rounded-xl bg-rose-600 hover:bg-rose-700 dark:bg-zinc-600 dark:hover:bg-zinc-800" data-testid="startButton">시작하기</div>
             </motion.div>
             
             {/* 로그인 Modal */}
