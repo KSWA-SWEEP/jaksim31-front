@@ -5,7 +5,7 @@ import DiaryGridList from "./gridList";
 
 async function getDiaryListData(userId) {
 
-    const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/v0/diaries/" + userId + "?page=0&size=6");
+    const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/v1/diaries/" + userId + "?page=0&size=6", { cache: 'no-store' });
 
     if (res.status != 200) {
         throw new Error('Failed to fetch data');
