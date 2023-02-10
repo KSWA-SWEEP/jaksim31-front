@@ -1,7 +1,7 @@
 import { useQuery } from "react-query";
 import { getDiaryList } from "../../api/getDiaryList";
 
-export const useDiaryListPageQuery = (options) =>
+export const useDiaryListPageQuery = (options, diaryList) =>
     useQuery(
         ['DIARY_LIST', 'PAGES', (options.page).toString()], 
         async () => {
@@ -20,7 +20,8 @@ export const useDiaryListPageQuery = (options) =>
 
             return returnData;
         },
-        {
+        {   
+            initialData: diaryList,
             retry: false,
             staleTime: 5 * 60 * 1000,
         }

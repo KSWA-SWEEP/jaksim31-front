@@ -24,7 +24,7 @@ function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
   
-export default function DiaryGridList() {
+export default function DiaryGridList(props) {
     const [page, setPage] = useState(1);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
@@ -62,7 +62,7 @@ export default function DiaryGridList() {
         }
     }, [status])
 
-    const { data : diaryListData, error, isLoading, isError } = useDiaryListPageQuery(optionData)
+    const { data : diaryListData, error, isLoading, isError } = useDiaryListPageQuery(optionData, props.diaryList)
     
     if ( isLoading ) return <Loading className="flex justify-center"/>
  
