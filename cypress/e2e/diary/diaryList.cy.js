@@ -56,7 +56,7 @@ describe('Diary List Test', () => {
         // 옵션 입력
         cy.get('[data-testid="searchWordInput"]').clear();
         cy.get('[data-testid="searchWordInput"]').type('날씨');
-        cy.get('[data-testid="emotionSelectInput"]').select('😕 싫음');
+        cy.get('[data-testid="emotionSelectInput"]').select('싫음');
         cy.get(':nth-child(1) > .react-datepicker-wrapper > .react-datepicker__input-container > .w-full').click();
         cy.get('.react-datepicker__day--029').click();
         cy.get(':nth-child(3) > .react-datepicker-wrapper > .react-datepicker__input-container > .w-full').click();
