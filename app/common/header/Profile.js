@@ -2,9 +2,7 @@
 
 import { PencilSquareIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Dialog, Transition } from '@headlessui/react';
-import userData from '../../../public/data/user.json'
 import { Fragment, useState, useRef } from 'react';
-import { useRouter } from 'next/navigation';
 import { useUserInfoQuery } from '../../hooks/queries/useUserInfoQuery';
 import Loading from './loading';
 import { useQueryClient } from 'react-query';
@@ -14,14 +12,12 @@ import { checkPassword } from '../../api/checkPassword';
 import { useLogout } from '../../hooks/mutations/useLogout';
 import { uploadImg } from '../../api/uploadImg';
 import { getCookie } from 'cookies-next';
+import Image from 'next/image';
 
 const Profile = () => {
 
     let [isProfileModalOpen, setIsProfileModalOpen] = useState(false)
     let [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false)  
-
-    const user = userData;
-    const router = useRouter();
 
     // 사용자 입력 변수
     const userName = useRef("");
@@ -150,9 +146,6 @@ const Profile = () => {
     };
 
     async function requestLogout() {
-
-      console.log("로그아웃 버튼 눌림");
-      
       mutateLogout();
     }
 
@@ -239,17 +232,26 @@ const Profile = () => {
     return (
       <div>
         <div className="dropdown dropdown-end">
-              <label tabIndex={0} className="btn btn-ghost hover:bg-red-300 btn-circle avatar">
+              <label tabIndex={0} className="btn btn-ghost dark:hover:bg-zinc-300 hover:bg-red-300 btn-circle avatar" data-testid="profileButton">
                 <div className="w-10 rounded-full">
-                  <img src={userInfoData.profileImage} />
+                  <Image 
+                    src={userInfoData.profileImage} 
+                    width={200}
+                    height={200} 
+                    alt="프로필 이미지" 
+                    sizes="100vw"
+                    priority="true"
+                    data-testid="profileImageButton"
+                    >
+                  </Image>
                 </div>
               </label>
-              <ul tabIndex={0} className="w-32 p-2 mt-3 bg-white shadow menu menu-compact dropdown-content rounded-box">
+              <ul tabIndex={0} className="w-32 p-2 mt-3 bg-white shadow dark:bg-zinc-700 menu menu-compact dropdown-content rounded-box">
                 <li>
-                  <a onClick={openProfileModal} className="text-base hover:bg-red-100">내 프로필</a>
+                  <div onClick={openProfileModal} className="text-base dark:text-zinc-100 dark:hover:text-zinc-700 hover:bg-red-100 dark:hover:bg-blue-200" data-testid="myPageButton">내 프로필</div>
                 </li>
                 <li>
-                  <a onClick={requestLogout} className="text-base hover:bg-red-100">로그아웃</a>
+                  <div onClick={requestLogout} className="text-base dark:text-zinc-100 dark:hover:text-zinc-700 hover:bg-red-100 dark:hover:bg-blue-200" data-testid="logoutButton">로그아웃</div>
                 </li>
               </ul>
 
@@ -279,18 +281,19 @@ const Profile = () => {
                         leaveFrom="opacity-100 scale-100"
                         leaveTo="opacity-0 scale-95"
                       >
-                        <Dialog.Panel className="w-full max-w-md p-6 pt-4 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl lg:max-w-lg rounded-2xl">
+                        <Dialog.Panel className="w-full max-w-md p-6 pt-4 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl dark:bg-zinc-700 lg:max-w-lg rounded-2xl"data-testid="myPageModal">
                           
                           <div className='flex justify-end'>
                             <XMarkIcon
                               className="w-6 h-6 text-sm text-zinc-500 "
                               onClick={closeProfileModal}
+                              data-testid="closeProfileModalButton"
                             />
                           </div>
                           
                           <Dialog.Title
                             as="h3"
-                            className="text-lg font-medium leading-6 text-center text-zinc-900"
+                            className="text-lg font-medium leading-6 text-center dark:text-zinc-100 text-zinc-900"
                           >
                             내 프로필
                           </Dialog.Title>
@@ -299,59 +302,79 @@ const Profile = () => {
                             {/* 프로필 사진 */}
                             <div className="justify-center m-5 avatar">
                               <div className="relative top-0 flex items-start w-32 rounded-full group">
-                                <img src={userProfileImageURL ? userProfileImageURL : userInfoData.profileImage} />
-                                <div className='absolute top-0 flex items-center justify-center w-full h-full bg-black opacity-0 hover:opacity-50'>
-                                  {/* 파일 선택 창 hidden 설정 */}
-                                  <input
-                                    hidden
-                                    type="file" 
-                                    onChange={onProfileImageChange} 
-                                    id="profileImage" 
-                                    ref={userProfileImage}
-                                    accept="image/jpeg, image/gif, image/png"
-                                  />
-
-                                  {/* 파일 선택 창 대신 아이콘 사용 */}
-                                  {getCookie("isSocial") ? 
-                                    <></>
-                                    :
+                                <Image 
+                                  src={userProfileImageURL ? userProfileImageURL : userInfoData.profileImage} 
+                                  width={100}
+                                  height={100} 
+                                  alt="프로필 이미지" 
+                                  sizes="100vw"
+                                  priority="true"
+                                  >
+                                  </Image>
+                                {getCookie("isSocial") ? 
+                                  <div className='absolute top-0 flex items-center justify-center w-full h-full'>
+                                    {/* 소셜 로그인 사용자일 경우 프로필 변경 비활성화 */}
+                                    <input
+                                      hidden
+                                      type="file" 
+                                      onChange={onProfileImageChange} 
+                                      id="profileImage" 
+                                      ref={userProfileImage}
+                                      accept="image/jpeg, image/gif, image/png"
+                                      data-testid="profileImageInput"
+                                    />
+                                  </div>
+                                  :
+                                  <div className='absolute top-0 flex items-center justify-center w-full h-full bg-black opacity-0 hover:opacity-50'>
+                                    {/* 일반 로그인 사용자일 경우 프로필 변경 활성화 */}
+                                    <input
+                                      hidden
+                                      type="file" 
+                                      onChange={onProfileImageChange} 
+                                      id="profileImage" 
+                                      ref={userProfileImage}
+                                      accept="image/jpeg, image/gif, image/png"
+                                      data-testid="profileImageInput"
+                                    />
                                     <label className="signup-profileImg-label" htmlFor="profileImage">
-                                      <PencilSquareIcon className='hidden text-white w-7 h-7 group-hover:block'/>
+                                      <PencilSquareIcon data-testid="editProfileImageButton" className='hidden text-white w-7 h-7 group-hover:block'/>
                                     </label>
-                                  }
-                                </div>
+                                  </div>
+                                }
                               </div>
                             </div>
                             <div className='flex items-center justify-center'>
                               {/* 이름 */}
                               {isNameEdit ? 
                                 <div className="justify-center w-30 form-control">
-                                  <input type="text" placeholder="이름을 입력하세요" defaultValue={userInfoData.username} className="w-full h-10 input input-bordered" onChange={onNameChange} />
+                                  <input type="text" placeholder="이름을 입력하세요" defaultValue={userInfoData.username} className="w-full h-10 input input-bordered dark:bg-zinc-600" onChange={onNameChange}  data-testid="profileNameInput"/>
                                 </div>
                                 :
-                                <div className='text-3xl font-extrabold text-zinc-700'>
+                                <div className='text-3xl font-extrabold dark:text-zinc-100 text-zinc-700'>
                                   {userInfoData.username}
                                 </div>
                               }
                               <PencilSquareIcon
-                                className="w-8 h-8 pl-2 text-black"
+                                className="w-8 h-8 pl-2 text-zinc-800 dark:text-zinc-400"
                                 onClick={onNameEdit}
+                                data-testid="editProfileNameButton"
                               />
                             </div>
                             {/* 사용자 ID (이메일) */}
                             {getCookie("isSocial") ? 
                               <></>
                             :
-                              <p className="text-sm text-zinc-500">
+                              <p className="text-sm text-zinc-500 dark:text-zinc-400">
                                 {userInfoData.loginId}
                               </p>
                             }
                             <div className='flex items-center justify-center'> 
                               <button
                                   type="button"
-                                  className="inline-flex justify-center px-3 py-2 mt-4 mr-2 text-sm font-medium text-red-700 bg-red-200 border border-transparent rounded-md hover:bg-red-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
+                                  className="inline-flex justify-center px-3 py-2 mt-4 mr-2 text-sm font-medium text-red-700 bg-red-200 border border-transparent rounded-md hover:bg-red-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 dark:text-zinc-100 dark:bg-red-400 dark:hover:bg-red-500 dark:focus:outline-none dark:focus-visible:ring-2 dark:focus-visible:ring-red-300 dark:focus-visible:ring-offset-2"
                                   onClick={requestChangeProfile}
                                   disabled={userName.current || userProfileImage.current ? false : true}
+                                  data-testid="changeProfileInfoButton"
                               >
                                 저장하기
                               </button>
@@ -362,8 +385,9 @@ const Profile = () => {
                                 <div className='justify-center '>
                                 <button
                                   type="button"
-                                  className="px-3 py-2 mt-4 text-sm font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md w-fit hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                                  className="px-3 py-2 mt-4 text-sm font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md w-fit hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:text-zinc-100 dark:bg-blue-400 dark:hover:bg-blue-500 dark:focus:outline-none dark:focus-visible:ring-2 dark:focus-visible:ring-blue-300 dark:focus-visible:ring-offset-2"
                                   onClick={openPasswordModal}
+                                  data-testid="changePasswordButton"
                                 >
                                   비밀번호 변경
                                 </button>
@@ -378,8 +402,8 @@ const Profile = () => {
                               <div className="grid grid-cols-3">
                                 
                                 {/* 총 작성한 일기 */}
-                                <div className='col-span-3 mb-1 sm:col-span-1 ml-10'>
-                                  <div className="mb-1 text-lg text-zinc-600">
+                                <div className='col-span-3 mb-1 ml-10 sm:col-span-1'>
+                                  <div className="mb-1 text-lg text-zinc-600 dark:text-zinc-500">
                                     총 작성한 일기
                                   </div>
                                   <div className='text-3xl font-bold'>
@@ -389,7 +413,7 @@ const Profile = () => {
 
                                 {/* 최근 일기 */}
                                 <div className='col-span-3 sm:col-span-2'>
-                                  <div className="mb-1 text-lg text-zinc-600">
+                                  <div className="mb-1 text-lg text-zinc-600 dark:text-zinc-500">
                                     최근 일기
                                   </div>
 
@@ -404,13 +428,13 @@ const Profile = () => {
                                           {userInfoData.recentDiary.diaryDate}
                                         </div>
                                       </div>
-                                      <div className='flex place-content-center flex-wrap'>
-                                        <div className='w-1/3 pb-2 text-zinc-500 text-m'>
+                                      <div className='flex flex-wrap place-content-center'>
+                                        <div className='w-1/3 pb-2 text-zinc-500 dark:text-zinc-400 text-m'>
                                             {userInfoData.recentDiary.emotion}
                                         </div>
                                         <div className='relative flex flex-wrap justify-center'>
                                             {userInfoData.recentDiary.keywords.map((keyword) => (
-                                                <div key={keyword} className="px-2 py-1 mb-1 mr-2 text-xs font-medium w-fit text-zinc-500 bg-zinc-200 rounded-xl dark:bg-zinc-200 dark:text-zinc-800 ">
+                                                <div key={keyword} className="px-2 py-1 mb-1 mr-2 text-xs font-medium w-fit text-zinc-500 bg-zinc-200 rounded-xl dark:bg-zinc-800 dark:text-zinc-400 ">
                                                     {keyword == "EXECPTION_NO_KEYWORD" ? <>#키워드 없음</> : <>#{keyword}</>}
                                                 </div>
                                             ))}
@@ -442,7 +466,7 @@ const Profile = () => {
                     leaveFrom="opacity-100"
                     leaveTo="opacity-0"
                   >
-                    <div className="fixed inset-0 bg-black bg-opacity-50" />
+                    <div className="fixed inset-0 bg-black bg-opacity-50 dark:text-zinc-100" />
                   </Transition.Child>
 
                   <div className="fixed inset-0 overflow-y-auto">
@@ -456,18 +480,19 @@ const Profile = () => {
                         leaveFrom="opacity-100 scale-100"
                         leaveTo="opacity-0 scale-95"
                       >
-                        <Dialog.Panel className="w-full max-w-md p-6 pt-4 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl lg:max-w-lg rounded-2xl">
+                        <Dialog.Panel className="w-full max-w-md p-6 pt-4 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl dark:bg-zinc-700 lg:max-w-lg rounded-2xl" data-testid="changePasswordModal">
                           
                             <div className='flex justify-end'>
                               <XMarkIcon
-                                className="w-6 h-6 text-sm text-zinc-500 "
+                                className="w-6 h-6 text-sm text-zinc-500 dark:text-zinc-100"
                                 onClick={closeProfileModal}
+                                data-testid="closePasswordChangeModal"
                               />
                             </div>
                             
                             <Dialog.Title
                               as="h3"
-                              className="text-lg font-medium leading-6 text-center text-zinc-900"
+                              className="text-lg font-medium leading-6 text-center text-zinc-900 dark:text-zinc-100"
                             >
                               비밀번호 변경하기
                             </Dialog.Title>
@@ -476,39 +501,41 @@ const Profile = () => {
                               <div>
                                   <div className="w-full form-control">
                                     <label className="label">
-                                      <div className="label-text">현재 비밀번호</div>
+                                      <div className="label-text dark:text-zinc-100">현재 비밀번호</div>
                                     </label>
-                                    <input type="password" placeholder="현재 비밀번호를 입력하세요" className="w-full h-10 input input-bordered" onChange={onOldPasswordChange} />
+                                    <input type="password" placeholder="현재 비밀번호를 입력하세요" className="w-full h-10 input input-bordered dark:bg-zinc-600" onChange={onOldPasswordChange} data-testid="currentPasswordInput"/>
                                   </div>
           
                                   <div className="w-full form-control">
                                     <label className="label">
-                                      <div className="label-text">변경할 비밀번호</div>
+                                      <div className="label-text dark:text-zinc-100">변경할 비밀번호</div>
                                     </label>
-                                    <input type="password" placeholder="변경할 비밀번호를 입력하세요" className="w-full h-10 input input-bordered" onChange={onNewPasswordChange} />
+                                    <input type="password" placeholder="변경할 비밀번호를 입력하세요" className="w-full h-10 input input-bordered dark:bg-zinc-600" onChange={onNewPasswordChange} data-testid="newPasswordInput"/>
                                   </div>
                                   {userNewPassword.current.length > 0 && <span className={`message ${isNewPassword ? 'success text-xs text-blue-500' : 'error text-xs text-red-500'}`}>{passwordMessage}</span>}
                                   <div className="w-full form-control">
                                     <label className="label">
-                                      <div className="label-text">비밀번호 확인</div>
+                                      <div className="label-text dark:text-zinc-100">비밀번호 확인</div>
                                     </label>
-                                    <input type="password" placeholder="변경할 비밀번호를 다시 입력하세요" className="w-full h-10 input input-bordered" onChange={onNewPasswordCheckChange} />
+                                    <input type="password" placeholder="변경할 비밀번호를 다시 입력하세요" className="w-full h-10 input input-bordered dark:bg-zinc-600" onChange={onNewPasswordCheckChange} data-testid="passwordCheckInput"/>
                                   </div>
                                   {userNewPasswordCheck.current.length > 0 && <span className={`message ${isNewPasswordConfirm ? 'success text-xs text-blue-500' : 'error text-xs text-red-500'}`}>{passwordConfirmMessage}</span>}
                               </div>
                               <button
                                 type="button"
-                                className="inline-flex justify-center px-3 py-2 text-sm font-medium text-red-700 bg-red-200 border border-transparent rounded-md mt-7 hover:bg-red-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
+                                className="inline-flex justify-center px-3 py-2 text-sm font-medium text-red-700 bg-red-200 border border-transparent rounded-md mt-7 hover:bg-red-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 dark:text-zinc-100 dark:bg-red-400 dark:hover:bg-red-500 dark:focus:outline-none dark:focus-visible:ring-2 dark:focus-visible:ring-red-300 dark:focus-visible:ring-offset-2"
                                 onClick={requestChangePassword}
                                 disabled={(userOldPassword.current.length == 0 || userNewPassword.current.length == 0 || userNewPasswordCheck.current.length == 0) ? true : !(isOldPassword && isNewPassword && isNewPasswordConfirm)}        
+                                data-testid="changePasswordSubmitButton"
                               >
                                 변경하기
                               </button>
 
                               <button
                                 type="button"
-                                className="inline-flex justify-center px-3 py-2 text-sm font-medium border border-transparent rounded-md text-zinc-700 bg-zinc-200 mt-7 hover:bg-zinc-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500 focus-visible:ring-offset-2"
+                                className="inline-flex justify-center px-3 py-2 text-sm font-medium border border-transparent rounded-md text-zinc-700 bg-zinc-200 mt-7 hover:bg-zinc-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500 focus-visible:ring-offset-2 dark:text-zinc-100 dark:bg-zinc-500 dark:hover:bg-zinc-600 dark:focus:outline-none dark:focus-visible:ring-2 dark:focus-visible:ring-zinc-300 dark:focus-visible:ring-offset-2"
                                 onClick={openProfileModal}
+                                data-testid="backToProfileButton"
                               >
                                 뒤로가기
                               </button>

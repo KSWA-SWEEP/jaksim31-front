@@ -71,26 +71,26 @@ export default function DiaryContents(props) {
             <div className="text-2xl font-extrabold">{moment(data.diaryDate).format("YYYY. MM. DD.")}</div>
             <div className="flex flex-wrap mt-3">
                 {data.keywords.map((keyword) => (
-                    <>
+                    <div key={keyword}>
                     {
                         (keyword == "EXECPTION_NO_KEYWORD")
                         ?
                         <div className='relative flex items-center mb-3'>
                             {/* 분석된 키워드가 없을 경우 */}
-                            <div className="font-medium sm:text-sm w-fit text-zinc-500 dark:bg-zinc-200 dark:text-zinc-800 ">
+                            <div className="font-medium sm:text-sm w-fit text-zinc-500 dark:text-zinc-400 ">
                                 분석된 키워드가 없습니다
                             </div>
                             {/* 키워드 관련 info tooltip */}
                             <div className='tooltip tooltip-bottom' data-tip="일기가 너무 짧으면 키워드 분석이 어려울 수 있습니다😥">
-                                <QuestionMarkCircleIcon className='w-4 h-4 ml-1 duration-200 text-zinc-500 hover:text-zinc-700'/>
+                                <QuestionMarkCircleIcon className='w-4 h-4 ml-1 duration-200 text-zinc-500 dark:hover:text-zinc-300 hover:text-zinc-700'/>
                             </div>
                         </div>
                         :
-                        <div key={keyword} className="px-3 mb-2 py-1 mr-2.5 text-sm font-medium text-zinc-500 bg-zinc-200 rounded-xl dark:bg-zinc-200 dark:text-zinc-800 ">
+                        <div className="px-3 mb-2 py-1 mr-2.5 text-sm font-medium text-zinc-500 bg-zinc-200 rounded-xl dark:bg-zinc-900 dark:text-zinc-200 ">
                             #{keyword}
                         </div>
                     }
-                    </>
+                    </div>
                 ))}
             </div>
           </div>
@@ -111,9 +111,9 @@ export default function DiaryContents(props) {
           {/* 목록, 수정, 삭제 */}
           <div className="flex items-center justify-center col-span-3 mt-4">
             <div className="text-xl">
-              <Link href={"diary/"+props.diaryId+"/modify"} className="mr-2 font-semibold duration-200 sm:text-base btn btn-secondary hover:scale-105">수정하기</Link>
-              <button onClick={openDeleteModal} className="mx-2 font-semibold duration-200 sm:text-base btn btn-accent hover:scale-105">삭제하기</button>
-              <button onClick={() => router.back()} className="ml-2 font-semibold duration-200 border-opacity-0 outline-none sm:text-base text-zinc-50 bg-zinc-400 hover:bg-zinc-500 btn outline-0 border-spacing-0 hover:scale-105">뒤로가기</button>
+              <Link href={"diary/"+props.diaryId+"/modify"} className="mr-2 font-semibold duration-200 sm:text-base btn btn-secondary hover:scale-105 dark:bg-green-400/40 dark:outline-0 dark:border-0 dark:hover:bg-green-400/50 dark:hover:outline-0 dark:hover:border-0 dark:text-zinc-100">수정하기</Link>
+              <button onClick={openDeleteModal} className="mx-2 font-semibold duration-200 sm:text-base btn btn-accent hover:scale-105 dark:bg-red-400/40 dark:outline-0 dark:border-0 dark:hover:bg-red-400/60 dark:hover:outline-0 dark:hover:border-0 dark:text-zinc-100">삭제하기</button>
+              <button onClick={() => router.back()} className="ml-2 font-semibold duration-200 border-opacity-0 outline-none sm:text-base text-zinc-50 bg-zinc-400 hover:bg-zinc-500 btn outline-0 border-spacing-0 hover:scale-105 dark:bg-zinc-600">뒤로가기</button>
             </div>
           </div>
         </div>
@@ -144,15 +144,15 @@ export default function DiaryContents(props) {
                   leaveFrom="opacity-100 scale-100"
                   leaveTo="opacity-0 scale-95"
               >
-                  <Dialog.Panel className="w-full max-w-md p-6 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+                  <Dialog.Panel className="w-full max-w-md p-6 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl dark:bg-zinc-700 rounded-2xl">
                   <Dialog.Title
                       as="h3"
-                      className="text-base font-extrabold leading-6 text-zinc-900"
+                      className="text-base font-extrabold leading-6 text-zinc-900 dark:text-zinc-100"
                   >
                      일기 삭제
                   </Dialog.Title>
                   <div className="mt-3">
-                      <p className="text-lg text-zinc-500">
+                      <p className="text-lg text-zinc-500 dark:text-zinc-300">
                       일기을 삭제하시겠습니까?
                       </p>
                       <p className="mt-1 text-base text-red-500">
@@ -163,7 +163,7 @@ export default function DiaryContents(props) {
                   <div className="flex justify-center mt-4">
                       <button
                           type="button"
-                          className="justify-center px-2 py-1.5 mx-2 text-base font-semibold duration-200 border border-transparent rounded-md text-zinc-700 bg-zinc-200 hover:bg-zinc-300 focus:outline-none "
+                          className="justify-center px-2 py-1.5 mx-2 text-base font-semibold duration-200 border border-transparent rounded-md text-zinc-700 bg-zinc-200 hover:bg-zinc-300 focus:outline-none  dark:text-zinc-100 dark:bg-zinc-500 dark:hover:bg-zinc-600 dark:focus:outline-none dark:focus-visible:ring-2 dark:focus-visible:ring-zinc-300 dark:focus-visible:ring-offset-2"
                           onClick={() => closeDeleteModal()}
                           >
                           닫기
@@ -171,7 +171,7 @@ export default function DiaryContents(props) {
 
                       <button
                           type="button"
-                          className="justify-center px-2 py-1.5 mx-2 text-base font-semibold text-red-900 duration-200 bg-red-100 border border-transparent rounded-md hover:bg-red-200 focus:outline-none "
+                          className="justify-center px-2 py-1.5 mx-2 text-base font-semibold text-red-900 duration-200 bg-red-100 border border-transparent rounded-md hover:bg-red-200 focus:outline-none  dark:text-zinc-100 dark:bg-red-400 dark:hover:bg-red-500 dark:focus:outline-none dark:focus-visible:ring-2 dark:focus-visible:ring-red-300 dark:focus-visible:ring-offset-2"
                           onClick={() => {
                               deleteDiary(); 
                               closeDeleteModal();
@@ -213,7 +213,7 @@ export default function DiaryContents(props) {
                     leaveFrom="opacity-100 scale-100"
                     leaveTo="opacity-0 scale-95"
                 >
-                    <Dialog.Panel className="w-full max-w-md p-6 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+                    <Dialog.Panel className="w-full max-w-md p-6 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl dark:bg-zinc-700 rounded-2xl">
                     <Dialog.Title
                         as="h3"
                         className="text-base font-extrabold leading-6 text-zinc-900"

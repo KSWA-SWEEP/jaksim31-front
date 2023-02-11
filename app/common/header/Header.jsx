@@ -3,10 +3,12 @@
 import React, { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import { Bars3Icon } from '@heroicons/react/24/outline';
-import Login from './Login';
-import Profile from './Profile';
 import { getCookie } from 'cookies-next';
 import { useQueryClient } from 'react-query';
+import dynamic from 'next/dynamic';
+
+const DynamicLogin = dynamic(() => import('./Login'))
+const DynamicProfile = dynamic(() => import('./Profile'))
 
 function Header({ isOpen, setIsOpen }) {
 
@@ -36,23 +38,23 @@ function Header({ isOpen, setIsOpen }) {
   }
 
   return (
-    <div className={`fixed z-40 w-full md:bg-opacity-70 transition duration-300 ease-in-out ${!top && 'bg-white backdrop-blur-sm shadow-lg'}`}>
-      <div className="max-w-6xl mx-5 md:mx-20 lg:mx-36 xl:mx-56 2xl:mx-72 sm:px-6">
+    <div className={`fixed z-40 w-full md:bg-opacity-70 transition duration-300 ease-in-out ${!top && 'bg-white dark:bg-zinc-800 backdrop-blur-sm shadow-lg'}`}>
+      <div className="mx-5 md:mx-20 lg:mx-36 xl:mx-56 2xl:mx-72 sm:px-6">
         <div className="flex items-center justify-between h-16 md:h-20">
 
-          <Bars3Icon className={"w-6 h-6 hover:scale-105 " + (pathname.includes('home') ? "text-zinc-400" : "text-zinc-600") } aria-hidden="true" onClick={() => setIsOpen(true)}/>
+          <Bars3Icon className={"w-6 h-6 hover:scale-105 " + (pathname.includes('home') ? "text-zinc-400" : "text-zinc-600 dark:text-zinc-100") } aria-hidden="true" onClick={() => setIsOpen(true)} data-testid="drawerButton"/>
 
           {
             !isLogin
             ?
             <>
               {/* 로그인 이전 - 시작하기 버튼 */}
-              <Login/>
+              <DynamicLogin/>
             </>
             :
             <>
               {/* 로그인 이후 - 사용자 프로필 사진 */}
-              <Profile/>
+              <DynamicProfile/>
             </>
           }
         </div>

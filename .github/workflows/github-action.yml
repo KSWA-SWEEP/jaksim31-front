@@ -1,14 +1,70 @@
 name: Jaksim31-Frontend CI/CD
+
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "develop" ]
   pull_request:
-    branches: [ "develop" ]
+    branches: [ "main", "develop", "release" ]
+    types: [ "opened", "assigned", "synchronize", "labeled", "reopened" ]
     
 jobs:
-  Jaksim31-Front:
+  Jaksim31-Front-CI:
     runs-on: ubuntu-latest
     steps:
+      # Checkout code
+      - name: Checkout
+        uses: actions/checkout@v2.3.1
+        with:
+          persist-credentials: false
+      
+      - name: Create env local file
+        run: echo "${{ secrets.ENV_LOCAL_FILE }}" > .env.local
+          
+      # NPM install & Build
+      - name: Install and Build
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16
+      - run: |
+          npm install
+          npm install sharp
+          npm run build      
+      
+      # NPM caching
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          cache: 'npm'   
+
+      # Unit Test - Jest
+      - name: Run Jest Unit Test
+        run: npm test
+      
+      # E2E Test - Cypress
+      - name: Run Cypress E2E test
+        uses: cypress-io/github-action@v5
+        with:
+          start: npm start
+          spec: |
+            cypress/e2e/member/userLogin.cy.js
+            cypress/e2e/member/userInfo.cy.js
+            cypress/e2e/diary/diarySave.cy.js
+            cypress/e2e/diary/diaryList.cy.js
+          browser: chrome
+          record: true
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        if: contains(github.ref, 'main')
+       
+          
+  Jaksim31-Front-CD:
+    if: contains(github.ref, 'main')
+    needs: Jaksim31-Front-CI
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout code
       - name: Checkout
         uses: actions/checkout@v2.3.1
         with:
@@ -16,22 +72,6 @@ jobs:
       
       - name: Create env file
         run: echo "${{ secrets.ENV_FILE }}" > .env
-          
-      # NPM install & Build
-      - name: Install and Build
-        uses: actions/setup-node@v1
-        with:
-          node-version: 16
-      - run: npm install
-      - run: npm install sharp
-      - run: npm run build
-      
-      # NPM caching
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16'
-          cache: 'npm'
           
       # Docker Buildx Setting
       - name: Set up Docker Buildx
@@ -54,7 +94,7 @@ jobs:
             file: ./Dockerfile
             platforms: linux/amd64
             push: true
-            tags: r2god7k/jaksim31-frontend:latest
+            tags: ${{ secrets.DOCKER_ID }}/jaksim31-frontend:latest
             cache-from: type=gha    # gha=Github Action Cache
             cache-to: type=gha,mode=max
 
@@ -67,17 +107,12 @@ jobs:
             key: ${{ secrets.REMOTE_SSH_KEY }}
             port: ${{ secrets.REMOTE_SSH_PORT }}
             script: |
-              ls -a
-              sudo su
-              # sudo chmod 666 /var/run/docker.sock
-              sudo /usr/sbin/groupadd -f docker
-              sudo /usr/sbin/usermod -aG docker `user`
-              sudo chown root:docker /var/run/docker.sock
-              docker pull r2god7k/jaksim31-frontend:latest
-              docker stop jaksim31-frontend
-              docker rm jaksim31-frontend
-              docker run -d -p 3000:3000 --name jaksim31-front --network centos_default r2god7k/jaksim31-frontend:latest
-          
+              sudo docker stop jaksim31-front
+              sudo docker rm jaksim31-front
+              sudo docker pull ${{ secrets.DOCKER_ID }}/jaksim31-frontend:latest
+              sudo docker run -d -p 3000:3000 --name jaksim31-front --network centos_default ${{ secrets.DOCKER_ID }}/jaksim31-frontend
+              sudo docker image prune -f
+        
           
       - name: Check the deployed service URL
         uses: jtalk/url-health-check-action@v3
@@ -93,7 +128,7 @@ jobs:
           # Retry all errors, including 404. This option might trigger curl upgrade.
           retry-all: false # Optional, defaults to "false"
 
-            
+
       # SSH Connect - (Web2)
       - name: Deploy to Web2
         uses: appleboy/ssh-action@master
@@ -103,14 +138,10 @@ jobs:
             key: ${{ secrets.REMOTE_SSH_KEY }}
             port: ${{ secrets.REMOTE_SSH_PORT_2 }}
             script: |
-              ls -a
-              sudo su
-              # sudo chmod 666 /var/run/docker.sock
-              sudo /usr/sbin/groupadd -f docker
-              sudo /usr/sbin/usermod -aG docker `user`
-              sudo chown root:docker /var/run/docker.sock
-              docker pull r2god7k/jaksim31-frontend:latest
-              docker stop jaksim31-frontend
-              docker rm jaksim31-frontend
-              docker run -d -p 3000:3000 --name jaksim31-front --network centos_default r2god7k/jaksim31-frontend:latest
+              sudo docker stop jaksim31-front
+              sudo docker rm jaksim31-front
+              sudo docker pull ${{ secrets.DOCKER_ID }}/jaksim31-frontend:latest
+              sudo docker run -d -p 3000:3000 --name jaksim31-front --network centos_default ${{ secrets.DOCKER_ID }}/jaksim31-frontend
+              sudo docker image prune -f
+
 

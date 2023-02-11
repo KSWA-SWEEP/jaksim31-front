@@ -26,7 +26,7 @@ export default async function diaryModify({ params }) {
       <div className="p-1 sm:p-4">
         <BackButton/>
         <div className="flex justify-center w-full">
-          <div className="text-2xl font-extrabold text-center lg:text-3xl text-zinc-500">
+          <div className="text-2xl font-extrabold text-center lg:text-3xl text-zinc-500 dark:text-zinc-100">
             일기 수정
           </div>
         </div>

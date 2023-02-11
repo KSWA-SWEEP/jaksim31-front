@@ -1,7 +1,14 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   daisyui: {
-    themes: ["light", "dark", "cupcake", "bumblebee", "emerald", "corporate", "synthwave", "retro", "cyberpunk", "valentine", "halloween", "garden", "forest", "aqua", "lofi", "pastel", "fantasy", "wireframe", "black", "luxury", "dracula", "cmyk", "autumn", "business", "acid", "lemonade", "night", "coffee", "winter", 
+    styled: true,
+    base: true,
+    utils: true,
+    logs: true,
+    rtl: false,
+    prefix: "",
+    darkTheme: "dark",
+    themes: ["light", "dark", "garden", 
       {
         mytheme: {
           "primary": "#3C2707",
@@ -23,10 +30,16 @@ module.exports = {
     "./components/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    fontFamily: {
-      custom1 : ["LeeSeoyun", "GangwonEdu", "sans-serif", "GmarketSansLight", "GmarketSansMedium", "GmarketSansBold"],
-    },
-    extend: {},
+    extend: {
+      fontFamily: {
+        "leeseoyun": ['var(--font-leeseoyun)'],
+        "gmarketSans": ['var(--font-gmarketSans)'],
+      },
+      backgroundImage: {
+        "gradient-image": "url('/images/gradient.webp')", 
+        "background-image-dark": "url('/images/dark-background.webp')", 
+      }
+    }
   },
   plugins: [
     require("daisyui"),

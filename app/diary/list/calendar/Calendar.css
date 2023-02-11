@@ -10,7 +10,6 @@
     min-width: 44px;
     background: none;
     font-size: large;
-    color: #626262;
     align-self: center;
     border-radius: 25px;
   }
@@ -19,17 +18,9 @@
     vertical-align: middle;
     font-size:  medium;
     font-weight: 600;
-    color: #424242;
     align-self: center;
   }
-  /* 상단 navigation 라벨 (XXXX년 XX월) - hover */
-  .react-calendar__navigation__label:focus,
-  .react-calendar__navigation__label:hover {
-    background-color: #e6e6e6;
-    color: #ff7676;
-  }
   .react-calendar__navigation button:enabled:hover{
-    color: #ffa8a8;
     border-radius: 25px;
   }
   .react-calendar__month-view__days__day abbr {
@@ -132,7 +123,7 @@
 .react-calendar {
   justify-content: center;
   text-align: center;
-  font-family: LeeSeoyun;
+  font-family: var(--font-leeseoyun);
 }
 /* 일 */
 .react-calendar__month-view__days__day {
@@ -145,27 +136,13 @@
 }
 
 /* 선택 날짜 hover 및 focus event => 날짜 abbr에 대한 div에 변화 */
-.react-calendar__tile--hasActive > abbr {
-  background-color: #ff7676;
-  color: white;
-}
 .react-calendar__tile--hasActive:enabled:hover > abbr {
-  background-color: #ffcdce;
-  color: white;
   transition-duration: 400ms;
 }
 .react-calendar__tile:enabled:hover > abbr {
-  background-color: #ffcdce;
-  color: white;
   transition-duration: 400ms;
 }
-.react-calendar__tile--active > abbr {
-  background-color: #ff7676;
-  color: white;
-}
 .react-calendar__tile--active:enabled:hover > abbr {
-  background-color: #ffcdce;
-  color: white;
   transition-duration: 400ms;
 }
 
@@ -178,10 +155,6 @@
 }
 .react-calendar__month-view__days__day .dayBox {
   width: 100%;
-}
-/* 일 - 주말 */
-.react-calendar__month-view__days__day--weekend {
-color: #d10000;
 }
 /* 일 - 다른 달 날짜 */
 .react-calendar__month-view__days__day--neighboringMonth {
@@ -236,6 +209,112 @@ color: #d10000;
 }
 .react-calendar__month-view__weekdays {
   text-align: center;
-  color: #5d5d5d;
   font-weight: 600;
+}
+
+
+@media (prefers-color-scheme: dark) {
+
+  .react-calendar__month-view__weekdays {
+    color: #c8c8c8;
+  }
+
+  /* 선택 날짜 hover 및 focus event => 날짜 abbr에 대한 div에 변화 */
+  .react-calendar__tile--hasActive > abbr {
+    background-color: #53aeeb;
+    color: white;
+  }
+  .react-calendar__tile--hasActive:enabled:hover > abbr {
+    background-color: #8fd2ff;
+    color: white;
+  }
+  .react-calendar__tile:enabled:hover > abbr {
+    background-color: #8fd2ff;
+    color: white;
+  }
+  .react-calendar__tile--active > abbr {
+    background-color: #53aeeb;
+    color: white;
+  }
+  .react-calendar__tile--active:enabled:hover > abbr {
+    background-color: #8fd2ff;
+    color: white;
+  }
+  
+  /* 일 - 주말 */
+  .react-calendar__month-view__days__day--weekend {
+    color: #006cf1;
+  }
+
+  /* 상단 navigation 버튼 (<< < > >>) */
+  .react-calendar__navigation button {
+    color: #e0e0e0;
+  }
+  /* 상단 navigation 라벨 (XXXX년 XX월) */
+  .react-calendar__navigation__label > span {
+    color: #9d9d9d;
+  }
+  /* 상단 navigation 라벨 (XXXX년 XX월) - hover */
+  .react-calendar__navigation__label:focus,
+  .react-calendar__navigation__label:hover {
+    background-color: #e6e6e6;
+    color: #53aeeb;
+  }
+  .react-calendar__navigation button:enabled:hover{
+    color: #8fd2ff;
+  }
+
+}
+
+@media (prefers-color-scheme: light) {
+
+  .react-calendar__month-view__weekdays {
+    color: #5d5d5d;
+  }
+
+  /* 선택 날짜 hover 및 focus event => 날짜 abbr에 대한 div에 변화 */
+  .react-calendar__tile--hasActive > abbr {
+    background-color: #ff7676;
+    color: white;
+  }
+  .react-calendar__tile--hasActive:enabled:hover > abbr {
+    background-color: #ffcdce;
+    color: white;
+  }
+  .react-calendar__tile:enabled:hover > abbr {
+    background-color: #ffcdce;
+    color: white;
+  }
+  .react-calendar__tile--active > abbr {
+    background-color: #ff7676;
+    color: white;
+  }
+  .react-calendar__tile--active:enabled:hover > abbr {
+    background-color: #ffcdce;
+    color: white;
+  }
+
+  /* 일 - 주말 */
+  .react-calendar__month-view__days__day--weekend {
+    color: #d10000;
+  }
+
+  /* 상단 navigation 버튼 (<< < > >>) */
+  .react-calendar__navigation button {
+    color: #626262;
+  }
+  /* 상단 navigation 라벨 (XXXX년 XX월) */
+  .react-calendar__navigation__label > span {
+    color: #424242;
+  }
+  /* 상단 navigation 라벨 (XXXX년 XX월) - hover */
+  .react-calendar__navigation__label:focus,
+  .react-calendar__navigation__label:hover {
+    background-color: #e6e6e6;
+    color: #ff7676;
+  }
+  .react-calendar__navigation button:enabled:hover{
+    color: #ffa8a8;
+  }
+
 }

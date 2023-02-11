@@ -6,7 +6,6 @@ import Image from 'next/image';
 import { Dialog, Transition } from '@headlessui/react';
 import KakaoLoginBtn from '../../../public/images/kakaoLogin.png'
 import { XMarkIcon } from '@heroicons/react/24/outline';
-import { useRouter } from 'next/navigation';
 import { init, send } from 'emailjs-com';
 import { updatePassword } from "../../api/updatePassword";
 import { checkIsMember } from "../../api/checkIsMember";
@@ -28,7 +27,6 @@ const Login = () => {
     function openEmailCheckModal() { setIsEmailCheckModalOpen(true); setIsLoginModalOpen(false); setEmailMessage("") }
     function closeEmailCheckModal() { setIsEmailCheckModalOpen(false); setIsLoginModalOpen(true); setEmailMessage("") }
     
-    const router = useRouter();
     const [isChangePasswordMoal, setIsChangePasswordModal] = useState("false");   // 회원가입과 비밀번호 재설정 모달 구분을 위한 변수
 
     // 사용자 입력 변수
@@ -87,7 +85,6 @@ const Login = () => {
       const emailRegex =
           /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/
       userEmail.current = e.target.value;
-      // console.log("Email : "+userEmail.current);
 
       if (!emailRegex.test(userEmail.current)) {
           setEmailMessage('이메일 형식이 틀렸습니다. 다시 확인해 주세요 😢')
@@ -107,7 +104,6 @@ const Login = () => {
 
     const onAuthChange = (e) => {
       userAuth.current = e.target.value;
-      // console.log("인증번호##" + randNum.current)
 
       if (randNum.current != userAuth.current) {
           setAuthMessage('인증 번호가 틀렸습니다. 다시 확인해 주세요 😢')
@@ -125,7 +121,7 @@ const Login = () => {
 
       const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/
       userPassword.current = e.target.value;
-      // console.log("userPassword : "+userPassword.current);
+
       if (!passwordRegex.test(userPassword.current)) {
           setPasswordMessage('숫자+영문자+특수문자 조합으로 8자리 이상 입력해 주세요 🚨')
           setIsPassword(false)
@@ -137,7 +133,7 @@ const Login = () => {
 
     const onPasswordCheckChange = (e) => {
         userPasswordCheck.current = e.target.value;
-        // console.log("userPasswordCheck : "+userPasswordCheck.current);
+
         if (userPassword.current === userPasswordCheck.current) {
             setPasswordConfirmMessage('비밀번호를 똑같이 입력했어요 ✅')
             setIsPasswordConfirm(true)
@@ -148,8 +144,6 @@ const Login = () => {
     };
 
     async function requestLogin(){
-      
-      console.log("로그인 버튼 눌림");
 
       if(!userPassword.current) {
         alert("비밀번호를 입력해 주세요 😮");
@@ -173,8 +167,6 @@ const Login = () => {
     }
 
     async function requestSignup(){
-
-      console.log("회원가입 버튼 눌림");
 
       if(!userName.current){
           alert("이름을 입력해 주세요 😮");
@@ -231,16 +223,14 @@ const Login = () => {
             user_email: userEmail.current,
           },"cPndipwNGrbp1LMBT").then(resp => {});
 
-          console.log("전송한 인증번호: "+randNum.current)
+          // console.log("전송한 인증번호: "+randNum.current)
           setIsAuthIng(true)
           setCheckAuthMessage("메일을 전송하였습니다. 확인 후 인증번호를 입력해 주세요.");
         }
         else if(!isChangePasswordMoal && resp.status == 200) {  // 회원가입일 경우 이미 회원이 존재하는 경우
-          console.log(resp);
           alert("이미 가입된 계정입니다.");
         }
         else if(isChangePasswordMoal && resp.status == 404) {  // 비밀번호 재설정일 경우 회원이 존재하지 않는 경우
-          console.log(resp);
           alert("찾을 수 없는 계정입니다. 회원 정보를 확인해 주세요.");
         }
       });
@@ -266,7 +256,7 @@ const Login = () => {
               whileTap={{ scale: 0.95 }}
               transition={{ duration: 0.2, type: "spring", stiffness: 400, damping: 17 }}
             >
-              <div onClick={openLoginModal} className="z-40 inline-flex items-center justify-center px-4 py-2 ml-8 text-base font-medium text-white duration-150 border border-transparent shadow-sm whitespace-nowrap rounded-xl bg-rose-400 hover:bg-rose-500">시작하기</div>
+              <div onClick={openLoginModal} className="z-40 inline-flex items-center justify-center px-4 py-2 ml-8 text-base font-medium text-white duration-150 border border-transparent shadow-sm whitespace-nowrap rounded-xl bg-rose-600 hover:bg-rose-700 dark:bg-zinc-600 dark:hover:bg-zinc-800" data-testid="startButton">시작하기</div>
             </motion.div>
             
             {/* 로그인 Modal */}
@@ -295,7 +285,7 @@ const Login = () => {
                       leaveFrom="opacity-100 scale-100"
                       leaveTo="opacity-0 scale-95"
                     >
-                      <Dialog.Panel className="w-full max-w-md p-6 pt-4 text-left align-middle transition-all transform bg-white shadow-xl lg:max-w-lg rounded-2xl">
+                      <Dialog.Panel className="w-full max-w-md p-6 pt-4 text-left align-middle transition-all transform bg-white shadow-xl dark:bg-zinc-700 lg:max-w-lg rounded-2xl" data-testid="loginModal">
                         
                         <div className='flex justify-end'>
                           <XMarkIcon
@@ -306,7 +296,7 @@ const Login = () => {
 
                         <div className='flex flex-col text-center justify-items-center'>
                           <div className="flex-auto px-4 py-4 pt-2 lg:px-10">
-                            <div className="mb-5 text-2xl font-bold text-center text-zinc-700">
+                            <div className="mb-5 text-2xl font-bold text-center text-zinc-700 dark:text-zinc-100">
                               로그인
                             </div>
                             <form>
@@ -314,7 +304,7 @@ const Login = () => {
                                 <div className="grid grid-cols-7 gap-1">
                                   <div className="col-span-2">
                                     <label
-                                      className="block pt-2 mb-2 font-bold uppercase text-m text-zinc-600"
+                                      className="block pt-2 mb-2 font-bold uppercase text-m text-zinc-600 dark:text-zinc-300"
                                       htmlFor="grid-password"
                                     >
                                       이메일
@@ -323,9 +313,10 @@ const Login = () => {
                                   <div className="col-span-5">
                                     <input
                                       type="email"
-                                      className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
+                                      className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 dark:text-zinc-300 dark:bg-zinc-600 dark:placeholder-zinc-400 text-zinc-600 focus:outline-none focus:ring"
                                       placeholder="Email"
                                       onChange={onEmailChange}
+                                      data-testid="loginEmailInput"
                                     />
                                     {userEmail.current.length > 0 && <span className={`message ${isEmail ? 'success text-xs text-blue-500' : 'error text-xs text-red-500'}`}>{emailMessage}</span>}
                                   </div>
@@ -336,7 +327,7 @@ const Login = () => {
                                 <div className="grid grid-cols-7 gap-1">  
                                   <div className="col-span-2">
                                     <label
-                                      className="block pt-2 mb-2 font-bold uppercase text-m text-zinc-600"
+                                      className="block pt-2 mb-2 font-bold uppercase text-m text-zinc-600 dark:text-zinc-300"
                                       htmlFor="grid-password"
                                     >
                                       비밀번호
@@ -345,9 +336,10 @@ const Login = () => {
                                   <div className="col-span-5">
                                     <input
                                       type="password"
-                                      className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
+                                      className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 dark:text-zinc-300 dark:bg-zinc-600 dark:placeholder-zinc-400 text-zinc-600 focus:outline-none focus:ring"
                                       placeholder="Password"
                                       onChange={onPasswordChange}
+                                      data-testid="passwordInput"
                                     />
                                   </div>
                                 </div>
@@ -359,6 +351,7 @@ const Login = () => {
                                   type="button"
                                   onClick={requestLogin}
                                   disabled={!isEmail}
+                                  data-testid="loginSubmitButton"
                                 >
                                   로그인
                                 </button>
@@ -367,16 +360,16 @@ const Login = () => {
                               <div className="relative w-full mt-1 mb-1">
                                 <div className="grid grid-cols-2 gap-1">
                                   <div className="grid justify-start">
-                                    <strong onClick={openEmailCheckModal} className="text-sm hover:text-gray-500">이메일 조회</strong>
+                                    <strong onClick={openEmailCheckModal} className="text-sm hover:text-gray-500" data-testid="checkEmailButton">이메일 조회</strong>
                                   </div>
                                   <div className="grid justify-end">
-                                    <strong onClick={() => {setIsChangePasswordModal(true); openSignupModal();}} className="text-sm hover:text-gray-500">비밀번호 재설정</strong>
+                                    <strong onClick={() => {setIsChangePasswordModal(true); openSignupModal();}} className="text-sm hover:text-gray-500" data-testid="resetPasswordButton">비밀번호 재설정</strong>
                                   </div>
                                 </div>
                               </div>
 
                               <div className="relative w-full mt-4 mb-2">
-                                <p>회원이 아니신가요? <strong onClick={openSignupModal} className='text-red-400 hover:text-red-500'>회원 가입하기</strong></p>
+                                <p>회원이 아니신가요? <strong onClick={openSignupModal} className='text-red-400 hover:text-red-500' data-testid="joinButton">회원 가입하기</strong></p>
                               </div>
                             </form>
                           </div>
@@ -394,6 +387,7 @@ const Login = () => {
                               <button
                                 className="items-center mb-1 mr-2 text-xs font-bold duration-150 hover:scale-105" 
                                 onClick={kakaologin}
+                                data-testid="kakaoLoginButton"
                               >
                                 <Image src={KakaoLoginBtn} alt="카카오 로그인"></Image>
                               </button>
@@ -434,18 +428,18 @@ const Login = () => {
                       leaveFrom="opacity-100 scale-100"
                       leaveTo="opacity-0 scale-95"
                     >
-                      <Dialog.Panel className="w-full max-w-md p-6 pt-4 text-left align-middle transition-all transform bg-white shadow-xl lg:max-w-lg rounded-2xl">
+                      <Dialog.Panel className="w-full max-w-md p-6 pt-4 text-left align-middle transition-all transform bg-white shadow-xl dark:bg-zinc-700 lg:max-w-lg rounded-2xl" data-testid="checkEmailModal">
                         
                         <div className='flex justify-end'>
                           <XMarkIcon
-                            className="w-6 h-6 text-sm text-zinc-500 "
+                            className="w-6 h-6 text-sm text-zinc-500 dark:text-zinc-100 "
                             onClick={closeEmailCheckModal}
                           />
                         </div>
 
                         <div className='flex flex-col text-center justify-items-center'>
                           <div className="flex-auto px-4 py-4 pt-2 lg:px-10">
-                            <div className="mb-5 text-2xl font-bold text-center text-zinc-700">
+                            <div className="mb-5 text-2xl font-bold text-center text-zinc-700 dark:text-zinc-100" data-testid="checkEmail">
                               이메일 조회
                             </div>
                             <form>
@@ -453,7 +447,7 @@ const Login = () => {
                                 <div className="grid grid-cols-7 gap-1">
                                   <div className="col-span-2">
                                     <label
-                                      className="block pt-2 mb-2 font-bold uppercase text-m text-zinc-600"
+                                      className="block pt-2 mb-2 font-bold uppercase text-m text-zinc-600 dark:text-zinc-300"
                                       htmlFor="grid-password"
                                     >
                                       이메일
@@ -462,9 +456,10 @@ const Login = () => {
                                   <div className="col-span-5">
                                     <input
                                       type="email"
-                                      className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
+                                      className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring dark:text-zinc-300 dark:bg-zinc-600 dark:placeholder-zinc-400 "
                                       placeholder="Email"
                                       onChange={onEmailChange}
+                                      data-testid="isMemberEmailInput"
                                     />
                                     {userEmail.current.length > 0 && <span className={`message ${isEmail ? 'success text-xs text-blue-500' : 'error text-xs text-red-500'}`}>{emailMessage}</span>}
                                   </div>
@@ -477,13 +472,14 @@ const Login = () => {
                                   type="button"
                                   onClick={checkEmail}
                                   disabled={!isEmail}
+                                  data-testid="isMemberSubmitButton"
                                 >
                                   조회하기
                                 </button>
                               </div>
 
                               <div className="relative w-full mt-4 mb-2">
-                                <p>회원이 아니신가요?  <strong onClick={openSignupModal} className='text-red-400 hover:text-red-500'>회원 가입하기</strong></p>
+                                <p>회원이 아니신가요?  <strong onClick={openSignupModal} className='text-red-400 hover:text-red-500' data-testid="join">회원 가입하기</strong></p>
                               </div>
                             </form>
                           </div>
@@ -521,18 +517,18 @@ const Login = () => {
                       leaveFrom="opacity-100 scale-100"
                       leaveTo="opacity-0 scale-95"
                     >
-                      <Dialog.Panel className="w-full max-w-md p-6 pt-4 text-left align-middle transition-all transform bg-white shadow-xl lg:max-w-lg rounded-2xl">
+                      <Dialog.Panel className="w-full max-w-md p-6 pt-4 text-left align-middle transition-all transform bg-white shadow-xl dark:bg-zinc-700 lg:max-w-lg rounded-2xl" data-testid="joinModal">
                         
                         <div className='flex justify-end'>
                           <XMarkIcon
-                            className="w-6 h-6 text-sm text-zinc-500 "
+                            className="w-6 h-6 text-sm text-zinc-500 dark:text-zinc-100"
                             onClick={closeSignupModal}
                           />
                         </div>
 
                         <div className='flex flex-col text-center justify-items-center'>
                           <div className="flex-auto px-4 py-10 pt-2 lg:px-10">
-                            <div className="mb-5 text-2xl font-bold text-center text-zinc-700">
+                            <div className="mb-5 text-2xl font-bold text-center text-zinc-700 dark:text-zinc-100">
                               {isChangePasswordMoal ? <>비밀번호 재설정</> : <>회원가입</>}
                             </div>
                             <form>
@@ -545,7 +541,7 @@ const Login = () => {
                                   <div className="grid grid-cols-7 gap-1">
                                     <div className="col-span-2">
                                       <label
-                                        className="block pt-2 mb-2 font-bold uppercase text-m text-zinc-600"
+                                        className="block pt-2 mb-2 font-bold uppercase text-m text-zinc-600 dark:text-zinc-300"
                                         htmlFor="grid-password"
                                       >
                                         이름
@@ -554,9 +550,10 @@ const Login = () => {
                                     <div className="col-span-5">
                                       <input
                                         type="text"
-                                        className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
+                                        className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring dark:text-zinc-300 dark:bg-zinc-600 dark:placeholder-zinc-400 "
                                         placeholder="Name"
                                         onChange={onNameChange}
+                                        data-testid="nameInput"
                                       />
                                     </div>
                                   </div>
@@ -567,7 +564,7 @@ const Login = () => {
                                 <div className="grid grid-cols-7 gap-1">
                                   <div className="col-span-2">
                                     <label
-                                      className="block pt-2 mb-2 font-bold uppercase text-m text-zinc-600"
+                                      className="block pt-2 mb-2 font-bold uppercase text-m text-zinc-600 dark:text-zinc-300"
                                       htmlFor="grid-password"
                                     >
                                       이메일
@@ -576,9 +573,10 @@ const Login = () => {
                                   <div className="col-span-5">
                                     <input
                                       type="email"
-                                      className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
+                                      className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring dark:text-zinc-300 dark:bg-zinc-600 dark:placeholder-zinc-400 "
                                       placeholder="Email"
                                       onChange={onEmailChange}
+                                      data-testid="validationEmailInput"
                                     />
                                   </div>
                                 </div>
@@ -591,6 +589,7 @@ const Login = () => {
                                   type="button"
                                   onClick={sendAuthMail}
                                   disabled={!(isEmail)}
+                                  data-testid="sendEmailButton"
                                 >
                                   인증메일 전송
                                 </button>
@@ -601,7 +600,7 @@ const Login = () => {
                                 <div className="grid grid-cols-7 gap-1">
                                   <div className="col-span-2">
                                     <label
-                                      className="block pt-2 mb-2 font-bold uppercase text-m text-zinc-600"
+                                      className="block pt-2 mb-2 font-bold uppercase text-m text-zinc-600 dark:text-zinc-300"
                                       htmlFor="grid-verify"
                                     >
                                       인증번호
@@ -610,10 +609,11 @@ const Login = () => {
                                   <div className="col-span-5">
                                     <input
                                       type="text"
-                                      className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
+                                      className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring dark:text-zinc-300 dark:bg-zinc-600 dark:placeholder-zinc-400 "
                                       placeholder="인증번호를 입력하세요"
                                       disabled={!(isAuthIng)}
                                       onChange={onAuthChange}
+                                      data-testid="authCodeInput"
                                     />
                                   </div>
                                 </div>
@@ -624,7 +624,7 @@ const Login = () => {
                                 <div className="grid grid-cols-7 gap-1">
                                   <div className="col-span-2">
                                     <label
-                                      className="block pt-2 mb-2 font-bold uppercase text-m text-zinc-600"
+                                      className="block pt-2 mb-2 font-bold uppercase text-m text-zinc-600 dark:text-zinc-300"
                                       htmlFor="grid-password"
                                     >
                                       비밀번호
@@ -633,9 +633,10 @@ const Login = () => {
                                   <div className="col-span-5">
                                     <input
                                       type="password"
-                                      className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
+                                      className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring dark:text-zinc-300 dark:bg-zinc-600 dark:placeholder-zinc-400 "
                                       placeholder="Password"
                                       onChange={onPasswordChange}
+                                      data-testid="passwordInput"
                                     />
                                   </div>
                                 </div>
@@ -646,7 +647,7 @@ const Login = () => {
                                 <div className="grid grid-cols-7 gap-1">
                                   <div className="col-span-2">
                                     <label
-                                      className="block pt-2 mb-2 font-bold uppercase text-m text-zinc-600"
+                                      className="block pt-2 mb-2 font-bold uppercase text-m text-zinc-600 dark:text-zinc-300"
                                       htmlFor="grid-password"
                                     >
                                       비밀번호 확인
@@ -655,9 +656,10 @@ const Login = () => {
                                   <div className="col-span-5">
                                     <input
                                       type="password"
-                                      className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring"
+                                      className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-zinc-300 text-zinc-600 focus:outline-none focus:ring dark:text-zinc-300 dark:bg-zinc-600 dark:placeholder-zinc-400 "
                                       placeholder="Password"
                                       onChange={onPasswordCheckChange}
+                                      data-testid="passwordCheckInput"
                                     />
                                   </div>
                                 </div>
@@ -670,6 +672,7 @@ const Login = () => {
                                   type="button"
                                   disabled={!(isEmail && isPassword && isPasswordConfirm && isAuthConfirm)}
                                   onClick={isChangePasswordMoal ? requestChangePassword : requestSignup}
+                                  data-testid="submitButton"
                                 >
                                   {isChangePasswordMoal ? <>비밀번호 변경하기</> : <>회원가입</>}
                                 </button>
@@ -678,7 +681,7 @@ const Login = () => {
                           </div>
 
                           <div className="mb-3 text-center">
-                            <h6 onClick={() => {closeSignupModal(); openLoginModal();}} className="text-sm font-bold text-zinc-400">
+                            <h6 onClick={() => {closeSignupModal(); openLoginModal();}} className="text-sm font-bold text-zinc-400" data-testid="back">
                               로그인 화면으로 돌아가기
                             </h6>
                           </div>
