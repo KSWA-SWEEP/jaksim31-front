@@ -6,10 +6,10 @@ import { getCookie } from "cookies-next";
 import Image from "next/image";
 
 // export default function UserProfile(userInfo) {
-export default function ProfileCard() {
+export default function ProfileCard(props) {
 
     // 유저 정보 data fetching을 위한 useQuery
-    const { data, error, isLoading, isFetching, isFetched, isError } = useUserInfoQuery();
+    const { data, error, isLoading, isFetching, isFetched, isError } = useUserInfoQuery(props.userInfo);
 
     if( isLoading || isFetching ) return (
         <div className="flex justify-center w-full">

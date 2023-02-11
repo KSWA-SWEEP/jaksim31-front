@@ -21,6 +21,7 @@ export const useUserInfoQuery = (userInfo) =>
             return returnData;
         },
         { 
+            initialData: userInfo,
             retry: false,
             cacheTime: 5 * 60 * 1000,
             staleTime: 5 * 60 * 1000,
