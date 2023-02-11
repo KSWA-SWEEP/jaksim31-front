@@ -1,7 +1,7 @@
 import { useQuery } from "react-query";
 import { getDiary } from "../../api/getDiary";
 
-export const useDiaryQuery = (diaryId) =>
+export const useDiaryQuery = (diaryId, diary) =>
     useQuery(
         ['DIARY', diaryId], 
         async () => {
@@ -22,6 +22,7 @@ export const useDiaryQuery = (diaryId) =>
         },
         {
             retry: false,
+            initialData: diary,
             staleTime: 60 * 1000,
             enabled: !!diaryId,
         }

@@ -14,7 +14,7 @@ export default function DiaryInputFormat(props) {
   }, []);
   
   
-  const { data, isLoading, isFetching, isFetched, isError } = useDiaryQuery(props.diaryId)
+  const { data, isLoading, isFetching, isFetched, isError } = useDiaryQuery(props.diaryId, props.diary)
 
   const [editorLoaded, setEditorLoaded] = useState(false);
 
