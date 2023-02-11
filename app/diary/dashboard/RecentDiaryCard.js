@@ -68,7 +68,6 @@ export default function RecentDiaryCard() {
                                     alt="일기 썸네일" 
                                     sizes="100vw"
                                     priority="true"
-                                    prefetch={false}
                                 >
                                 </Image>
                             </Link>

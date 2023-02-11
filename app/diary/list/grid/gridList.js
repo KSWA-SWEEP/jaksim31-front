@@ -347,7 +347,7 @@ export default function DiaryGridList() {
                                                                                     href={item.href + diary.diaryId + '/modify'}                                             >
                                                                                     <div className={classNames(
                                                                                         active ? 'bg-zinc-100 dark:bg-zinc-600' : '',
-                                                                                        'diaryModifyButton block px-4 py-2 text-sm text-zinc-700 dark:text-zinc-100 border-b-2 hover:bg-zinc-600 border-gray-100 dark:border-zinc-500'
+                                                                                        'diaryModifyButton block px-4 py-2 text-sm text-zinc-700 dark:text-zinc-100 border-b-2 hover:bg-zinc-300 dark:hover:bg-zinc-600 border-gray-100 dark:border-zinc-500'
                                                                                     )}>
                                                                                         {item.name}
                                                                                     </div>
@@ -356,7 +356,7 @@ export default function DiaryGridList() {
                                                                             :
                                                                             <a
                                                                                 onClick={() =>openDeleteModal(diary.diaryId)}
-                                                                                className='block px-4 py-2 text-sm diaryDeleteButton text-zinc-700 dark:text-zinc-100 hover:bg-zinc-600 '
+                                                                                className='block px-4 py-2 text-sm diaryDeleteButton text-zinc-700 dark:text-zinc-100 hover:bg-zinc-300 dark:hover:bg-zinc-600 '
                                                                             >
                                                                                 {item.name}
                                                                             </a>
