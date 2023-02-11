@@ -112,9 +112,23 @@ jobs:
               sudo docker pull ${{ secrets.DOCKER_ID }}/jaksim31-frontend:latest
               sudo docker run -d -p 3000:3000 --name jaksim31-front --network centos_default ${{ secrets.DOCKER_ID }}/jaksim31-frontend
               sudo docker image prune -f
+        
+          
+      - name: Check the deployed service URL
+        uses: jtalk/url-health-check-action@v3
+        with:
+          # Check the following URLs one by one sequentially
+          url: https://jaksim31.xyz
+          # Follow redirects, or just report success on 3xx status codes
+          follow-redirect: false # Optional, defaults to "false"
+          # Fail this action after this many failed attempts
+          max-attempts: 10 # Optional, defaults to 1
+          # Delay between retries
+          retry-delay: 5s # Optional, only applicable to max-attempts > 1
+          # Retry all errors, including 404. This option might trigger curl upgrade.
+          retry-all: false # Optional, defaults to "false"
 
-              sleep 10s
-              
+
       # SSH Connect - (Web2)
       - name: Deploy to Web2
         uses: appleboy/ssh-action@master
@@ -129,5 +143,5 @@ jobs:
               sudo docker pull ${{ secrets.DOCKER_ID }}/jaksim31-frontend:latest
               sudo docker run -d -p 3000:3000 --name jaksim31-front --network centos_default ${{ secrets.DOCKER_ID }}/jaksim31-frontend
               sudo docker image prune -f
-              sleep 10s
+
 
