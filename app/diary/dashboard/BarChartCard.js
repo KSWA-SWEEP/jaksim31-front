@@ -6,7 +6,7 @@ import { useEmotionCountQuery } from "../../hooks/queries/useEmotionCountQuery";
 import moment from 'moment';
 import Loading from "./loading";
 
-export default function BarChartCard() {
+export default function BarChartCard(props) {
   
   const emotionNames = ["🥰 좋음", "😕 싫음", "😯 놀람", "😬 두려움", "😶 감정없음", "😑 지루함", "🤢 창피함", "😭 슬픔", "🤔 불확실"];
   // 차트에 표시될 감정 개수 배열
@@ -26,7 +26,7 @@ export default function BarChartCard() {
   requestData.endDate = moment(endDateThis).format("YYYY-MM-DD");
 
   // 이번 달 감정 통계 정보 data fetching을 위한 useQuery
-  const { data: dataEmotionThis, isSuccessThis } = useEmotionCountQuery(requestData, "THIS_MONTH");
+  const { data: dataEmotionThis, isSuccessThis } = useEmotionCountQuery(requestData, "THIS_MONTH", props.emotionCountThis);
   
   // 지난 달 감정 통계 요청 데이터
   requestData = new Object();
@@ -34,7 +34,7 @@ export default function BarChartCard() {
   requestData.endDate = moment(endDateLast).format("YYYY-MM-DD");
   
   // 지난 달 감정 통계 정보 data fetching을 위한 useQuery
-  const { data: dataEmotionLast, error, isLoading, isFetching, isError, isSuccessLast } = useEmotionCountQuery(requestData, "LAST_MONTH");
+  const { data: dataEmotionLast, error, isLoading, isFetching, isError, isSuccessLast } = useEmotionCountQuery(requestData, "LAST_MONTH", props.emotionCountLast);
   
   // 이번 달 emotionCount data-fetching
   useEffect(() => {

@@ -1,5 +1,4 @@
 'use client';
-import userEmotion from "../../../public/data/emotions.json"
 import React, { useEffect, useState } from "react";
 import Chart from "chart.js";
 import moment from 'moment';
@@ -39,7 +38,6 @@ export default function DonutChartCard() {
     }
   }, [isSuccessThis, dataEmotionThis]);
 
-  const emotions = userEmotion;
   useEffect(() => {
     let config = {
       type: "doughnut",

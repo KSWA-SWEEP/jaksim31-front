@@ -21,7 +21,7 @@ export default function DiaryContents(props) {
     // react-query
     const queryClient = useQueryClient();
 
-    const { data, error, isLoading, isFetching, isFetched, isError } = useDiaryQuery(props.diaryId)
+    const { data, error, isLoading, isFetching, isFetched, isError } = useDiaryQuery(props.diaryId, props.diary)
 
     // diary data 삭제를 위한 useMutation
     const { status, mutate } = useDiaryDelete(props.diaryId, queryClient)
