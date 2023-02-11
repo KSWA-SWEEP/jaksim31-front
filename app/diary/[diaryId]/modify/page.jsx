@@ -1,25 +1,37 @@
 import BackButton from "../../common/backButton";
 import DiaryInputFormat from "../../common/diaryInputFormat";
 import moment from "moment";
-import { getDiary } from "../../../api/getDiary";
-import DiaryDate from "./date";
+import { cookies } from "next/headers";
 
-// async function getDiaryData(diaryId) {
-//   const res = await getDiary(diaryId);
+async function getDiaryData(diaryId, userId, atk, rtk) {
+    
+  let res = await fetch(
+    process.env.NEXT_PUBLIC_BASE_URL+"/api/v1/diaries/"+userId+"/"+diaryId, 
+    {
+        cache : 'no-store', 
+        headers: {
+            Cookie: `atk=${atk}; rtk=${rtk};`
+        }
+    }
+  );
 
-//   if (res.status != 200) {
-//     throw new Error('Failed to fetch data');  
-//   }
+  if (res.status != 200) {
+      throw new Error('Failed to fetch data');
+  }
 
-//   return res.json();
-// }
+  return res.json();
+}
 
 export default async function diaryModify({ params }) {  
 
   const { diaryId } = params;
-  // const diary = await getDiaryData(diaryId);  
+  const cookieStore = cookies();
+  const userId = cookieStore.get('userId');
+  const atk = cookieStore.get('atk');
+  const rtk = cookieStore.get('rtk');
+  const diary = await getDiaryData(diaryId, userId.value, atk.value, rtk.value);
 
-  // let date = diary.diaryDate;
+  let date = diary.diaryDate;
 
   return (
     <>
@@ -33,14 +45,12 @@ export default async function diaryModify({ params }) {
 
         {/* 입력 구간 */}
         <div className="lg:px-28">
-          <DiaryDate diaryId={diaryId}/>
-          {/* <div className="m-6 text-2xl font-bold">
+          <div className="m-6 text-2xl font-bold">
             {moment(date).format("YYYY. MM. DD.")} 
-          </div> */}
+          </div>
           <div className="relative text-sm sm:text-lg">
             <div>
-              {/* <DiaryInputFormat diaryId={diaryId} content={diary.content.toString()} date={date}/> */}
-              <DiaryInputFormat diaryId={diaryId}/>
+              <DiaryInputFormat diaryId={diaryId} diary={diary}/>
             </div>
           </div>      
         </div>

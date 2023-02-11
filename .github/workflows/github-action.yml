@@ -2,10 +2,12 @@ name: Jaksim31-Frontend CI/CD
 
 on:
   push:
-    branches: [ "main", "develop" ]
+    branches: [main, develop]
   pull_request:
-    branches: [ "main", "develop", "release" ]
-    types: [ "opened", "assigned", "synchronize", "labeled", "reopened" ]
+    # 특정 브랜치만
+    branches: [develop, main, release]
+    # pr이 생성 되었을 때, 담당 유저가 등록되었을 때, PR에 코드가 머지되었을 때, 라벨이 달렸을 때 동작
+    types: [opened, assigned, synchronize, labeled, reopened]
     
 jobs:
   Jaksim31-Front-CI:
@@ -43,6 +45,7 @@ jobs:
       
       # E2E Test - Cypress
       - name: Run Cypress E2E test
+        if: contains(github.ref, 'main')
         uses: cypress-io/github-action@v5
         with:
           start: npm start
@@ -56,11 +59,10 @@ jobs:
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-        if: contains(github.ref, 'main')
        
           
   Jaksim31-Front-CD:
-    if: contains(github.ref, 'main')
+    if: github.event_name == 'push' && contains(github.ref, 'main')
     needs: Jaksim31-Front-CI
     runs-on: ubuntu-latest
     steps:
