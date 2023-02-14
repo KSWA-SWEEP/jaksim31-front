@@ -29,12 +29,14 @@ export default function DonutChartCard() {
   
     if(dataEmotionThis != undefined) {
 
-      // 응답 데이터에 대해 emotionNames와 매칭되는 emotionCount 값 설정
-      dataEmotionThis.emotionStatics.map((pair) => {      
-        let idx = emotionNames.indexOf(pair.emotion)
-        emotionCountThis[idx] = pair.countEmotion;
-        setEmotionCountThis([...emotionCountThis]);
-      });
+      if(dataEmotionThis.emotionStatics != null) {
+        // 응답 데이터에 대해 emotionNames와 매칭되는 emotionCount 값 설정
+        dataEmotionThis.emotionStatics.map((pair) => {      
+          let idx = emotionNames.indexOf(pair.emotion)
+          emotionCountThis[idx] = pair.countEmotion;
+          setEmotionCountThis([...emotionCountThis]);
+        });
+      }
     }
   }, [isSuccessThis, dataEmotionThis]);
 
