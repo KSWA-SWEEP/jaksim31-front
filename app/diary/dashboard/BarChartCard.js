@@ -40,13 +40,16 @@ export default function BarChartCard(props) {
   useEffect(() => {
   
     if(dataEmotionThis != undefined) {
+      console.log(dataEmotionThis)
 
-      // 응답 데이터에 대해 emotionNames와 매칭되는 emotionCount 값 설정
-      dataEmotionThis.emotionStatics.map((pair) => {      
-        let idx = emotionNames.indexOf(pair.emotion)
-        emotionCountThis[idx] = pair.countEmotion;
-        setEmotionCountThis([...emotionCountThis]);
-      });
+      if(dataEmotionThis.emotionStatics != null) {
+        // 응답 데이터에 대해 emotionNames와 매칭되는 emotionCount 값 설정
+        dataEmotionThis.emotionStatics.map((pair) => {      
+          let idx = emotionNames.indexOf(pair.emotion)
+          emotionCountThis[idx] = pair.countEmotion;
+          setEmotionCountThis([...emotionCountThis]);
+        });
+      }
     }
   }, [isSuccessThis, dataEmotionThis]);
 
@@ -55,12 +58,14 @@ export default function BarChartCard(props) {
   
     if(dataEmotionLast != undefined) {
 
-      // 응답 데이터에 대해 emotionNames와 매칭되는 emotionCount 값 설정
-      dataEmotionLast.emotionStatics.map((pair) => {      
-        let idx = emotionNames.indexOf(pair.emotion)
-        emotionCountLast[idx] = pair.countEmotion;
-        setEmotionCountLast([...emotionCountLast]);
-      });
+      if(dataEmotionThis.emotionStatics != null) {
+        // 응답 데이터에 대해 emotionNames와 매칭되는 emotionCount 값 설정
+        dataEmotionLast.emotionStatics.map((pair) => {      
+          let idx = emotionNames.indexOf(pair.emotion)
+          emotionCountLast[idx] = pair.countEmotion;
+          setEmotionCountLast([...emotionCountLast]);
+        });
+      }
     }
   }, [isSuccessLast, dataEmotionLast]);
 
